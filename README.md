@@ -1,10 +1,13 @@
-# 🌐 HTML5 Comprehensive Practice Project
+<div align="center">
 
+# 🌐 HTML5 Comprehensive Practice Project
 
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
+</div>
 
+<br/>
 A robust, one-stop reference for modern HTML5 elements, text formatting, and advanced form controls. This project serves as a comprehensive laboratory for mastering web structure and semantic markup.
 
 ---
