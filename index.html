@@ -3,17 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>HTML5 Comprehensive Practice</title>
+    <style>
+        .box-bordered {
+            border: 2px solid black;
+            padding: 10px;
+            width: fit-content;
+        }
+        .text-blue-large {
+            text-align: center;
+            color: blue;
+            font-size: 20px;
+        }
+        .bg-light-gray {
+            background-color: #d3d3d3;
+            padding: 15px;
+        }
+        canvas {
+            border: 1px solid #000000;
+        }
+        iframe {
+            border: 0;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Hello, World!</h1>
     <p>This is a sample HTML document.</p><br>
     <b>vijay </b><br>
     <strong>pandian</strong><br>
-    <i>italic text </i><br
+    <i>italic text </i><br>
     <em>emphasized text</em><br>
     <u>underlined text</u><br>
     <mark>marked text</mark><br>
+    <abbr title="Hyper Text Markup Language">HTML</abbr><br>
     <small>small text</small><br>
     <aside>This is an aside section.</aside><br>
     <ins>inserted text</ins><br>
@@ -21,31 +51,31 @@
    H <sub>2</sub>O<br>
    E = mc<sup>2</sup><br>
    <q>hello world</q><br>
-   <abb>Hyper Text Markup Language</abb><br>
+   <abbr>Hyper Text Markup Language</abbr><br>
    <address>
     1234 Elm Street<br>
     Springfield, IL 62704<br>
     USA
     </address><br>
-    <img src="https://via.placeholder.com/150" alt="Sample Image"><br> 
+    <img src="https://via.placeholder.com/150" alt="Sample Image"><br>
     <p>Image above is a placeholder image.</p>
     <bdo dir="rtl">This text is displayed from right to left.</bdo>
     <bdo dir="ltr">This text is displayed from left to right.</bdo>
-    <a href="https://www.example.com" target="_blank">Visit Example.com</a><br>
+    <a href="https://www.example.com" target="_blank" rel="noopener noreferrer">Visit Example.com</a><br>
     <p>Click the link above to visit Example.com in a new tab.</p>
     <a href="mailto:vijay@example.com">Email Vijay</a><br>
     <img src="https://via.placeholder.com/100" alt="Another Sample Image"><br>
-    <div style="border: 2px solid black; padding: 10px; width: fit-content;">
+    <div class="box-bordered">
         This div has a border, padding, and width set to fit its content.
     </div>
-    <p style="text-align: center; color: blue; font-size: 20px;">
+    <p class="text-blue-large">
         This paragraph is centered, blue, and has a font size of 20px.
     </p>
-    <div style="background-color: rgb(203, 38, 38); padding: 15px;">
+    <div class="bg-light-gray">
         This div has a light gray background and padding.
     </div>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead
+    <table>
+        <thead>
         <tr>
             <th>Name</th>
             <th>Age</th>
@@ -76,9 +106,9 @@
         <hr>
         <audio controls>
             <source src="sample-audio.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.    
+            Your browser does not support the audio element.
         </audio><br>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br><br>
         <label for="email">Email:</label>
@@ -91,29 +121,29 @@
         <label for="color">Color Picker:</label>
         <input type="color" id="color" name="color"><br><br>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>   
+        <input type="password" id="password" name="password"><br><br>
         <label for="confirm-password">Confirm Password:</label>
-        <input type="password" id="confirm-password" name="confirm-password"><br><br>   
+        <input type="password" id="confirm-password" name="confirm-password"><br><br>
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone"><br><br>  
+        <input type="tel" id="phone" name="phone"><br><br>
         <label for="address">Address:</label>
-        <input type="text" id="address" name="address"><br><br> 
+        <input type="text" id="address" name="address"><br><br>
         <label for="city">City:</label>
-        <input type="text" id="city" name="city"><br><br> 
+        <input type="text" id="city" name="city"><br><br>
         <label for="state">State:</label>
-        <input type="text" id="state" name="state"><br><br> 
+        <input type="text" id="state" name="state"><br><br>
         <label for="zip">Zip Code:</label>
-        <input type="text" id="zip" name="zip"><br><br> 
-        <label for="zip">Zip Code:</label>
-        <input type="text" id="zip" name="zip"><br><br>     
-        <label for = "range">Range:</label>
-        <input type="range" id="range" name="range" min="0" max="100"><br><br>  
+        <input type="text" id="zip" name="zip"><br><br>
+        <label for="zip2">Zip Code:</label>
+        <input type="text" id="zip2" name="zip2"><br><br>
+        <label for="range">Range:</label>
+        <input type="range" id="range" name="range" min="0" max="100"><br><br>
         <label for="date">Date:</label>
-        <input type="date" id="date" name="date"><br><br>   
+        <input type="date" id="date" name="date"><br><br>
         <label for="time">Time:</label>
-        <input type="time" id="time" name="time"><br><br>       
+        <input type="time" id="time" name="time"><br><br>
         <label for="datetime">Date and Time:</label>
-        <input type="datetime" id="datetime" name="datetime"><br><br>   
+        <input type="datetime-local" id="datetime" name="datetime"><br><br>
         <label for="birthday">Birthday:</label>
         <input type="date" id="birthday" name="birthday"><br><br>
         <label for="appointment">Appointment Time:</label>
@@ -192,7 +222,7 @@
             <option value="bangladesh">Bangladesh</option>
             <option value="sri lanka">Sri Lanka</option>
             <option value="nepal">Nepal</option>
-            <option value="bhutan">Bhutan</option> 
+            <option value="bhutan">Bhutan</option>
             <option value="maldives">Maldives</option>
             <option value="indonesia">Indonesia</option>
             <option value="philippines">Philippines</option>
@@ -258,7 +288,7 @@
             <option value="gambia">Gambia</option>
             <option value="malta">Malta</option>
             <option value="cyprus">Cyprus</option>
-            <option value="iceland">Iceland</option>   
+            <option value="iceland">Iceland</option>
             <option value="greenland">Greenland</option>
             <option value="faroeislands">Faroe Islands</option>
             <option value="luxembourg">Luxembourg</option>
@@ -272,7 +302,7 @@
             <option value="northmacedonia">North Macedonia</option>
             <option value="bosniaherzegovina">Bosnia and Herzegovina</option>
             <option value="kosovo">Kosovo</option>
-            
+
 
         </select><br><br>
     <label for="fruits">Choose your favorite fruits:</label><br>
@@ -317,11 +347,11 @@
     <div id="message"></div>
     <label for="username">Username:</label>
     <input type="text" id="username" name="username"><br><br>
-    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+    <canvas id="myCanvas" width="200" height="100">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
     <small>Canvas above is 200 pixels wide and 100 pixels high.</small><br><br>
-    <ddatalist id="browsers">
+    <datalist id="browsers">
         <option value="Chrome">
         <option value="Firefox">
         <option value="Safari">
@@ -380,7 +410,7 @@
     70% <meter value="0.7">70%</meter><br><br>
     260mg/dL <meter value="260" min="70" max="300">260mg/dL</meter><br><br>
     92% <meter value="0.92">92%</meter><br><br>
-    130bpm <meter value="130" min="60" max="200">130bpm</meter><br><br>     
+    130bpm <meter value="130" min="60" max="200">130bpm</meter><br><br>
     5 stars <meter value="5" min="0" max="5">5 stars</meter><br><br>
     <ul id="userList">
         <li>1111</li>
@@ -389,7 +419,7 @@
         <li>5555</li>
         <li>6666</li>
     </ul>
-    
+
     <ol id="userListOrdered">
         <li>AAAA</li>
         <li>BBBB</li>
@@ -404,18 +434,18 @@
         <a href="#home">Home</a> |
         <a href="#about">About</a> |
         <a href="#services">Services</a> |
-        <a href="#contact">Contact</a>      
+        <a href="#contact">Contact</a>
     </nav>
     <article>
         <h3>Article Title</h3>
         <p>This is a sample article content.</p>
     </article>
-    <section>   
+    <section>
         <h3>Section Title</h3>
-        <p>This is a sample section content.</p>        
+        <p>This is a sample section content.</p>
     </section>
     <footer>
-        <p>&copy; 2024 My Website</p>   
+        <p>&copy; 2024 My Website</p>
     </footer>
     <aside>
         <h4>Related Links</h4>
@@ -431,7 +461,7 @@
         india
     </address>
     <span title="This is a tooltip">Hover over me!</span>
-    <hidden>This text is hidden.</hidden>
+    <span hidden>This text is hidden.</span>
     <details>
         <summary>This is a summary element</summary>
         <p>This is additional information that can be toggled.</p>
@@ -440,8 +470,8 @@
         <p>This is a dialog box.</p>
         <button>Close</button>
     </dialog>
-    <h1 abbr="Hyper Text Markup Language">HTML</h1>
-    <h1 height="100">THANK YOU!!!!!</h1>
+    <h1>HTML</h1>
+    <h1>THANK YOU!!!!!</h1>
     <hr>
 </body>
 </html>
