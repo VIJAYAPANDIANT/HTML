@@ -1,5 +1,10 @@
 # 🌐 HTML5 Comprehensive Practice Project
 
+
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+
+
 A robust, one-stop reference for modern HTML5 elements, text formatting, and advanced form controls. This project serves as a comprehensive laboratory for mastering web structure and semantic markup.
 
 ---
@@ -34,13 +39,6 @@ This repository contains a single-page HTML document designed to showcase the fu
 ### 🎨 Clean Internal Styling
 - Transitioned from inline styles to a clean, centralized `<style>` architecture for better maintainability.
 - Removed all trailing whitespaces and redundant attributes for a production-ready feel.
-
----
-
-## 🛠️ Technologies Used
-
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 ---
 
