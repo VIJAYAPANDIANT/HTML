@@ -39,9 +39,16 @@ This repository contains a single-page HTML document designed to showcase the fu
 - Fully structured tables with `<thead>`, `<tbody>`, and `<tfoot>`.
 - Interactive `<details>`/`<summary>` and `<dialog>` components.
 
-### 🎨 Clean Internal Styling
-- Transitioned from inline styles to a clean, centralized `<style>` architecture for better maintainability.
-- Removed all trailing whitespaces and redundant attributes for a production-ready feel.
+### 🎨 Modern Style Architecture
+- Transitioned from internal styles to a modular, external `style.css` stylesheet for better maintainability.
+- Implemented responsive card-based layout containers (`.section-container`) using modern CSS Flexbox and CSS Grid.
+- Applied clean global CSS resets, sleek shadows, modern color schemes, and backdrop-blur styling.
+
+### ⚡ Dynamic Interactive Layer
+- Integrated an external `script.js` file for rich runtime behaviors.
+- Implemented interactive control triggers for the `<dialog>` modal including outside-click dismissals.
+- Created custom geometric drawing canvas rendering dynamically.
+- Programmed real-time value indicator display for the interactive range slider control.
 
 ---
 
@@ -49,7 +56,9 @@ This repository contains a single-page HTML document designed to showcase the fu
 
 ```bash
 .
-├── index.html   # The main practice document
+├── index.html   # The main practice document containing semantic content structures
+├── style.css    # Modular layout grids, resets, and styles
+├── script.js    # Client-side dynamic control logic (modals, canvas drawing)
 └── README.md    # Project documentation
 ```
 
@@ -76,13 +85,13 @@ To explore the project locally:
 - [x] **Phase 2: Advanced Forms & Multimedia**
   - Integrate native multimedia player tags (`<audio>`, `<video>`) and `<iframe>` video embeds.
   - Build modern form controls using diverse input types (`color`, `range`, `datetime-local`, `<datalist>`).
-- [ ] **Phase 3: JavaScript Interactivity**
+- [x] **Phase 3: JavaScript Interactivity**
   - Program trigger logic for `<dialog>` modals (opening and closing with backdrop handling).
   - Add custom drawings via JavaScript on the `<canvas>` element and update input value feedback.
-- [ ] **Phase 4: CSS Refactoring & Responsive Design**
+- [x] **Phase 4: CSS Refactoring & Responsive Design**
   - Extract the internal `<style>` sheet into a dedicated, clean external stylesheet.
   - Redesign the layout using CSS Grid/Flexbox to be fully responsive on mobile screens.
-- [ ] **Phase 5: Accessibility & Standards Validation**
+- [/] **Phase 5: Accessibility & Standards Validation**
   - Enhance compliance with WCAG/WAI-ARIA specifications to support screen readers and keyboard navigation.
   - Eliminate custom visual spacers (`<br>`) and validate against W3C validators.
 
