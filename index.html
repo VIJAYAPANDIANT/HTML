@@ -1,97 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML5 Comprehensive Practice</title>
-    <style>
-        .box-bordered {
-            border: 2px solid black;
-            padding: 10px;
-            width: fit-content;
-        }
-        .text-blue-large {
-            text-align: center;
-            color: blue;
-            font-size: 20px;
-        }
-        .bg-light-gray {
-            background-color: #d3d3d3;
-            padding: 15px;
-        }
-        body {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-        h1, h2, h3, h4 {
-            text-align: center;
-            color: #222;
-        }
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        input, select, textarea {
-            margin-bottom: 10px;
-        }
-        video, audio, iframe, canvas {
-            display: block;
-            margin: 20px auto;
-        }
-        canvas {
-            border: 1px solid #000000;
-        }
-        iframe {
-            border: 0;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 1. TEXT FORMATTING & INLINE ELEMENTS       -->
+    <!-- ========================================== -->
     <h1>Hello, World!</h1>
-    <p>This is a sample HTML document.</p><br>
-    <b>vijay </b><br>
-    <strong>pandian</strong><br>
-    <i>italic text </i><br>
-    <em>emphasized text</em><br>
-    <u>underlined text</u><br>
-    <mark>marked text</mark><br>
-    <abbr title="Hyper Text Markup Language">HTML</abbr><br>
-    <small>small text</small><br>
-    <aside>This is an aside section.</aside><br>
-    <ins>inserted text</ins><br>
-    <del>deleted text</del><br>
-   H <sub>2</sub>O<br>
-   E = mc<sup>2</sup><br>
-   <q>hello world</q><br>
-   <abbr>Hyper Text Markup Language</abbr><br>
-   <address>
-    1234 Elm Street<br>
-    Springfield, IL 62704<br>
-    USA
-    </address><br>
-    <img src="https://via.placeholder.com/150" alt="Sample Image"><br>
+    <p>This is a sample HTML document.</p>
+    <b>vijay </b>
+    <strong>pandian</strong>
+    <i>italic text </i>
+    <em>emphasized text</em>
+    <u>underlined text</u>
+    <mark>marked text</mark>
+    <abbr title="Hyper Text Markup Language">HTML</abbr>
+    <small>small text</small>
+    <aside>This is an aside section.</aside>
+    <ins>inserted text</ins>
+    <del>deleted text</del>
+    H <sub>2</sub>O
+    E = mc<sup>2</sup>
+    <q>hello world</q>
+    <abbr>Hyper Text Markup Language</abbr>
+    <address>
+        1234 Elm Street
+        Springfield, IL 62704
+        USA
+    </address>
+    <img src="https://via.placeholder.com/150" alt="Sample Image">
     <p>Image above is a placeholder image.</p>
     <bdo dir="rtl">This text is displayed from right to left.</bdo>
     <bdo dir="ltr">This text is displayed from left to right.</bdo>
-    <a href="https://www.example.com" target="_blank" rel="noopener noreferrer">Visit Example.com</a><br>
+    <a href="https://www.example.com" target="_blank" rel="noopener noreferrer">Visit Example.com</a>
     <p>Click the link above to visit Example.com in a new tab.</p>
-    <a href="mailto:vijay@example.com">Email Vijay</a><br>
-    <img src="https://via.placeholder.com/100" alt="Another Sample Image"><br>
+    <a href="mailto:vijay@example.com">Email Vijay</a>
+    <img src="https://via.placeholder.com/100" alt="Another Sample Image">
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 2. DIVS & BASIC STYLING CLASSES            -->
+    <!-- ========================================== -->
     <div class="box-bordered">
         This div has a border, padding, and width set to fit its content.
     </div>
@@ -101,238 +59,266 @@
     <div class="bg-light-gray">
         This div has a light gray background and padding.
     </div>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 3. TABLES                                  -->
+    <!-- ========================================== -->
     <table>
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>City</th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>City</th>
+            </tr>
         </thead>
         <tfoot>
-        <tr>
-            <td>Vijay</td>
-            <td>30</td>
-            <td>Chennai</td>
-        </tr>
+            <tr>
+                <td>Vijay</td>
+                <td>30</td>
+                <td>Chennai</td>
+            </tr>
         </tfoot>
         <tbody>
-        <tr>
-            <td>Pandian</td>
-            <td>28</td>
-            <td>Bangalore</td>
-        </tr>
+            <tr>
+                <td>Pandian</td>
+                <td>28</td>
+                <td>Bangalore</td>
+            </tr>
         </tbody>
     </table>
 
-        <hr>
-        <video width="320" height="240" controls>
-            <source src="sample-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <hr>
-        <audio controls>
-            <source src="sample-audio.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio><br>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br><br>
-        <input type="submit" value="Submit"><br>
-        <label for="education">Education:</label>
-        <input type="text" id="education" name="education"><br><br>
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="1" max="120"><br><br>
-        <label for="color">Color Picker:</label>
-        <input type="color" id="color" name="color"><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
-        <label for="confirm-password">Confirm Password:</label>
-        <input type="password" id="confirm-password" name="confirm-password"><br><br>
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone"><br><br>
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address"><br><br>
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city"><br><br>
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state"><br><br>
-        <label for="zip">Zip Code:</label>
-        <input type="text" id="zip" name="zip"><br><br>
-        <label for="zip2">Zip Code:</label>
-        <input type="text" id="zip2" name="zip2"><br><br>
-        <label for="range">Range:</label>
-        <input type="range" id="range" name="range" min="0" max="100"><br><br>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date"><br><br>
-        <label for="time">Time:</label>
-        <input type="time" id="time" name="time"><br><br>
-        <label for="datetime">Date and Time:</label>
-        <input type="datetime-local" id="datetime" name="datetime"><br><br>
-        <label for="birthday">Birthday:</label>
-        <input type="date" id="birthday" name="birthday"><br><br>
-        <label for="appointment">Appointment Time:</label>
-        <input type="time" id="appointment" name="appointment"><br><br>
-        <label for="quantity">Quantity (1-10):</label>
-        <input type="number" id="quantity" name="quantity" min="1" max="10"><br><br>
-        <label for="website">Website:</label>
-        <input type="url" id="website" name="website"><br><br>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 4. MEDIA ELEMENTS (Video, Audio, Iframe)   -->
+    <!-- ========================================== -->
+    <hr>
+    <video width="320" height="240" controls>
+        <source src="sample-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <hr>
+    <audio controls>
+        <source src="sample-audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 5. FORMS & INPUT TYPES                     -->
+    <!-- ========================================== -->
+    <form aria-label="Sample input forms">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required aria-required="true">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+    <input type="submit" value="Submit">
+    <label for="education">Education:</label>
+    <input type="text" id="education" name="education">
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" min="1" max="120">
+    <label for="color">Color Picker:</label>
+    <input type="color" id="color" name="color">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <label for="confirm-password">Confirm Password:</label>
+    <input type="password" id="confirm-password" name="confirm-password">
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone">
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address">
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city">
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state">
+    <label for="zip">Zip Code:</label>
+    <input type="text" id="zip" name="zip">
+    <label for="zip2">Zip Code:</label>
+    <input type="text" id="zip2" name="zip2">
+    <label for="range">Range:</label>
+    <input type="range" id="range" name="range" min="0" max="100">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date">
+    <label for="time">Time:</label>
+    <input type="time" id="time" name="time">
+    <label for="datetime">Date and Time:</label>
+    <input type="datetime-local" id="datetime" name="datetime">
+    <label for="birthday">Birthday:</label>
+    <input type="date" id="birthday" name="birthday">
+    <label for="appointment">Appointment Time:</label>
+    <input type="time" id="appointment" name="appointment">
+    <label for="quantity">Quantity (1-10):</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="10">
+    <label for="website">Website:</label>
+    <input type="url" id="website" name="website">
         <label for="search">Search:</label>
-        <input type="search" id="search" name="search"><br><br>
-        <input type="checkbox" id="subscribe" name="subscribe" value="newsletter">
-        <label for="subscribe"> Subscribe to newsletter</label><br><br>
-        <label for="comments">Comments:</label><br>
-        <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br><br>
-        <label for="country">Choose a country:</label>
-        <select id="country" name="country">
-            <option value="usa">USA</option>
-            <option value="canada">Canada</option>
-            <option value="uk">UK</option>
-            <option value="australia">Australia</option>
-            <option value="india">India</option>
-            <option value="germany">Germany</option>
-            <option value="france">France</option>
-            <option value="japan">Japan</option>
-            <option value="china">China</option>
-            <option value="brazil">Brazil</option>
-            <option value="southafrica">South Africa</option>
-            <option value="mexico">Mexico</option>
-            <option value="russia">Russia</option>
-            <option value="italy">Italy</option>
-            <option value="spain">Spain</option>
-            <option value="netherlands">Netherlands</option>
-            <option value="sweden">Sweden</option>
-            <option value="switzerland">Switzerland</option>
-            <option value="norway">Norway</option>
-            <option value="denmark">Denmark</option>
-            <option value="finland">Finland</option>
-            <option value="belgium">Belgium</option>
-            <option value="austria">Austria</option>
-            <option value="ireland">Ireland</option>
-            <option value="newzealand">New Zealand</option>
-            <option value="singapore">Singapore</option>
-            <option value="southkorea">South Korea</option>
-            <option value="taiwan">Taiwan</option>
-            <option value="hongkong">Hong Kong</option>
-            <option value="uae">UAE</option>
-            <option value="saudiarabia">Saudi Arabia</option>
-            <option value="turkey">Turkey</option>
-            <option value="greece">Greece</option>
-            <option value="portugal">Portugal</option>
-            <option value="poland">Poland</option>
-            <option value="czechrepublic">Czech Republic</option>
-            <option value="hungary">Hungary</option>
-            <option value="romania">Romania</option>
-            <option value="slovakia">Slovakia</option>
-            <option value="slovenia">Slovenia</option>
-            <option value="croatia">Croatia</option>
-            <option value="serbia">Serbia</option>
-            <option value="bulgaria">Bulgaria</option>
-            <option value="ukraine">Ukraine</option>
-            <option value="belarus">Belarus</option>
-            <option value="lithuania">Lithuania</option>
-            <option value="latvia">Latvia</option>
-            <option value="estonia">Estonia</option>
-            <option value="moldova">Moldova</option>
-            <option value="georgia">Georgia</option>
-            <option value="armenia">Armenia</option>
-            <option value="azerbaijan">Azerbaijan</option>
-            <option value="kazakhstan">Kazakhstan</option>
-            <option value="kyrgyzstan">Kyrgyzstan</option>
-            <option value="tajikistan">Tajikistan</option>
-            <option value="turkmenistan">Turkmenistan</option>
-            <option value="uzbekistan">Uzbekistan</option>
-            <option value="afghanistan">Afghanistan</option>
-            <option value="pakistan">Pakistan</option>
-            <option value="bangladesh">Bangladesh</option>
-            <option value="sri lanka">Sri Lanka</option>
-            <option value="nepal">Nepal</option>
-            <option value="bhutan">Bhutan</option>
-            <option value="maldives">Maldives</option>
-            <option value="indonesia">Indonesia</option>
-            <option value="philippines">Philippines</option>
-            <option value="thailand">Thailand</option>
-            <option value="vietnam">Vietnam</option>
-            <option value="myanmar">Myanmar</option>
-            <option value="cambodia">Cambodia</option>
-            <option value="laos">Laos</option>
-            <option value="malaysia">Malaysia</option>
-            <option value="brunei">Brunei</option>
-            <option value="timor-leste">Timor-Leste</option>
-            <option value="papuanewguinea">Papua New Guinea</option>
-            <option value="fiji">Fiji</option>
-            <option value="samoa">Samoa</option>
-            <option value="tonga">Tonga</option>
-            <option value="vanuatu">Vanuatu</option>
-            <option value="solomonislands">Solomon Islands</option>
-            <option value="micronesia">Micronesia</option>
-            <option value="marshallislands">Marshall Islands</option>
-            <option value="palau">Palau</option>
-            <option value="nauru">Nauru</option>
-            <option value="tuvalu">Tuvalu</option>
-            <option value="kiribati">Kiribati</option>
-            <option value="comoros">Comoros</option>
-            <option value="madagascar">Madagascar</option>
-            <option value="mauritius">Mauritius</option>
-            <option value="seychelles">Seychelles</option>
-            <option value="capeverde">Cape Verde</option>
-            <option value="gabon">Gabon</option>
-            <option value="angola">Angola</option>
-            <option value="mozambique">Mozambique</option>
-            <option value="zimbabwe">Zimbabwe</option>
-            <option value="zambia">Zambia</option>
-            <option value="eswatini">Eswatini</option>
-            <option value="lesotho">Lesotho</option>
-            <option value="botswana">Botswana</option>
-            <option value="namibia">Namibia</option>
-            <option value="malawi">Malawi</option>
-            <option value="tanzania">Tanzania</option>
-            <option value="kenya">Kenya</option>
-            <option value="uganda">Uganda</option>
-            <option value="rwanda">Rwanda</option>
-            <option value="burundi">Burundi</option>
-            <option value="ethiopia">Ethiopia</option>
-            <option value="somalia">Somalia</option>
-            <option value="djibouti">Djibouti</option>
-            <option value="eritrea">Eritrea</option>
-            <option value="sudan">Sudan</option>
-            <option value="southsudan">South Sudan</option>
-            <option value="chad">Chad</option>
-            <option value="centralafricanrepublic">Central African Republic</option>
-            <option value="cameroon">Cameroon</option>
-            <option value="nigeria">Nigeria</option>
-            <option value="benin">Benin</option>
-            <option value="togo">Togo</option>
-            <option value="ghana">Ghana</option>
-            <option value="ivorycoast">Ivory Coast</option>
-            <option value="liberia">Liberia</option>
-            <option value="sierra leone">Sierra Leone</option>
-            <option value="guinea">Guinea</option>
-            <option value="guineabissau">Guinea-Bissau</option>
-            <option value="senegal">Senegal</option>
-            <option value="gambia">Gambia</option>
-            <option value="malta">Malta</option>
-            <option value="cyprus">Cyprus</option>
-            <option value="iceland">Iceland</option>
-            <option value="greenland">Greenland</option>
-            <option value="faroeislands">Faroe Islands</option>
-            <option value="luxembourg">Luxembourg</option>
-            <option value="monaco">Monaco</option>
-            <option value="andorra">Andorra</option>
-            <option value="liechtenstein">Liechtenstein</option>
-            <option value="sanmarino">San Marino</option>
-            <option value="vaticancity">Vatican City</option>
-            <option value="montenegro">Montenegro</option>
-            <option value="albania">Albania</option>
-            <option value="northmacedonia">North Macedonia</option>
-            <option value="bosniaherzegovina">Bosnia and Herzegovina</option>
-            <option value="kosovo">Kosovo</option>
+        <input type="search" id="search" name="search" aria-label="Search the site">
+    <input type="checkbox" id="subscribe" name="subscribe" value="newsletter">
+    <label for="subscribe"> Subscribe to newsletter</label>
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
+    </form>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 6. SELECT DROPDOWNS & OPTIONS              -->
+    <!-- ========================================== -->
+    <label for="country">Choose a country:</label>
+    <select id="country" name="country">
+        <option value="usa">USA</option>
+        <option value="canada">Canada</option>
+        <option value="uk">UK</option>
+        <option value="australia">Australia</option>
+        <option value="india">India</option>
+        <option value="germany">Germany</option>
+        <option value="france">France</option>
+        <option value="japan">Japan</option>
+        <option value="china">China</option>
+        <option value="brazil">Brazil</option>
+        <option value="southafrica">South Africa</option>
+        <option value="mexico">Mexico</option>
+        <option value="russia">Russia</option>
+        <option value="italy">Italy</option>
+        <option value="spain">Spain</option>
+        <option value="netherlands">Netherlands</option>
+        <option value="sweden">Sweden</option>
+        <option value="switzerland">Switzerland</option>
+        <option value="norway">Norway</option>
+        <option value="denmark">Denmark</option>
+        <option value="finland">Finland</option>
+        <option value="belgium">Belgium</option>
+        <option value="austria">Austria</option>
+        <option value="ireland">Ireland</option>
+        <option value="newzealand">New Zealand</option>
+        <option value="singapore">Singapore</option>
+        <option value="southkorea">South Korea</option>
+        <option value="taiwan">Taiwan</option>
+        <option value="hongkong">Hong Kong</option>
+        <option value="uae">UAE</option>
+        <option value="saudiarabia">Saudi Arabia</option>
+        <option value="turkey">Turkey</option>
+        <option value="greece">Greece</option>
+        <option value="portugal">Portugal</option>
+        <option value="poland">Poland</option>
+        <option value="czechrepublic">Czech Republic</option>
+        <option value="hungary">Hungary</option>
+        <option value="romania">Romania</option>
+        <option value="slovakia">Slovakia</option>
+        <option value="slovenia">Slovenia</option>
+        <option value="croatia">Croatia</option>
+        <option value="serbia">Serbia</option>
+        <option value="bulgaria">Bulgaria</option>
+        <option value="ukraine">Ukraine</option>
+        <option value="belarus">Belarus</option>
+        <option value="lithuania">Lithuania</option>
+        <option value="latvia">Latvia</option>
+        <option value="estonia">Estonia</option>
+        <option value="moldova">Moldova</option>
+        <option value="georgia">Georgia</option>
+        <option value="armenia">Armenia</option>
+        <option value="azerbaijan">Azerbaijan</option>
+        <option value="kazakhstan">Kazakhstan</option>
+        <option value="kyrgyzstan">Kyrgyzstan</option>
+        <option value="tajikistan">Tajikistan</option>
+        <option value="turkmenistan">Turkmenistan</option>
+        <option value="uzbekistan">Uzbekistan</option>
+        <option value="afghanistan">Afghanistan</option>
+        <option value="pakistan">Pakistan</option>
+        <option value="bangladesh">Bangladesh</option>
+        <option value="sri lanka">Sri Lanka</option>
+        <option value="nepal">Nepal</option>
+        <option value="bhutan">Bhutan</option>
+        <option value="maldives">Maldives</option>
+        <option value="indonesia">Indonesia</option>
+        <option value="philippines">Philippines</option>
+        <option value="thailand">Thailand</option>
+        <option value="vietnam">Vietnam</option>
+        <option value="myanmar">Myanmar</option>
+        <option value="cambodia">Cambodia</option>
+        <option value="laos">Laos</option>
+        <option value="malaysia">Malaysia</option>
+        <option value="brunei">Brunei</option>
+        <option value="timor-leste">Timor-Leste</option>
+        <option value="papuanewguinea">Papua New Guinea</option>
+        <option value="fiji">Fiji</option>
+        <option value="samoa">Samoa</option>
+        <option value="tonga">Tonga</option>
+        <option value="vanuatu">Vanuatu</option>
+        <option value="solomonislands">Solomon Islands</option>
+        <option value="micronesia">Micronesia</option>
+        <option value="marshallislands">Marshall Islands</option>
+        <option value="palau">Palau</option>
+        <option value="nauru">Nauru</option>
+        <option value="tuvalu">Tuvalu</option>
+        <option value="kiribati">Kiribati</option>
+        <option value="comoros">Comoros</option>
+        <option value="madagascar">Madagascar</option>
+        <option value="mauritius">Mauritius</option>
+        <option value="seychelles">Seychelles</option>
+        <option value="capeverde">Cape Verde</option>
+        <option value="gabon">Gabon</option>
+        <option value="angola">Angola</option>
+        <option value="mozambique">Mozambique</option>
+        <option value="zimbabwe">Zimbabwe</option>
+        <option value="zambia">Zambia</option>
+        <option value="eswatini">Eswatini</option>
+        <option value="lesotho">Lesotho</option>
+        <option value="botswana">Botswana</option>
+        <option value="namibia">Namibia</option>
+        <option value="malawi">Malawi</option>
+        <option value="tanzania">Tanzania</option>
+        <option value="kenya">Kenya</option>
+        <option value="uganda">Uganda</option>
+        <option value="rwanda">Rwanda</option>
+        <option value="burundi">Burundi</option>
+        <option value="ethiopia">Ethiopia</option>
+        <option value="somalia">Somalia</option>
+        <option value="djibouti">Djibouti</option>
+        <option value="eritrea">Eritrea</option>
+        <option value="sudan">Sudan</option>
+        <option value="southsudan">South Sudan</option>
+        <option value="chad">Chad</option>
+        <option value="centralafricanrepublic">Central African Republic</option>
+        <option value="cameroon">Cameroon</option>
+        <option value="nigeria">Nigeria</option>
+        <option value="benin">Benin</option>
+        <option value="togo">Togo</option>
+        <option value="ghana">Ghana</option>
+        <option value="ivorycoast">Ivory Coast</option>
+        <option value="liberia">Liberia</option>
+        <option value="sierra leone">Sierra Leone</option>
+        <option value="guinea">Guinea</option>
+        <option value="guineabissau">Guinea-Bissau</option>
+        <option value="senegal">Senegal</option>
+        <option value="gambia">Gambia</option>
+        <option value="malta">Malta</option>
+        <option value="cyprus">Cyprus</option>
+        <option value="iceland">Iceland</option>
+        <option value="greenland">Greenland</option>
+        <option value="faroeislands">Faroe Islands</option>
+        <option value="luxembourg">Luxembourg</option>
+        <option value="monaco">Monaco</option>
+        <option value="andorra">Andorra</option>
+        <option value="liechtenstein">Liechtenstein</option>
+        <option value="sanmarino">San Marino</option>
+        <option value="vaticancity">Vatican City</option>
+        <option value="montenegro">Montenegro</option>
+        <option value="albania">Albania</option>
+        <option value="northmacedonia">North Macedonia</option>
+        <option value="bosniaherzegovina">Bosnia and Herzegovina</option>
+        <option value="kosovo">Kosovo</option>
 
 
-        </select><br><br>
-    <label for="fruits">Choose your favorite fruits:</label><br>
+    </select>
+    <label for="fruits">Choose your favorite fruits:</label>
     <select id="fruits" name="fruits" multiple size="5">
         <option value="apple">Apple</option>
         <option value="banana">Banana</option>
@@ -344,7 +330,7 @@
         <option value="honeydew">Honeydew</option>
         <option value="kiwi">Kiwi</option>
         <option value="lemon">Lemon</option>
-    </select><br><br>
+    </select>
     <label for="cars">Choose a car:</label>
     <select id="cars" name="cars">
         <option value="volvo">Volvo</option>
@@ -368,16 +354,22 @@
         <option value="lamborghini">Lamborghini</option>
         <option value="jaguar">Jaguar</option>
     </select>
-    <label for="bio">Bio:</label><br>
-    <textarea id="bio" name="bio" rows="4" cols="50"></textarea><br><br>
-    <input type="submit" value="Submit"><br><br>
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio" rows="4" cols="50"></textarea>
+    <input type="submit" value="Submit">
     <div id="message"></div>
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br><br>
+    <input type="text" id="username" name="username">
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 7. CANVAS & DATALIST                       -->
+    <!-- ========================================== -->
     <canvas id="myCanvas" width="200" height="100">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
-    <small>Canvas above is 200 pixels wide and 100 pixels high.</small><br><br>
+    <small>Canvas above is 200 pixels wide and 100 pixels high.</small>
     <datalist id="browsers">
         <option value="Chrome">
         <option value="Firefox">
@@ -386,59 +378,71 @@
         <option value="Opera">
         <option value="Internet Explorer">
     </datalist>
-    8 <progress value="8" max="10"></progress> 10<br><br>
-    70% <meter value="0.7">70%</meter><br><br>
-    40km/h <meter value="40" min="0" max="100">40km/h</meter><br><br>
-    60% <meter value="0.6">60%</meter><br><br>
-    120bpm <meter value="120" min="60" max="180">120bpm</meter><br><br>
-    5 stars <meter value="5" min="0" max="5">5 stars</meter><br><br>
-    75% <meter value="0.75">75%</meter><br><br>
-    300 calories <meter value="300" min="0" max="1000">300 calories</meter><br><br>
-    50% <meter value="0.5">50%</meter><br><br>
-    200mg/dL <meter value="200" min="70" max="200">200mg/dL</meter><br><br>
-    85% <meter value="0.85">85%</meter><br><br>
-    150ppm <meter value="150" min="0" max="300">150ppm</meter><br><br>
-    90% <meter value="0.9">90%</meter><br><br>
-    400mg <meter value="400" min="0" max="1000">400mg</meter><br><br>
-    65% <meter value="0.65">65%</meter><br><br>
-    250mg/dL <meter value="250" min="70" max="300">250mg/dL</meter><br><br>
-    95% <meter value="0.95">95%</meter><br><br>
-    180bpm <meter value="180" min="60" max="200">180bpm</meter><br><br>
-    4 stars <meter value="4" min="0" max="5">4 stars</meter><br><br>
-    60% <meter value="0.6">60%</meter><br><br>
-    350 calories <meter value="350" min="0" max="1000">350 calories</meter><br><br>
-    30km/h <meter value="30" min="0" max="100">30km/h</meter><br><br>
-    55% <meter value="0.55">55%</meter><br><br>
-    110bpm <meter value="110" min="60" max="180">110bpm</meter><br><br>
-    3 stars <meter value="3" min="0" max="5">3 stars</meter><br><br>
-    45% <meter value="0.45">45%</meter><br><br>
-    220mg/dL <meter value="220" min="70" max="300">220mg/dL</meter><br><br>
-    80% <meter value="0.8">80%</meter><br><br>
-    160ppm <meter value="160" min="0" max="300">160 ppm</meter><br><br>
-    70% <meter value="0.7">70%</meter><br><br>
-    500mg <meter value="500" min="0" max="1000">500mg</meter><br><br>
-    75% <meter value="0.75">75%</meter><br><br>
-    280mg/dL <meter value="280" min="70" max="300">280mg/dL</meter><br><br>
-    88% <meter value="0.88">88%</meter><br><br>
-    140bpm <meter value="140" min="60" max="200">140bpm</meter><br><br>
-    2 stars <meter value="2" min="0" max="5">2 stars</meter><br><br>
-    35% <meter value="0.35">35%</meter><br><br>
-    180 calories <meter value="180" min="0" max="1000"> 180 calories</meter><br><br>
-    25km/h <meter value="25" min="0" max="100">25km/h</meter><br><br>
-    50% <meter value="0.5">50%</meter><br><br>
-    90bpm <meter value="90" min="60" max="180">90bpm</meter><br><br>
-    1 star <meter value="1" min="0" max="5">1   star</meter><br><br>
-    20% <meter value="0.2">20%</meter><br><br>
-    200mg/dL <meter value="200" min="70" max="300   ">200mg/dL</meter><br><br>
-    65% <meter value="0.65">65%</meter><br><br>
-    120ppm <meter value="120" min="0" max="300">120ppm</meter><br><br>
-    55% <meter value="0.55">55%</meter><br><br>
-    600mg <meter value="600" min="0" max="1000">600mg</meter><br><br>
-    70% <meter value="0.7">70%</meter><br><br>
-    260mg/dL <meter value="260" min="70" max="300">260mg/dL</meter><br><br>
-    92% <meter value="0.92">92%</meter><br><br>
-    130bpm <meter value="130" min="60" max="200">130bpm</meter><br><br>
-    5 stars <meter value="5" min="0" max="5">5 stars</meter><br><br>
+    </div>
+
+    <div class="section-container grid-layout">
+    <!-- ========================================== -->
+    <!-- 8. PROGRESS & METER ELEMENTS               -->
+    <!-- ========================================== -->
+    8 <progress value="8" max="10"></progress> 10
+    70% <meter value="0.7">70%</meter>
+    40km/h <meter value="40" min="0" max="100">40km/h</meter>
+    60% <meter value="0.6">60%</meter>
+    120bpm <meter value="120" min="60" max="180">120bpm</meter>
+    5 stars <meter value="5" min="0" max="5">5 stars</meter>
+    75% <meter value="0.75">75%</meter>
+    300 calories <meter value="300" min="0" max="1000">300 calories</meter>
+    50% <meter value="0.5">50%</meter>
+    200mg/dL <meter value="200" min="70" max="200">200mg/dL</meter>
+    85% <meter value="0.85">85%</meter>
+    150ppm <meter value="150" min="0" max="300">150ppm</meter>
+    90% <meter value="0.9">90%</meter>
+    400mg <meter value="400" min="0" max="1000">400mg</meter>
+    65% <meter value="0.65">65%</meter>
+    250mg/dL <meter value="250" min="70" max="300">250mg/dL</meter>
+    95% <meter value="0.95">95%</meter>
+    180bpm <meter value="180" min="60" max="200">180bpm</meter>
+    4 stars <meter value="4" min="0" max="5">4 stars</meter>
+    60% <meter value="0.6">60%</meter>
+    350 calories <meter value="350" min="0" max="1000">350 calories</meter>
+    30km/h <meter value="30" min="0" max="100">30km/h</meter>
+    55% <meter value="0.55">55%</meter>
+    110bpm <meter value="110" min="60" max="180">110bpm</meter>
+    3 stars <meter value="3" min="0" max="5">3 stars</meter>
+    45% <meter value="0.45">45%</meter>
+    220mg/dL <meter value="220" min="70" max="300">220mg/dL</meter>
+    80% <meter value="0.8">80%</meter>
+    160ppm <meter value="160" min="0" max="300">160 ppm</meter>
+    70% <meter value="0.7">70%</meter>
+    500mg <meter value="500" min="0" max="1000">500mg</meter>
+    75% <meter value="0.75">75%</meter>
+    280mg/dL <meter value="280" min="70" max="300">280mg/dL</meter>
+    88% <meter value="0.88">88%</meter>
+    140bpm <meter value="140" min="60" max="200">140bpm</meter>
+    2 stars <meter value="2" min="0" max="5">2 stars</meter>
+    35% <meter value="0.35">35%</meter>
+    180 calories <meter value="180" min="0" max="1000"> 180 calories</meter>
+    25km/h <meter value="25" min="0" max="100">25km/h</meter>
+    50% <meter value="0.5">50%</meter>
+    90bpm <meter value="90" min="60" max="180">90bpm</meter>
+    1 star <meter value="1" min="0" max="5">1 star</meter>
+    20% <meter value="0.2">20%</meter>
+    200mg/dL <meter value="200" min="70" max="300   ">200mg/dL</meter>
+    65% <meter value="0.65">65%</meter>
+    120ppm <meter value="120" min="0" max="300">120ppm</meter>
+    55% <meter value="0.55">55%</meter>
+    600mg <meter value="600" min="0" max="1000">600mg</meter>
+    70% <meter value="0.7">70%</meter>
+    260mg/dL <meter value="260" min="70" max="300">260mg/dL</meter>
+    92% <meter value="0.92">92%</meter>
+    130bpm <meter value="130" min="60" max="200">130bpm</meter>
+    5 stars <meter value="5" min="0" max="5">5 stars</meter>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 9. LISTS (Unordered & Ordered)             -->
+    <!-- ========================================== -->
     <ul id="userList">
         <li>1111</li>
         <li>2222</li>
@@ -454,6 +458,12 @@
         <li>DDDD</li>
         <li>EEEE</li>
     </ol>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 10. SEMANTIC HTML LAYOUT ELEMENTS          -->
+    <!-- ========================================== -->
     <header>
         <h2>Welcome to My Website</h2>
     </header>
@@ -483,10 +493,16 @@
         </ul>
     </aside>
     <address>
-        easwaran nager<br>
-        chennai-89<br>
+        easwaran nager
+        chennai-89
         india
     </address>
+    </div>
+
+    <div class="section-container">
+    <!-- ========================================== -->
+    <!-- 11. MISCELLANEOUS ELEMENTS                 -->
+    <!-- ========================================== -->
     <span title="This is a tooltip">Hover over me!</span>
     <span hidden>This text is hidden.</span>
     <details>
@@ -497,8 +513,11 @@
         <p>This is a dialog box.</p>
         <button>Close</button>
     </dialog>
+    
     <h1>HTML</h1>
     <h1>THANK YOU!!!!!</h1>
     <hr>
+    </div>
 </body>
+
 </html>

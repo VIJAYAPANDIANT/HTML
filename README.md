@@ -68,6 +68,26 @@ To explore the project locally:
 
 ---
 
+## 🗺️ Roadmap
+
+- [x] **Phase 1: Basic Structure & Text Formatting**
+  - Implement standard semantic text tags (`<em>`, `<strong>`, `<mark>`, etc.).
+  - Set up lists and structured tables with semantic headers (`<thead>`, `<tbody>`, `<tfoot>`).
+- [x] **Phase 2: Advanced Forms & Multimedia**
+  - Integrate native multimedia player tags (`<audio>`, `<video>`) and `<iframe>` video embeds.
+  - Build modern form controls using diverse input types (`color`, `range`, `datetime-local`, `<datalist>`).
+- [ ] **Phase 3: JavaScript Interactivity**
+  - Program trigger logic for `<dialog>` modals (opening and closing with backdrop handling).
+  - Add custom drawings via JavaScript on the `<canvas>` element and update input value feedback.
+- [ ] **Phase 4: CSS Refactoring & Responsive Design**
+  - Extract the internal `<style>` sheet into a dedicated, clean external stylesheet.
+  - Redesign the layout using CSS Grid/Flexbox to be fully responsive on mobile screens.
+- [ ] **Phase 5: Accessibility & Standards Validation**
+  - Enhance compliance with WCAG/WAI-ARIA specifications to support screen readers and keyboard navigation.
+  - Eliminate custom visual spacers (`<br>`) and validate against W3C validators.
+
+---
+
 ## 👤 Author
 
 **Vijayapandian T**  
