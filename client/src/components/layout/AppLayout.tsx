@@ -71,7 +71,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
         {/* User profile / Logout */}
         <div className="p-4 border-t border-border flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <Link to="/profile" className="flex items-center space-x-3 hover:opacity-85 transition-opacity">
             <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center text-background font-bold">
               JD
             </div>
@@ -79,7 +79,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <p className="text-sm font-semibold text-white">John Doe</p>
               <p className="text-xs text-muted-foreground">Admin</p>
             </div>
-          </div>
+          </Link>
           <button className="p-2 text-muted-foreground hover:text-destructive rounded-lg hover:bg-destructive/10 transition-colors">
             <LogOut className="h-5 w-5" />
           </button>
