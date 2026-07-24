@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Relational Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: intellisphere-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: intellisphere
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - intellisphere-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d intellisphere"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: intellisphere-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - intellisphere-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  intellisphere-net:
+    driver: bridge
