@@ -134,3 +134,18 @@ CREATE INDEX idx_sensors_asset ON sensors(asset_id);
 CREATE INDEX idx_alerts_org ON alerts(organization_id);
 CREATE INDEX idx_predictions_module ON predictions(module_id);
 CREATE INDEX idx_notifications_user ON notifications(user_id);
+
+-- 13. User Sessions Table
+CREATE TABLE user_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    token VARCHAR(512) UNIQUE NOT NULL,
+    ip_address VARCHAR(45),
+    user_agent VARCHAR(255),
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_sessions_user ON user_sessions(user_id);
+CREATE INDEX idx_sessions_token ON user_sessions(token);

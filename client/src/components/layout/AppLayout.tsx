@@ -106,46 +106,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
             )}
           </div>
 
-          {/* Organization Switcher Dropdown */}
-          <div className="p-4 border-b border-border relative">
-            <button 
-              onClick={() => setShowOrgDropdown(!showOrgDropdown)}
-              className="w-full flex items-center justify-between px-3 py-2 bg-background border border-border rounded-lg hover:border-primary/50 transition-colors"
-            >
-              <div className="flex items-center space-x-2.5 overflow-hidden">
-                <div className="h-6 w-6 rounded bg-secondary/10 text-secondary flex items-center justify-center font-bold text-xs flex-shrink-0">
-                  {activeOrg.code}
-                </div>
-                {!isSidebarCollapsed && (
-                  <span className="text-xs font-semibold text-white truncate block">
-                    {activeOrg.name}
-                  </span>
-                )}
-              </div>
-              {!isSidebarCollapsed && <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />}
-            </button>
-
-            {showOrgDropdown && !isSidebarCollapsed && (
-              <div className="absolute left-4 right-4 mt-2 bg-card border border-border rounded-lg shadow-xl z-30 p-1.5 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
-                {organizations.map((org) => (
-                  <button
-                    key={org.code}
-                    onClick={() => {
-                      setActiveOrg(org);
-                      setShowOrgDropdown(false);
-                    }}
-                    className="w-full text-left px-3 py-2 text-xs font-medium rounded-md hover:bg-muted/50 text-slate-300 hover:text-white flex items-center justify-between"
-                  >
-                    <span>{org.name}</span>
-                    {activeOrg.code === org.code && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Navigation Links */}
           <nav className="p-4 space-y-1">
             {[
@@ -201,41 +161,95 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
       {/* 2. Top Header Navigation and Content Shell */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header */}
-        <header className="h-16 border-b border-border flex items-center px-8 justify-between bg-card/60 backdrop-blur-md z-10">
+        
+        {/* Sticky Glassmorphic Navbar */}
+        <header className="sticky top-0 h-16 border-b border-border/80 flex items-center px-8 justify-between bg-card/75 backdrop-blur-lg z-30 flex-shrink-0">
           
-          {/* Breadcrumb Navigation & Dynamic Trail */}
-          <div className="flex items-center space-x-2 text-xs font-medium text-muted-foreground">
-            <Link to="/dashboard" className="hover:text-white transition-colors">Home</Link>
-            {breadcrumbs.map((crumb, idx) => (
-              <div key={crumb.path} className="flex items-center space-x-2">
-                <span>/</span>
-                <Link 
-                  to={crumb.path} 
-                  className={`hover:text-white transition-colors capitalize ${
-                    idx === breadcrumbs.length - 1 ? 'text-white font-semibold' : ''
-                  }`}
-                >
-                  {crumb.name}
-                </Link>
-              </div>
-            ))}
+          {/* Left Side: Org Switcher & Breadcrumbs */}
+          <div className="flex items-center space-x-6">
+            {/* Org Switcher */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowOrgDropdown(!showOrgDropdown)}
+                className="flex items-center space-x-2 px-2.5 py-1.5 bg-background/50 border border-border rounded-lg hover:border-primary/50 transition-colors"
+              >
+                <div className="h-5 w-5 rounded bg-secondary/15 text-secondary flex items-center justify-center font-bold text-[10px]">
+                  {activeOrg.code}
+                </div>
+                <span className="text-xs font-bold text-white max-w-[120px] truncate hidden md:inline">
+                  {activeOrg.name}
+                </span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              </button>
+
+              {showOrgDropdown && (
+                <div className="absolute left-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-xl z-50 p-1.5 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {organizations.map((org) => (
+                    <button
+                      key={org.code}
+                      onClick={() => {
+                        setActiveOrg(org);
+                        setShowOrgDropdown(false);
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-md hover:bg-muted/50 text-slate-300 hover:text-white flex items-center justify-between"
+                    >
+                      <span>{org.name}</span>
+                      {activeOrg.code === org.code && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="h-4 w-px bg-border/80" />
+
+            {/* Breadcrumb Navigation */}
+            <div className="flex items-center space-x-2 text-xs font-semibold text-muted-foreground">
+              <Link to="/dashboard" className="hover:text-white transition-colors">Home</Link>
+              {breadcrumbs.map((crumb, idx) => (
+                <div key={crumb.path} className="flex items-center space-x-2">
+                  <span>/</span>
+                  <Link 
+                    to={crumb.path} 
+                    className={`hover:text-white transition-colors capitalize ${
+                      idx === breadcrumbs.length - 1 ? 'text-white font-semibold' : ''
+                    }`}
+                  >
+                    {crumb.name}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Top Nav Action Items */}
-          <div className="flex items-center space-x-6">
+          {/* Right Side: Search, AI Assistant, Notifications, Theme, Profile */}
+          <div className="flex items-center space-x-4">
             
             {/* Search Bar */}
-            <div className="relative w-48 sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative w-40 sm:w-56 hidden sm:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
               <input 
                 type="text" 
                 placeholder="Search..." 
-                className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                className="w-full bg-background/50 border border-border rounded-lg pl-9 pr-4 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
               />
             </div>
 
-            {/* Notification Center Dropdown */}
+            {/* AI Assistant Button */}
+            <button 
+              onClick={() => navigate('/ai-center')}
+              className="p-2 text-muted-foreground hover:text-primary rounded-lg transition-colors focus:outline-none relative group"
+              title="AI Assistant"
+            >
+              <Sparkles className="h-5 w-5 text-accent animate-pulse" />
+              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-card border border-border text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow z-50">
+                AI Assistant
+              </span>
+            </button>
+
+            {/* Notification Center */}
             <div className="relative">
               <button 
                 onClick={() => {
@@ -253,7 +267,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               </button>
 
               {showNotifDropdown && (
-                <div className="absolute right-0 mt-3 w-80 bg-card border border-border rounded-xl shadow-2xl z-40 p-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute right-0 mt-3 w-80 bg-card border border-border rounded-xl shadow-2xl z-50 p-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="flex justify-between items-center border-b border-border pb-2">
                     <span className="text-xs font-bold text-white">Notifications</span>
                     <button 
@@ -278,7 +292,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               )}
             </div>
 
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle */}
             <button 
               onClick={toggleTheme}
               className="p-2 text-muted-foreground hover:text-white rounded-lg transition-colors focus:outline-none"
@@ -287,23 +301,28 @@ export default function AppLayout({ children }: AppLayoutProps) {
               {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
 
-            {/* User Profile Menu Dropdown */}
+            <div className="h-4 w-px bg-border/80" />
+
+            {/* User Profile Menu & Avatar with Status ring */}
             <div className="relative">
               <button 
                 onClick={() => {
                   setShowProfileDropdown(!showProfileDropdown);
                   setShowNotifDropdown(false);
                 }}
-                className="flex items-center space-x-2 focus:outline-none hover:opacity-85 transition-opacity"
+                className="flex items-center space-x-2 focus:outline-none hover:opacity-90 transition-opacity"
               >
-                <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-background font-bold text-xs">
-                  JD
+                <div className="relative">
+                  <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-background font-bold text-xs ring-2 ring-primary/20">
+                    JD
+                  </div>
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-secondary border-2 border-card" />
                 </div>
-                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block" />
               </button>
 
               {showProfileDropdown && (
-                <div className="absolute right-0 mt-3 w-48 bg-card border border-border rounded-xl shadow-2xl z-40 p-1.5 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute right-0 mt-3 w-48 bg-card border border-border rounded-xl shadow-2xl z-50 p-1.5 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
                   <Link 
                     to="/profile" 
                     onClick={() => setShowProfileDropdown(false)}
