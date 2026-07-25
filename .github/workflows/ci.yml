@@ -23,7 +23,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd client
-          npm ci
+          npm ci --legacy-peer-deps
 
       - name: Lint and Format
         run: |
@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'maven'
 
       - name: Build with Maven
