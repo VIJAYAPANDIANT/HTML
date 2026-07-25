@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   Coins, 
@@ -26,9 +27,23 @@ interface SimulationResult {
 }
 
 export default function IndustryPage() {
-  const [activeTab, setActiveTab] = useState<IndustryType>('agriculture');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getTabFromPath = (path: string): IndustryType => {
+    if (path.includes('healthcare')) return 'healthcare';
+    if (path.includes('manufacturing')) return 'manufacturing';
+    if (path.includes('smart-city') || path.includes('smartcity')) return 'smartcity';
+    return 'agriculture';
+  };
+
+  const [activeTab, setActiveTab] = useState<IndustryType>(getTabFromPath(location.pathname));
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SimulationResult | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getTabFromPath(location.pathname));
+  }, [location.pathname]);
 
   // Form states
   const [cropType, setCropType] = useState('Wheat');
@@ -97,7 +112,8 @@ export default function IndustryPage() {
             <button
               key={ind.id}
               onClick={() => {
-                setActiveTab(ind.id as IndustryType);
+                const path = ind.id === 'smartcity' ? '/smart-city' : `/${ind.id}`;
+                navigate(path);
                 setResult(null);
               }}
               className={`p-5 rounded-xl border text-left transition-all duration-300 focus:outline-none ${

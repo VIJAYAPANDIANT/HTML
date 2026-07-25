@@ -17,7 +17,10 @@ import {
   Moon,
   User,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Coins,
+  Compass,
+  Truck
 } from 'lucide-react';
 
 interface AppLayoutProps {
@@ -149,7 +152,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
               { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
               { name: 'AI Center', href: '/ai-center', icon: BrainCircuit },
               { name: 'Organizations', href: '/organizations', icon: Building2 },
-              { name: 'Industry Modules', href: '/industry', icon: Activity },
+              { name: 'Agriculture', href: '/agriculture', icon: Coins },
+              { name: 'Healthcare', href: '/healthcare', icon: Activity },
+              { name: 'Manufacturing', href: '/manufacturing', icon: Compass },
+              { name: 'Smart City', href: '/smart-city', icon: Truck },
               { name: 'Analytics', href: '/analytics', icon: BarChart3 },
               { name: 'Reports', href: '/reports', icon: FileSpreadsheet },
               { name: 'Notifications', href: '/notifications', icon: Bell },

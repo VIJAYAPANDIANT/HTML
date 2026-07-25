@@ -34,6 +34,10 @@ function App() {
                 <Route path="ai-center" element={<AiCenterPage />} />
                 <Route path="organizations" element={<OrganizationsPage />} />
                 <Route path="industry" element={<IndustryPage />} />
+                <Route path="agriculture" element={<IndustryPage />} />
+                <Route path="healthcare" element={<IndustryPage />} />
+                <Route path="manufacturing" element={<IndustryPage />} />
+                <Route path="smart-city" element={<IndustryPage />} />
                 <Route path="analytics" element={<AnalyticsPage />} />
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
