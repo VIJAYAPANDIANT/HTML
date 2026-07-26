@@ -1,413 +1,343 @@
 import { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
-import { useNavigate } from 'react-router-dom';
 import { 
-  Brain, 
-  Users, 
-  Activity, 
-  TrendingUp, 
-  Sparkles, 
+  CloudSun, 
   AlertTriangle, 
-  Bell, 
-  Coins, 
-  Compass, 
-  Truck, 
-  Plus, 
-  CheckCircle, 
+  Sparkles, 
   FileText, 
+  CheckCircle2, 
+  Loader2, 
+  Compass, 
+  Activity, 
+  BrainCircuit,
+  UploadCloud,
+  ChevronRight,
   X
 } from 'lucide-react';
+import api from '@/lib/axios';
 
-interface AlertItem {
-  id: string;
-  source: string;
-  message: string;
-  severity: 'WARNING' | 'CRITICAL' | 'INFO';
-  time: string;
+interface WeatherInfo {
+  temperature: string;
+  humidity: string;
+  windSpeed: string;
+  rainProbability: string;
+  outlook: string;
+  cachedAt: string;
 }
 
-interface ActivityItem {
+interface SmartAlert {
   id: string;
-  type: 'AI_RUN' | 'CONFIG' | 'ALERT' | 'USER';
+  category: 'Disease Risk' | 'Water Shortage' | 'Weather Warning' | 'Equipment Issue';
+  severity: 'Critical' | 'Medium' | 'Low';
   message: string;
-  time: string;
+  timestamp: string;
 }
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
-
-  // 1. Live Alerts state (Active Alerts count updates dynamically when resolved!)
-  const [alerts, setAlerts] = useState<AlertItem[]>([
-    { id: 'al-1', source: 'Agriculture Engine', message: 'Low Soil hydration in Section 4B. Recommended: drip irrigation.', severity: 'WARNING', time: '10m ago' },
-    { id: 'al-2', source: 'Smart Grid Monitor', message: 'Power grid load demand peak shunts activated.', severity: 'CRITICAL', time: '1h ago' },
-    { id: 'al-3', source: 'Healthcare Scanner', message: 'Patient queue buffer capacity threshold exceeded.', severity: 'INFO', time: '3h ago' }
+  const [weather, setWeather] = useState<WeatherInfo | null>(null);
+  const [loadingWeather, setLoadingWeather] = useState(true);
+  const [alerts, setAlerts] = useState<SmartAlert[]>([
+    { id: '1', category: 'Water Shortage', severity: 'Critical', message: 'Severe crop dehydration warning flagged in Sector 4B.', timestamp: '10m ago' },
+    { id: '2', category: 'Disease Risk', severity: 'Medium', message: 'Foliage density scan indicates potential leaf rust risk in Sector 1A.', timestamp: '1h ago' },
+    { id: '3', category: 'Weather Warning', severity: 'Medium', message: 'High wind advisory: gusts up to 45 km/h predicted over next 12h.', timestamp: '3h ago' },
+    { id: '4', category: 'Equipment Issue', severity: 'Low', message: 'Battery warning: soil moisture detector #12 telemetry low power state.', timestamp: '5h ago' }
   ]);
 
-  // 2. Activity Feed filter state
-  const [activityFilter, setActivityFilter] = useState<'ALL' | 'AI_RUN' | 'USER'>('ALL');
-  const [activities] = useState<ActivityItem[]>([
-    { id: 'act-1', type: 'AI_RUN', message: 'Monte Carlo simulation completed: Asset Rebalancing.', time: '2m ago' },
-    { id: 'act-2', type: 'USER', message: 'John Doe edited hosted OpenAI credentials.', time: '40m ago' },
-    { id: 'act-3', type: 'AI_RUN', message: 'Healthcare clinic load balancing parameters calculated.', time: '2h ago' },
-    { id: 'act-4', type: 'USER', message: 'Organization domain linked: global.intellisphere.com.', time: '1d ago' }
+  const [recentPredictions] = useState([
+    { id: 'p1', model: 'Spring AI Forecasting', outcome: 'Sector 4B yield output forecast lowered by 6.5% due to soil moisture deficit.', confidence: '91.2%' },
+    { id: 'p2', model: 'Risk Assessment Loop', outcome: 'Optimal harvest schedules identified for Sector 1A (Wheat) between Aug 12-15.', confidence: '94.5%' }
   ]);
 
-  // 3. Live WebSocket Toast Simulator (Pulsates a toast alert every 15s)
-  const [liveToast, setLiveToast] = useState<{ id: string; message: string } | null>(null);
+  const [aiRecommendations] = useState([
+    'Configure auxiliary drip loops on Sector 4B for 45 minutes.',
+    'Execute localized soil NPK analysis in Sector 2B.',
+    'Verify physical connection of moisture sensor device #12.'
+  ]);
+
+  const [recentUploads] = useState([
+    { name: 'sensor_readings_q2.csv', size: '142 KB', time: '14m ago' },
+    { name: 'soil_report_zone4.pdf', size: '2.4 MB', time: '1h ago' }
+  ]);
+
+  // Fetch Weather API from Backend
+  const fetchWeather = async () => {
+    try {
+      const response = await api.get('/api/v1/weather/current');
+      setWeather(response.data);
+    } catch (err) {
+      console.error('Failed to load weather indicators:', err);
+    } finally {
+      setLoadingWeather(false);
+    }
+  };
 
   useEffect(() => {
-    const toastItems = [
-      'AI Recommendation: Recalibrate section 2B thermal sensors.',
-      'Active Alert: Healthcare clinic load spiked by 12%.',
-      'System Event: Daily report sheet Q3 exported successfully.',
-      'Optimization: Factory floor downtime reduced by 4.2%.'
-    ];
-
-    const interval = setInterval(() => {
-      const randomMsg = toastItems[Math.floor(Math.random() * toastItems.length)];
-      setLiveToast({ id: String(Date.now()), message: randomMsg });
-      
-      // Auto-dismiss toast after 5s
-      setTimeout(() => {
-        setLiveToast(null);
-      }, 5000);
-    }, 15000);
-
-    return () => clearInterval(interval);
+    fetchWeather();
   }, []);
 
-  const handleResolveAlert = (id: string) => {
-    setAlerts(prev => prev.filter(a => a.id !== id));
+  const dismissAlert = (id: string) => {
+    setAlerts(prev => prev.filter(alert => alert.id !== id));
   };
 
-  // Dynamic values for KPIs
-  const totalOrgs = '4';
-  const activeAlertsCount = alerts.length;
-  const totalPredictions = '1,420';
-  const totalReports = '18';
-
-  // ECharts Simulation Performance Line Chart Option
-  const lineChartOption = {
+  // ECharts Risk Heatmap configuration
+  const heatmapOption = {
     backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'axis',
-      backgroundColor: '#1e293b',
-      borderColor: '#334155',
-      textStyle: { color: '#f8fafc' }
-    },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    tooltip: { position: 'top', backgroundColor: '#1e293b', textStyle: { color: '#f8fafc' } },
+    grid: { height: '70%', top: '10%' },
     xAxis: {
       type: 'category',
-      boundaryGap: false,
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      axisLabel: { color: '#94a3b8', fontSize: 10 },
-      axisLine: { lineStyle: { color: '#334155' } },
-      splitLine: { show: false }
+      data: ['Sec 1A', 'Sec 2B', 'Sec 3C', 'Sec 4B'],
+      splitArea: { show: true },
+      axisLabel: { color: '#94a3b8', fontSize: 10 }
     },
     yAxis: {
-      type: 'value',
-      axisLabel: { color: '#94a3b8', fontSize: 10 },
-      axisLine: { lineStyle: { color: '#334155' } },
-      splitLine: { lineStyle: { color: '#1e293b' } }
+      type: 'category',
+      data: ['Moisture', 'Pest Risk', 'NPK Level'],
+      splitArea: { show: true },
+      axisLabel: { color: '#94a3b8', fontSize: 10 }
+    },
+    visualMap: {
+      min: 0,
+      max: 100,
+      calculable: true,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: '0%',
+      textStyle: { color: '#94a3b8', fontSize: 9 },
+      inRange: {
+        color: ['#14B8A6', '#F59E0B', '#EF4444']
+      }
     },
     series: [
       {
-        name: 'AI Confidence Index',
-        type: 'line',
-        smooth: true,
-        data: [94.2, 95.8, 94.6, 96.9, 97.5, 98.2, 98.6],
-        itemStyle: { color: '#2563EB' },
-        lineStyle: { width: 3 },
-        areaStyle: {
-          color: {
-            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(37, 99, 235, 0.3)' },
-              { offset: 1, color: 'rgba(37, 99, 235, 0.0)' }
-            ]
-          }
-        }
-      },
-      {
-        name: 'Sensor Precision Rate',
-        type: 'line',
-        smooth: true,
-        data: [88.5, 89.2, 91.0, 90.5, 92.8, 93.5, 94.1],
-        itemStyle: { color: '#14B8A6' },
-        lineStyle: { width: 3 },
-        areaStyle: {
-          color: {
-            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(20, 184, 166, 0.3)' },
-              { offset: 1, color: 'rgba(20, 184, 166, 0.0)' }
-            ]
-          }
-        }
-      }
-    ]
-  };
-
-  // ECharts Distribution Pie Chart Option
-  const distributionChartOption = {
-    backgroundColor: 'transparent',
-    tooltip: { trigger: 'item', backgroundColor: '#1e293b', textStyle: { color: '#f8fafc' } },
-    legend: { bottom: '5%', left: 'center', textStyle: { color: '#94a3b8', fontSize: 10 } },
-    series: [
-      {
-        name: 'Risk Allocation',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 10, borderColor: '#1e293b', borderWidth: 2 },
-        label: { show: false },
+        name: 'Risk Level %',
+        type: 'heatmap',
         data: [
-          { value: 45, name: 'Agriculture Node', itemStyle: { color: '#2563EB' } },
-          { value: 25, name: 'Healthcare Node', itemStyle: { color: '#14B8A6' } },
-          { value: 20, name: 'Manufacturing Node', itemStyle: { color: '#F59E0B' } },
-          { value: 10, name: 'Smart City Node', itemStyle: { color: '#EF4444' } }
-        ]
+          [0, 0, 85], [1, 0, 78], [2, 0, 80], [3, 0, 32], // Moisture row
+          [0, 1, 15], [1, 1, 20], [2, 1, 10], [3, 1, 88], // Pest Risk row
+          [0, 2, 90], [1, 2, 58], [2, 2, 85], [3, 2, 70]  // NPK row
+        ],
+        label: { show: true, color: '#ffffff', fontSize: 9 },
+        emphasis: {
+          itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+        }
       }
     ]
   };
 
   return (
-    <div className="space-y-8 pb-16 relative">
+    <div className="space-y-8 pb-16">
       
-      {/* Live Toast Notification Alert */}
-      {liveToast && (
-        <div className="fixed bottom-6 right-6 max-w-sm bg-card border border-primary/20 rounded-xl p-4 shadow-2xl z-50 flex items-start space-x-3 animate-in slide-in-from-bottom-5 duration-300">
-          <div className="p-1.5 bg-primary/10 rounded-lg text-primary">
-            <Sparkles className="h-4 w-4" />
-          </div>
-          <div className="flex-1 text-left">
-            <p className="text-xs font-bold text-white">Live AI Insight</p>
-            <p className="text-xs text-slate-300 leading-normal mt-0.5">{liveToast.message}</p>
-          </div>
-          <button 
-            onClick={() => setLiveToast(null)}
-            className="p-1 text-muted-foreground hover:text-white rounded"
-          >
-            <X className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      )}
-
-      {/* 1. KPI Cards Grid */}
+      {/* Animated KPI cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Total Organizations', value: totalOrgs, icon: Users, color: 'text-primary bg-primary/5 border-primary/10' },
-          { title: 'Active Alerts', value: String(activeAlertsCount), icon: AlertTriangle, color: activeAlertsCount > 0 ? 'text-destructive bg-destructive/5 border-destructive/10' : 'text-secondary bg-secondary/5 border-secondary/10' },
-          { title: 'AI Predictions Run', value: totalPredictions, icon: Brain, color: 'text-accent bg-accent/5 border-accent/10' },
-          { title: 'Reports Ingested', value: totalReports, icon: FileText, color: 'text-secondary bg-secondary/5 border-secondary/10' }
+          { title: 'Total Farms', value: '4 Active', desc: 'Across 250 Acres', icon: Compass, color: 'text-primary border-primary/20 hover:border-primary/50' },
+          { title: 'Soil Hydration', value: '62.4%', desc: 'Optimal Threshold: 65%', icon: Activity, color: 'text-[#14B8A6] border-[#14B8A6]/20 hover:border-[#14B8A6]/50' },
+          { title: 'AI Recommendations', value: `${aiRecommendations.length} Actions`, desc: '3 unresolved anomalies', icon: Sparkles, color: 'text-accent border-accent/20 hover:border-accent/50' },
+          { title: 'Critical Warnings', value: `${alerts.filter(a => a.severity === 'Critical').length} Alert`, desc: 'Requires immediate irrigation', icon: AlertTriangle, color: 'text-destructive border-destructive/20 hover:border-destructive/50' }
         ].map((card) => (
-          <div key={card.title} className="bg-card border border-border rounded-xl p-6 shadow hover:border-primary/40 transition-colors">
+          <div 
+            key={card.title} 
+            className={`bg-card border rounded-xl p-6 shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl relative overflow-hidden group cursor-pointer ${card.color}`}
+          >
+            {/* Visual glow background inside hover group */}
+            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{card.title}</span>
-              <div className={`p-2 rounded-lg border ${card.color}`}>
-                <card.icon className="h-5 w-5" />
-              </div>
+              <card.icon className="h-5 w-5" />
             </div>
             <div className="text-3xl font-extrabold text-white tracking-tight">{card.value}</div>
-            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Simulated and optimized in the current tenant.</p>
+            <span className="text-[10px] text-muted-foreground block mt-1.5">{card.desc}</span>
           </div>
         ))}
       </div>
 
-      {/* 2. ECharts Performance Trends & Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Trend line */}
-        <div className="bg-card border border-border rounded-xl p-6 lg:col-span-2 shadow">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                <span>Simulation Load Metrics</span>
-              </h3>
-              <p className="text-xs text-muted-foreground mt-1">Real-time mapping of AI confidence levels vs IoT precision rates.</p>
+        
+        {/* Left Columns: Weather widget & Alerts feed & Risk Heatmap */}
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Weather Widget connected to Weather API */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md relative overflow-hidden">
+            <div className="absolute top-[20%] right-[10%] w-[120px] h-[120px] bg-primary/10 rounded-full blur-[40px] pointer-events-none" />
+
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+                  <CloudSun className="h-5.5 w-5.5 text-accent animate-pulse" />
+                  <span>Real-time Weather Overlay</span>
+                </h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Live conditions synced via Open-Meteo REST service.</p>
+              </div>
+              <button 
+                onClick={fetchWeather} 
+                className="text-xs font-semibold text-primary hover:text-primary/95 hover:underline"
+              >
+                Refresh
+              </button>
             </div>
+
+            {loadingWeather ? (
+              <div className="h-24 flex items-center justify-center space-x-2">
+                <Loader2 className="h-5 w-5 text-primary animate-spin" />
+                <span className="text-xs text-muted-foreground">Fetching Open-Meteo conditions...</span>
+              </div>
+            ) : weather ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div className="bg-background border border-border rounded-lg p-3">
+                  <span className="text-[9px] text-muted-foreground uppercase font-bold block">Outlook</span>
+                  <span className="text-sm font-bold text-white mt-1 block">{weather.outlook}</span>
+                </div>
+                <div className="bg-background border border-border rounded-lg p-3">
+                  <span className="text-[9px] text-muted-foreground uppercase font-bold block">Temperature</span>
+                  <span className="text-sm font-bold text-white mt-1 block">{weather.temperature}</span>
+                </div>
+                <div className="bg-background border border-border rounded-lg p-3">
+                  <span className="text-[9px] text-muted-foreground uppercase font-bold block">Humidity</span>
+                  <span className="text-sm font-bold text-white mt-1 block">{weather.humidity}</span>
+                </div>
+                <div className="bg-background border border-border rounded-lg p-3">
+                  <span className="text-[9px] text-muted-foreground uppercase font-bold block">Wind Speed</span>
+                  <span className="text-sm font-bold text-white mt-1 block">{weather.windSpeed}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground">Failed to parse weather parameters.</p>
+            )}
           </div>
-          <div className="h-72">
-            <ReactECharts option={lineChartOption} style={{ height: '100%' }} />
-          </div>
-        </div>
 
-        {/* Pie Distribution */}
-        <div className="bg-card border border-border rounded-xl p-6 shadow">
-          <h3 className="text-lg font-bold text-white flex items-center space-x-2 mb-1">
-            <Brain className="h-5 w-5 text-accent" />
-            <span>AI Risk Distribution</span>
-          </h3>
-          <p className="text-xs text-muted-foreground mb-6">Relative prediction density per industry sector.</p>
-          <div className="h-72">
-            <ReactECharts option={distributionChartOption} style={{ height: '100%' }} />
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Interactive Region Map & Risk Heatmap */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-card border border-border rounded-xl p-6 lg:col-span-2 shadow">
-          <h3 className="text-lg font-bold text-white flex items-center space-x-2 mb-1">
-            <Compass className="h-5 w-5 text-secondary" />
-            <span>Decision Node Heatmap</span>
-          </h3>
-          <p className="text-xs text-muted-foreground mb-6">Active nodes and localized threat indicators.</p>
-
-          <div className="h-80 bg-background border border-border rounded-xl overflow-hidden relative flex items-center justify-center">
-            {/* World Map Vector Background */}
-            <svg viewBox="0 0 1000 500" className="w-full h-full opacity-10 fill-muted-foreground">
-              <path d="M150,150 Q180,120 220,150 T300,180 T400,140 Q450,160 500,130 T600,150 T700,130 T850,160 L900,200 L950,250 L850,300 L750,350 L600,320 L500,380 L400,340 L300,420 L200,380 Z" />
-              <circle cx="220" cy="180" r="40" />
-              <circle cx="580" cy="220" r="60" />
-              <circle cx="780" cy="300" r="50" />
-            </svg>
-
-            {/* Pulsating Heatmap Markers */}
-            <div className="absolute top-[28%] left-[22%] flex items-center justify-center">
-              <span className="absolute inline-flex h-8 w-8 rounded-full bg-primary/30 animate-ping" />
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-primary border-2 border-white" />
-              <span className="absolute bg-card border border-border px-2.5 py-1.5 rounded text-[10px] text-white font-bold whitespace-nowrap -top-10 shadow-md">
-                AgriNode-1 (Risk: LOW)
+          {/* Smart Alerts Feed */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
+              <span className="flex items-center space-x-2">
+                <AlertTriangle className="h-5.5 w-5.5 text-destructive" />
+                <span>Smart Alerts</span>
               </span>
-            </div>
-
-            <div className="absolute top-[35%] left-[52%] flex items-center justify-center">
-              <span className="absolute inline-flex h-12 w-12 rounded-full bg-accent/30 animate-ping" />
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-accent border-2 border-white" />
-              <span className="absolute bg-card border border-border px-2.5 py-1.5 rounded text-[10px] text-white font-bold whitespace-nowrap -top-10 shadow-md">
-                HealthNode-2 (Risk: MEDIUM)
+              <span className="text-xs font-normal text-muted-foreground">
+                {alerts.length} unresolved actions
               </span>
-            </div>
-
-            <div className="absolute top-[48%] left-[75%] flex items-center justify-center">
-              <span className="absolute inline-flex h-16 w-16 rounded-full bg-destructive/30 animate-ping" />
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-destructive border-2 border-white" />
-              <span className="absolute bg-card border border-border px-2.5 py-1.5 rounded text-[10px] text-white font-bold whitespace-nowrap -top-10 shadow-md">
-                GridNode-3 (Risk: HIGH)
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 4. Active Alerts Feed */}
-        <div className="bg-card border border-border rounded-xl p-6 shadow flex flex-col justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2 mb-4">
-              <Bell className="h-5 w-5 text-primary" />
-              <span>Active System Alerts</span>
             </h3>
-            {alerts.length > 0 ? (
-              <div className="space-y-4 max-h-[280px] overflow-y-auto pr-1">
-                {alerts.map((al) => (
-                  <div key={al.id} className="bg-muted/10 border border-border rounded-lg p-3.5 text-xs flex justify-between space-x-3 hover:border-primary/30 transition-colors">
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                          al.severity === 'CRITICAL' ? 'bg-destructive/10 text-destructive' : 'bg-accent/10 text-accent'
-                        }`}>
-                          {al.severity}
-                        </span>
-                        <span className="font-semibold text-white">{al.source}</span>
+
+            {alerts.length === 0 ? (
+              <div className="h-32 flex flex-col items-center justify-center p-6 border border-dashed border-border rounded-lg text-center bg-card/25">
+                <CheckCircle2 className="h-8 w-8 text-secondary mb-2" />
+                <h4 className="font-bold text-sm text-white">All Clear</h4>
+                <p className="text-xs text-muted-foreground mt-0.5">No unresolved risk anomalies logged.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {alerts.map((alert) => (
+                  <div 
+                    key={alert.id} 
+                    className="bg-background border border-border rounded-xl p-4 flex items-start justify-between gap-4 text-xs transition-colors hover:bg-muted/5"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
+                        alert.severity === 'Critical' ? 'bg-destructive/10 text-destructive' : 'bg-accent/10 text-accent'
+                      }`}>
+                        {alert.severity}
+                      </span>
+                      <div>
+                        <span className="font-bold text-white block">{alert.category}</span>
+                        <p className="text-slate-300 mt-1 leading-normal">{alert.message}</p>
                       </div>
-                      <p className="text-slate-300 leading-normal">{al.message}</p>
-                      <span className="text-[9px] text-muted-foreground block">{al.time}</span>
                     </div>
-                    <button 
-                      onClick={() => handleResolveAlert(al.id)}
-                      className="p-1 text-muted-foreground hover:text-secondary focus:outline-none flex-shrink-0 self-start"
-                      title="Resolve Alert"
-                    >
-                      <CheckCircle className="h-4.5 w-4.5" />
-                    </button>
+
+                    <div className="flex items-center space-x-3 flex-shrink-0">
+                      <span className="text-[10px] text-muted-foreground">{alert.timestamp}</span>
+                      <button 
+                        onClick={() => dismissAlert(alert.id)}
+                        className="text-muted-foreground hover:text-white transition-colors"
+                        title="Dismiss Warning"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="h-48 border border-dashed border-border rounded-lg flex flex-col items-center justify-center text-muted-foreground">
-                <CheckCircle className="h-8 w-8 text-secondary mb-2 animate-bounce" />
-                <p className="font-semibold text-xs text-white">All alerts resolved</p>
-                <p className="text-[10px]">No warning indicators logged.</p>
-              </div>
             )}
           </div>
-          <button 
-            onClick={() => navigate('/notifications')}
-            className="w-full mt-6 py-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-white border border-border rounded-lg text-xs transition-colors"
-          >
-            Inspect Activity Feed
-          </button>
-        </div>
-      </div>
 
-      {/* 5. Recent Activity Logs & Industry Selector */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Activity feed */}
-        <div className="bg-card border border-border rounded-xl p-6 lg:col-span-2 shadow">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-              <Activity className="h-5 w-5 text-secondary" />
-              <span>Workspace Activity Feed</span>
-            </h3>
-            <div className="flex bg-muted/40 p-0.5 rounded-lg border border-border">
-              {(['ALL', 'AI_RUN', 'USER'] as const).map(type => (
-                <button
-                  key={type}
-                  onClick={() => setActivityFilter(type)}
-                  className={`px-2.5 py-1 text-[10px] font-bold uppercase rounded-md transition-all ${
-                    activityFilter === type 
-                      ? 'bg-primary text-white' 
-                      : 'text-muted-foreground hover:text-white'
-                  }`}
-                >
-                  {type === 'ALL' ? 'All' : type === 'AI_RUN' ? 'AI' : 'User'}
-                </button>
-              ))}
+          {/* Risk Heatmap grid */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md">
+            <h3 className="text-lg font-bold text-white mb-2">Sector Risk Heatmap</h3>
+            <p className="text-xs text-muted-foreground mb-4">Coordinates NPK indexes, pest risks, and moisture ratios per active zone.</p>
+            <div className="h-64">
+              <ReactECharts option={heatmapOption} style={{ height: '100%' }} />
             </div>
           </div>
-          <div className="space-y-4">
-            {activities
-              .filter(act => activityFilter === 'ALL' || act.type === activityFilter)
-              .map(act => (
-                <div key={act.id} className="flex justify-between items-center text-xs leading-normal border-b border-border/40 pb-3">
-                  <div className="flex items-center space-x-3">
-                    <span className={`h-2 w-2 rounded-full ${
-                      act.type === 'AI_RUN' ? 'bg-primary' : 'bg-secondary'
-                    }`} />
-                    <p className="text-slate-200">{act.message}</p>
+
+        </div>
+
+        {/* Right Column: AI Predictions & Recommendations & Upload logs */}
+        <div className="space-y-8">
+          
+          {/* AI Predictions */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+              <BrainCircuit className="h-5.5 w-5.5 text-primary" />
+              <span>AI Predictions</span>
+            </h3>
+
+            <div className="space-y-3">
+              {recentPredictions.map((pred) => (
+                <div key={pred.id} className="bg-background border border-border rounded-lg p-3 space-y-1.5 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-white uppercase text-[10px] tracking-wide">{pred.model}</span>
+                    <span className="text-[10px] text-secondary font-bold">Confidence: {pred.confidence}</span>
                   </div>
-                  <span className="text-[10px] text-muted-foreground">{act.time}</span>
+                  <p className="text-slate-400 leading-normal text-[11px]">{pred.outcome}</p>
                 </div>
               ))}
+            </div>
           </div>
-        </div>
 
-        {/* Industry selector */}
-        <div className="bg-card border border-border rounded-xl p-6 shadow flex flex-col justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2 mb-4">
-              <Plus className="h-5 w-5 text-primary" />
-              <span>Quick Launch Modules</span>
+          {/* AI Recommendations */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+              <Sparkles className="h-5.5 w-5.5 text-accent" />
+              <span>AI Recommendations</span>
             </h3>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { name: 'Agriculture', path: '/industry', icon: Coins, color: 'text-primary bg-primary/5 hover:border-primary/40' },
-                { name: 'Healthcare', path: '/industry', icon: Activity, color: 'text-secondary bg-secondary/5 hover:border-secondary/40' },
-                { name: 'Manufacturing', path: '/industry', icon: Compass, color: 'text-accent bg-accent/5 hover:border-accent/40' },
-                { name: 'Smart City', path: '/industry', icon: Truck, color: 'text-primary bg-primary/5 hover:border-primary/40' }
-              ].map((m, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => navigate(m.path)}
-                  className={`border border-border p-4 rounded-xl text-left transition-colors flex flex-col justify-between h-24 ${m.color}`}
-                >
-                  <m.icon className="h-5 w-5" />
-                  <span className="font-bold text-white text-xs block mt-2">{m.name}</span>
-                </button>
+
+            <ul className="space-y-3 text-xs text-slate-300">
+              {aiRecommendations.map((rec, i) => (
+                <li key={i} className="flex items-start space-x-2.5 bg-background border border-border p-2.5 rounded-lg">
+                  <ChevronRight className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                  <span className="leading-normal">{rec}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Ingestion logs / Uploads tracker */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+              <UploadCloud className="h-5.5 w-5.5 text-muted-foreground" />
+              <span>Latest Ingestion Logs</span>
+            </h3>
+
+            <div className="space-y-3">
+              {recentUploads.map((up, i) => (
+                <div key={i} className="bg-background border border-border rounded-lg p-3 flex items-center justify-between text-xs">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="h-4 w-4 text-primary" />
+                    <div>
+                      <span className="font-bold text-white block max-w-[120px] truncate" title={up.name}>
+                        {up.name}
+                      </span>
+                      <span className="text-[9px] text-muted-foreground block mt-0.5">{up.size}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">{up.time}</span>
+                </div>
               ))}
             </div>
           </div>
+
         </div>
+
       </div>
 
     </div>

@@ -149,3 +149,43 @@ CREATE TABLE user_sessions (
 
 CREATE INDEX idx_sessions_user ON user_sessions(user_id);
 CREATE INDEX idx_sessions_token ON user_sessions(token);
+
+-- 14. Farms Table
+CREATE TABLE farms (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    acreage DOUBLE PRECISION,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 15. Crops Table
+CREATE TABLE crops (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    farm_id UUID REFERENCES farms(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(100),
+    acreage DOUBLE PRECISION,
+    status VARCHAR(50) DEFAULT 'HEALTHY', -- 'HEALTHY', 'STRESSED', 'INFESTED'
+    health_index DOUBLE PRECISION DEFAULT 100.0,
+    growth_stage VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 16. Diseases Table
+CREATE TABLE diseases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    crop_id UUID REFERENCES crops(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    risk_probability DOUBLE PRECISION DEFAULT 0.0,
+    status VARCHAR(50) DEFAULT 'NONE', -- 'NONE', 'SUSPECTED', 'CONFIRMED'
+    recommended_action TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for Agriculture optimization
+CREATE INDEX idx_farms_org ON farms(organization_id);
+CREATE INDEX idx_crops_farm ON crops(farm_id);
+CREATE INDEX idx_diseases_crop ON diseases(crop_id);
