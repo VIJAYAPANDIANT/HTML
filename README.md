@@ -34,27 +34,28 @@ intellisphere/
 - **Query & Fetching**: TanStack Query, Axios (configured with bearer token headers)
 - **Styling**: Tailwind CSS v4, shadcn/ui (Radix UI core & Nova preset)
 - **Data Visualization**: Apache ECharts (`echarts-for-react`)
-- **Geospatial Mapping**: SVG Region Heatmaps with pulsating nodes
+- **GIS Mapping**: Leaflet Map Integration with OpenStreetMap standard tiles
 
 ### Backend (`server/`)
 - **Framework**: Spring Boot 3.3.1 (Java 21)
 - **Build System**: Maven (via `./mvnw` wrapper, Lombok version 1.18.46)
 - **Database Access**: Spring Data JPA / Hibernate
 - **Security**: Spring Security & JWT (using `jjwt` 0.12.5) with stateless filters
-- **AI Integrations**: Spring AI (with OpenAI Starter)
+- **AI Engine**: Google Gemini API integration (`v1beta/models/gemini-1.5-flash`)
+- **Document Export**: PDF generation using `openpdf` (v1.3.30)
 - **REST Documentation**: SpringDoc OpenAPI Swagger UI
 
 ### Database & DevOps
-- **Relational DB**: PostgreSQL 15+ (comprehensive 13-table schema)
+- **Relational DB**: PostgreSQL 15+ (comprehensive 16-table schema)
 - **Caching & Messaging**: Redis 7+
 - **Containerization**: Docker & Docker Compose
-- **CI/CD**: GitHub Actions workflows validating client packages and Maven compilations under JDK 21.
+- **CI/CD**: GitHub Actions workflows validating client packages (legacy peer dependency bypasses) and Maven compilation under JDK 21.
 
 ---
 
 ## 📄 Database Architecture (`database/`)
 
-The PostgreSQL relational database is structured around 13 core tables:
+The PostgreSQL relational database is structured around 16 core tables:
 1. **`roles`**: User authorization levels (`SUPER_ADMIN`, `ORG_ADMIN`, `ANALYST`, `OPERATOR`) and permissions arrays.
 2. **`users`**: Identity credentials and role mappings with BCrypt hashing.
 3. **`organizations`**: Workspace management and tenant groupings.
@@ -68,49 +69,51 @@ The PostgreSQL relational database is structured around 13 core tables:
 11. **`recommendations`**: Prioritized recommendations derived from AI models.
 12. **`notifications`**: Active notifications for users.
 13. **`audit_logs`**: Audit trail of system actions and network IPs.
+14. **`farms`**: Tracks location, organization ties, and acreage.
+15. **`crops`**: Logs growth stages, active health index ratios, and target farm references.
+16. **`diseases`**: Logs localized disease names, probability risks, and mitigation action advice.
 
 ---
 
-## 🚀 Shared AI Engine
+## 🤖 AI Engine & Report Generator
 
-The platform implements a unified, central AI engine service (`AIService.java`) that drives core decision capabilities across all industry modules:
-- **Report Summary**: Compiles and summarizes uploaded enterprise documents.
-- **Risk Prediction**: Assesses risk levels and identifies system failure modes.
-- **Recommendation Engine**: Generates prioritized mitigation suggestions.
-- **Executive Summary**: Creates concise briefs of simulated outcomes.
-- **AI Chat**: Exposes conversational analysis playground.
-- **Trend Forecast**: Calculates linear probability trends from historical datasets.
+The platform implements a unified, central AI engine service (`AIService.java` & `GeminiService.java`) that drives core decision capabilities across all industry modules:
+- **Google Gemini API**: Processes parameter DTOs, evaluates risk indexes, and generates suggestions via the official Gemini endpoint (`gemini-1.5-flash`). Supports realistic fallback mocks for local testing.
+- **On-the-fly PDF Generation**: Integrates OpenPDF (`com.lowagie.text`) to compile metrics, alarm feeds, and operator notes into styled corporate PDF sheets on the fly.
+- **AI Chat Assistant**: Interactive conversation playground using context-aware prompts.
+- **Live Weather Cache**: Queries Open-Meteo REST parameters for farm coords and caches results in a thread-safe synchronized ConcurrentHashMap with a 15-minute TTL.
 
 ---
 
 ## 📂 Core UI Pages Layout
 
 The frontend SPA maps the following user paths:
-- `/` - Public premium landing page featuring 9 sections: Hero, Features, Industries (tabbed selection), AI Engine, Architecture log diagrams, Pricing tier calculator, Star-rated Testimonials, FAQ accordion, and Footer.
-- `/login` - Secure login page validated via Zod schemas.
-- `/register` - Workspace registration page.
-- `/dashboard` - Enterprise landing cockpit featuring KPI metrics, interactive ECharts line/donut graphs, SVG regional hotspot maps, filterable activity feeds, and websocket toast simulators.
-- `/agriculture` - Crop yield and irrigation schedule optimizations.
-- `/healthcare` - Clinic staffing and patient load optimizations.
-- `/manufacturing` - Predictive maintenance schedule optimizations.
-- `/smart-city` - Grid load-balancing and traffic optimizations.
-- `/ai-center` - Chat playground to query the AI service.
-- `/analytics` - Probability distribution and graph analytics sandboxes.
-- `/reports` - Table tracking exported PDF/Excel sheets.
-- `/notifications` - Alarm log feeds.
-- `/profile` - User access keys, MFA configurations, and profile parameters.
-- `/settings` - Workspace settings and API gateway configuration.
+- `/` - Public marketing landing page.
+- `/login` / `/register` - Secure authentication gateways.
+- `/dashboard` - Operational cockpit containing animated KPI cards, live weather overlay widget, smart alerts list with dismiss triggers, recent predictions list, recent uploads list, and ECharts risk heatmaps.
+- `/agriculture` - Agriculture cockpit containing:
+  - **Overview Metrics**: Active area, water consumption, and soil hydration ratios.
+  - **Soil Health Cards**: Real-time NPK levels, pH ratios, temperature, and moisture.
+  - **Crop Monitoring**: Cultivated crop statuses, growth stages, and health status indicators.
+  - **Field Map Selector**: Toggle system supporting sector grid schematics and Leaflet GIS mapping layer overlays.
+  - **Diagnostics Scanner**: Visual foliage computer vision scan simulation logs.
+  - **Report Modal**: Dialog interface to write operator action notes and download decision PDFs.
+- `/uploads` - Drag-and-drop Upload Center supporting CSV, Excel, PDF, and image uploads, file validation, progress bars, and upload history logs.
+- `/analytics` - Analytics dashboard containing **6 interactive ECharts**: Crop Health (bar), Water Usage (area), Yield Trend (line), Disease Share (donut), Risk Score (gauge), and Soil Performance (radar).
+- `/ai-center` / `/reports` / `/settings` - Standard operational panels.
 
 ---
 
-## 🛡️ Project Polish & Standards
+## 🌐 Conceptual REST APIs
 
-IntelliSphere follows production-ready enterprise standards:
-- **Error Boundaries**: Standalone `<ErrorBoundary>` wraps the router shell to intercept rendering crashes and present recovery instructions.
-- **Custom 404 Pages**: Wildcard routes display a custom `<NotFoundPage />` directing traffic back to safety.
-- **Empty States**: Reusable `<EmptyState>` loaders display center vector indicators for resolved feeds.
-- **Skeleton Loaders**: Reusable `<Skeleton>` animations overlay loading frames.
-- **Interceptors**: Axios client config automatically appends JWT bearer tokens to requests and handles 401 redirect shunts.
+To support the UI layout, the backend controllers expose the following endpoint structures:
+- `GET /api/agriculture/dashboard` - Fetches overall crop stats, soil matrices, and Alerts.
+- `GET /api/agriculture/farms` - Fetches active farm entities.
+- `GET /api/agriculture/weather` - Fetches live weather conditions from Open-Meteo.
+- `GET /api/agriculture/predictions` - Fetches recent AI predictions.
+- `POST /api/agriculture/upload` - Logs telemetry uploads.
+- `POST /api/ai/chat` - Submits prompts to the Gemini conversation engine.
+- `POST /api/ai/report` - Requests a compiled PDF report document binary.
 
 ---
 
@@ -132,7 +135,7 @@ docker-compose up -d
 Navigate to the backend directory, set JDK 21, and compile/start:
 ```bash
 cd server
-$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1" # Using compatible compiler settings
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1"
 ./mvnw spring-boot:run
 ```
 
