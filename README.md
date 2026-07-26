@@ -22,6 +22,22 @@ intellisphere/
 └── docker-compose.yml
 ```
 
+## 🏗️ System Architecture
+
+IntelliSphere follows a secure, decoupled full-stack architectural paradigm. The data flow from UI interactions to external service overlays is modeled below:
+
+```mermaid
+graph TD
+    Client[React 19 Frontend SPA] -->|HTTP REST + Bearer JWT| API[Spring Boot REST Gateway]
+    API -->|Authentication Verification| Sec[Spring Security & JWT Filter]
+    Sec -->|Entity Mapping| DB[(PostgreSQL 16 Tables)]
+    API -->|Query Conditions| Weather[Open-Meteo REST Caching Service]
+    API -->|Generative Prompts| AIService[Shared AI Service]
+    AIService -->|Rest client payload| Gemini[Google Gemini API]
+    API -->|Binary compilation| PDF[OpenPDF Engine]
+    PDF -->|Byte stream file download| Client
+```
+
 ---
 
 ## 🛠️ Tech Stack & Technologies
