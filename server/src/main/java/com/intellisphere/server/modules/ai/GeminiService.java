@@ -15,7 +15,7 @@ public class GeminiService {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings("rawtypes")
     public String generateContent(String prompt) {
         if (apiKey == null || apiKey.trim().isEmpty() || "mock".equalsIgnoreCase(apiKey)) {
             return getFallbackResponse(prompt);

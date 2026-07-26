@@ -15,6 +15,7 @@ public class WeatherService {
     private long cacheExpiryTime = 0;
     private static final long CACHE_DURATION_MS = 15 * 60 * 1000; // 15 Minutes
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public synchronized Map<String, Object> getLiveWeather() {
         long now = System.currentTimeMillis();
         if (cachedWeather != null && now < cacheExpiryTime) {
