@@ -12,6 +12,7 @@ import ReportsPage from './modules/reports/ReportsPage';
 import NotificationsPage from './modules/notifications/NotificationsPage';
 import SettingsPage from './modules/settings/SettingsPage';
 import ProfilePage from './modules/profile/ProfilePage';
+import AgriculturePage from './modules/industry/AgriculturePage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import NotFoundPage from './modules/error/NotFoundPage';
 
@@ -37,7 +38,7 @@ function App() {
                   <Route path="ai-center" element={<AiCenterPage />} />
                   <Route path="organizations" element={<OrganizationsPage />} />
                   <Route path="industry" element={<IndustryPage />} />
-                  <Route path="agriculture" element={<IndustryPage />} />
+                  <Route path="agriculture" element={<AgriculturePage />} />
                   <Route path="healthcare" element={<IndustryPage />} />
                   <Route path="manufacturing" element={<IndustryPage />} />
                   <Route path="smart-city" element={<IndustryPage />} />

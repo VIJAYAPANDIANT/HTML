@@ -19,6 +19,47 @@ public class AgricultureController {
         this.aiService = aiService;
     }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<Map<String, Object>> getDashboardData() {
+        Map<String, Object> data = new HashMap<>();
+        
+        // Farm Overview Metrics
+        data.put("activeArea", "250 Acres");
+        data.put("waterConsumption", "45k Gal");
+        data.put("soilHydration", "68%");
+        data.put("yieldForecast", "94.2%");
+
+        // Soil Health Cards Data
+        data.put("nitrogen", Map.of("value", "42 mg/kg", "status", "Optimal"));
+        data.put("phosphorus", Map.of("value", "18 mg/kg", "status", "Warning"));
+        data.put("potassium", Map.of("value", "125 mg/kg", "status", "Optimal"));
+        data.put("ph", Map.of("value", "6.8", "status", "Optimal"));
+        data.put("moisture", Map.of("value", "32%", "status", "Optimal"));
+        data.put("temperature", Map.of("value", "22.5 C", "status", "Optimal"));
+
+        // Weather Summary
+        data.put("weatherTemp", "26 C");
+        data.put("weatherHumidity", "62%");
+        data.put("weatherWind", "12 km/h");
+        data.put("weatherOutlook", "Sunny");
+
+        // Crop Monitoring List
+        data.put("crops", List.of(
+            Map.of("crop", "Wheat", "area", "120 Acres", "stage", "Flowering", "health", "Excellent"),
+            Map.of("crop", "Corn", "area", "80 Acres", "stage", "Vegetative", "health", "Good"),
+            Map.of("crop", "Soybeans", "area", "50 Acres", "stage", "Maturation", "health", "Warning")
+        ));
+
+        // Irrigation and Alerts
+        data.put("irrigationSystem", "ONLINE");
+        data.put("activeAlerts", List.of(
+            "Low Soil hydration detected in Sector 4B.",
+            "Phosphorus depletion risk highlighted in soil card."
+        ));
+
+        return ResponseEntity.ok(data);
+    }
+
     @PostMapping("/simulate")
     public ResponseEntity<Map<String, Object>> simulate(@RequestBody Map<String, Object> params) {
         String cropType = String.valueOf(params.getOrDefault("cropType", "Wheat"));
