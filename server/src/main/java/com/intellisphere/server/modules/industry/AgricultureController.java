@@ -1,6 +1,7 @@
 package com.intellisphere.server.modules.industry;
 
 import com.intellisphere.server.modules.ai.AIService;
+import com.intellisphere.server.modules.weather.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,17 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/industry/agriculture")
+@RequestMapping
 public class AgricultureController {
 
     private final AIService aiService;
+    private final WeatherService weatherService;
 
     @Autowired
-    public AgricultureController(AIService aiService) {
+    public AgricultureController(AIService aiService, WeatherService weatherService) {
         this.aiService = aiService;
+        this.weatherService = weatherService;
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/api/v1/industry/agriculture/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardData() {
         Map<String, Object> data = new HashMap<>();
         
@@ -60,7 +63,7 @@ public class AgricultureController {
         return ResponseEntity.ok(data);
     }
 
-    @PostMapping("/simulate")
+    @PostMapping("/api/v1/industry/agriculture/simulate")
     public ResponseEntity<Map<String, Object>> simulate(@RequestBody Map<String, Object> params) {
         String cropType = String.valueOf(params.getOrDefault("cropType", "Wheat"));
         String hydration = String.valueOf(params.getOrDefault("soilHydration", "Low"));
@@ -79,5 +82,42 @@ public class AgricultureController {
         result.put("executiveSummary", summary);
         
         return ResponseEntity.ok(result);
+    }
+
+    // Direct concept API mappings requested in Prompt 7-10 UI Outline
+    @GetMapping("/api/agriculture/dashboard")
+    public ResponseEntity<Map<String, Object>> getDashboardApi() {
+        return getDashboardData();
+    }
+
+    @GetMapping("/api/agriculture/farms")
+    public ResponseEntity<List<Map<String, Object>>> getFarms() {
+        return ResponseEntity.ok(List.of(
+            Map.of("id", "f1", "name", "Fresno Sector 1A", "acreage", 120, "location", "Central Valley"),
+            Map.of("id", "f2", "name", "Sanger Sector 2B", "acreage", 80, "location", "East Fresno"),
+            Map.of("id", "f3", "name", "Clovis Sector 3C", "acreage", 50, "location", "North Clovis")
+        ));
+    }
+
+    @GetMapping("/api/agriculture/weather")
+    public ResponseEntity<Map<String, Object>> getAgricultureWeather() {
+        return ResponseEntity.ok(weatherService.getLiveWeather());
+    }
+
+    @GetMapping("/api/agriculture/predictions")
+    public ResponseEntity<List<Map<String, Object>>> getAgriculturePredictions() {
+        return ResponseEntity.ok(List.of(
+            Map.of("id", "p1", "crop", "Corn", "predictedYield", "12.4 Tons", "confidence", 0.91),
+            Map.of("id", "p2", "crop", "Wheat", "predictedYield", "24.5 Tons", "confidence", 0.94)
+        ));
+    }
+
+    @PostMapping("/api/agriculture/upload")
+    public ResponseEntity<Map<String, Object>> uploadTelemetry(@RequestBody Map<String, Object> body) {
+        return ResponseEntity.ok(Map.of(
+            "status", "Ingested", 
+            "fileName", body.getOrDefault("fileName", "telemetry.csv"), 
+            "timestamp", new java.util.Date().toString()
+        ));
     }
 }

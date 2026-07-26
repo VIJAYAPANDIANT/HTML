@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping
 public class ReportController {
 
     private final ReportGeneratorService reportGeneratorService;
@@ -19,7 +19,7 @@ public class ReportController {
         this.reportGeneratorService = reportGeneratorService;
     }
 
-    @PostMapping("/generate-pdf")
+    @PostMapping("/api/v1/reports/generate-pdf")
     public ResponseEntity<byte[]> generatePdf(@RequestBody ReportRequest request) {
         byte[] pdfBytes = reportGeneratorService.generatePdfReport(
                 request.getMetrics(),
@@ -34,5 +34,11 @@ public class ReportController {
         headers.setContentLength(pdfBytes.length);
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
+
+    // Direct conceptual API mapping requested in prompt
+    @PostMapping("/api/ai/report")
+    public ResponseEntity<byte[]> generatePdfDirect(@RequestBody ReportRequest request) {
+        return generatePdf(request);
     }
 }
