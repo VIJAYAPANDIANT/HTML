@@ -20,7 +20,8 @@ import {
   ChevronRight,
   Coins,
   Compass,
-  Truck
+  Truck,
+  Upload
 } from 'lucide-react';
 
 interface AppLayoutProps {
@@ -118,6 +119,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               { name: 'Smart City', href: '/smart-city', icon: Truck },
               { name: 'Analytics', href: '/analytics', icon: BarChart3 },
               { name: 'Reports', href: '/reports', icon: FileSpreadsheet },
+              { name: 'Upload Center', href: '/uploads', icon: Upload },
               { name: 'Notifications', href: '/notifications', icon: Bell },
               { name: 'Settings', href: '/settings', icon: Settings },
             ].map((item) => {

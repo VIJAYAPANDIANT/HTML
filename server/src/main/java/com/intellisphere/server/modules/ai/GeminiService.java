@@ -33,8 +33,7 @@ public class GeminiService {
             ResponseEntity<Map> response = restTemplate.postForEntity(
                     GEMINI_API_URL + apiKey,
                     entity,
-                    Map.class
-            );
+                    Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 List candidates = (List) response.getBody().get("candidates");
@@ -59,10 +58,11 @@ public class GeminiService {
 
     private String getFallbackResponse(String prompt) {
         String lower = prompt.toLowerCase();
-        
+
         if (lower.contains("agriculture") || lower.contains("soil") || lower.contains("crop")) {
             return "### Executive Summary\n" +
-                    "The simulated agricultural telemetry indicators display a slight hydration deficit across Sector 4B. Recommended mitigations involve scheduling local drip loops.\n\n" +
+                    "The simulated agricultural telemetry indicators display a slight hydration deficit across Sector 4B. Recommended mitigations involve scheduling local drip loops.\n\n"
+                    +
                     "### Key Findings\n" +
                     "- Soil hydration index is currently at 58% (Threshold: 65% optimal).\n" +
                     "- Daily water utility volume reached 45,000 gallons.\n\n" +
@@ -70,10 +70,11 @@ public class GeminiService {
                     "1. Activate drip irrigation loops on Sector 4B for 45 minutes during evening hours.\n" +
                     "2. Calibrate localized moisture detectors to resolve anomalous readings.";
         }
-        
+
         if (lower.contains("report") || lower.contains("summary")) {
             return "### Executive Summary\n" +
-                    "This automated brief highlights core operational indicators in the active tenant. Yield trends are currently positive.\n\n" +
+                    "This automated brief highlights core operational indicators in the active tenant. Yield trends are currently positive.\n\n"
+                    +
                     "### Action Plan\n" +
                     "- Monitor sector alerts.\n" +
                     "- Keep sensor devices calibrated to prevent data fluctuations.";

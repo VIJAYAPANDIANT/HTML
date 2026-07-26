@@ -13,6 +13,7 @@ import {
   Download
 } from 'lucide-react';
 import api from '@/lib/axios';
+import AgricultureMap from '../../components/ui/AgricultureMap';
 
 interface SoilCard {
   value: string;
@@ -54,6 +55,7 @@ export default function AgriculturePage() {
   const [generatingReport, setGeneratingReport] = useState(false);
   const [diseaseScanning, setDiseaseScanning] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
+  const [mapTab, setMapTab] = useState<'grid' | 'gis'>('grid');
 
   // Fetch Dashboard Data from Backend
   const fetchDashboardData = async () => {
@@ -206,24 +208,55 @@ export default function AgriculturePage() {
             </div>
           </div>
 
-          {/* SVG Crop Sector Map */}
+          {/* Crop Map View Tabs */}
           <div className="bg-card border border-border rounded-xl p-6 shadow">
-            <h3 className="text-lg font-bold text-white mb-1">Crop Sector Grid Map</h3>
-            <p className="text-xs text-muted-foreground mb-4">Hover/Click sectors to review live moisture sensor feedback.</p>
-            <div className="h-64 bg-background border border-border rounded-xl flex items-center justify-center relative overflow-hidden">
-              <svg viewBox="0 0 600 300" className="w-full h-full p-4">
-                <rect x="50" y="50" width="100" height="150" className="fill-[#2563EB]/15 stroke-primary stroke-2 hover:fill-[#2563EB]/30 transition-all cursor-pointer" />
-                <text x="100" y="130" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 1A (Wheat)</text>
-                
-                <rect x="180" y="50" width="180" height="70" className="fill-[#14B8A6]/15 stroke-secondary stroke-2 hover:fill-[#14B8A6]/30 transition-all cursor-pointer" />
-                <text x="270" y="90" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 2B (Corn)</text>
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-lg font-bold text-white">Crop Field Map</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Toggle between sector grid schematic and Leaflet GIS map layers.</p>
+              </div>
 
-                <rect x="180" y="140" width="180" height="110" className="fill-[#EF4444]/15 stroke-destructive stroke-2 hover:fill-[#EF4444]/30 transition-all cursor-pointer animate-pulse" />
-                <text x="270" y="200" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 4B (Warning)</text>
+              {/* Tab toggles */}
+              <div className="flex bg-muted/20 p-0.5 rounded-lg border border-border">
+                <button
+                  onClick={() => setMapTab('grid')}
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
+                    mapTab === 'grid' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:text-white'
+                  }`}
+                >
+                  Sector Grid
+                </button>
+                <button
+                  onClick={() => setMapTab('gis')}
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
+                    mapTab === 'gis' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:text-white'
+                  }`}
+                >
+                  GIS Map
+                </button>
+              </div>
+            </div>
 
-                <rect x="390" y="50" width="150" height="200" className="fill-[#F59E0B]/15 stroke-accent stroke-2 hover:fill-[#F59E0B]/30 transition-all cursor-pointer" />
-                <text x="465" y="160" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 3C (Soy)</text>
-              </svg>
+            <div className="h-72 bg-background border border-border rounded-xl flex items-center justify-center relative overflow-hidden">
+              {mapTab === 'grid' ? (
+                <svg viewBox="0 0 600 300" className="w-full h-full p-4">
+                  <rect x="50" y="50" width="100" height="150" className="fill-[#2563EB]/15 stroke-primary stroke-2 hover:fill-[#2563EB]/30 transition-all cursor-pointer" />
+                  <text x="100" y="130" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 1A (Wheat)</text>
+                  
+                  <rect x="180" y="50" width="180" height="70" className="fill-[#14B8A6]/15 stroke-secondary stroke-2 hover:fill-[#14B8A6]/30 transition-all cursor-pointer" />
+                  <text x="270" y="90" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 2B (Corn)</text>
+
+                  <rect x="180" y="140" width="180" height="110" className="fill-[#EF4444]/15 stroke-destructive stroke-2 hover:fill-[#EF4444]/30 transition-all cursor-pointer animate-pulse" />
+                  <text x="270" y="200" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 4B (Warning)</text>
+
+                  <rect x="390" y="50" width="150" height="200" className="fill-[#F59E0B]/15 stroke-accent stroke-2 hover:fill-[#F59E0B]/30 transition-all cursor-pointer" />
+                  <text x="465" y="160" textAnchor="middle" className="fill-white text-[10px] font-bold">Sector 3C (Soy)</text>
+                </svg>
+              ) : (
+                <div className="w-full h-full text-slate-800 z-10">
+                  <AgricultureMap />
+                </div>
+              )}
             </div>
           </div>
 

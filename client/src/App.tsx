@@ -13,6 +13,7 @@ import NotificationsPage from './modules/notifications/NotificationsPage';
 import SettingsPage from './modules/settings/SettingsPage';
 import ProfilePage from './modules/profile/ProfilePage';
 import AgriculturePage from './modules/industry/AgriculturePage';
+import UploadCenterPage from './modules/upload/UploadCenterPage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import NotFoundPage from './modules/error/NotFoundPage';
 
@@ -44,6 +45,7 @@ function App() {
                   <Route path="smart-city" element={<IndustryPage />} />
                   <Route path="analytics" element={<AnalyticsPage />} />
                   <Route path="reports" element={<ReportsPage />} />
+                  <Route path="uploads" element={<UploadCenterPage />} />
                   <Route path="notifications" element={<NotificationsPage />} />
                   <Route path="settings" element={<SettingsPage />} />
                   <Route path="profile" element={<ProfilePage />} />
