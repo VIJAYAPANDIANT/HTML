@@ -51,8 +51,16 @@ public class ReportGeneratorService {
             Font sectionFont = new Font(Font.HELVETICA, 12, Font.BOLD);
             Font bodyFont = new Font(Font.HELVETICA, 9, Font.NORMAL);
 
+            String titleText = "INTELLISPHERE DECISION ANALYSIS REPORT";
+            String domainText = "Agriculture Optimization Service";
+            
+            if (metrics != null && (metrics.containsKey("bedOccupancy") || metrics.containsKey("activeEmergencies"))) {
+                titleText = "INTELLISPHERE CLINICAL DECISION BRIEF";
+                domainText = "Healthcare Optimization Service";
+            }
+
             // Add Header Title
-            Paragraph title = new Paragraph("INTELLISPHERE DECISION ANALYSIS REPORT", titleFont);
+            Paragraph title = new Paragraph(titleText, titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
@@ -60,7 +68,7 @@ public class ReportGeneratorService {
             // Add Metadata Section
             document.add(new Paragraph("Generated at: " + new java.util.Date().toString(), bodyFont));
             document.add(new Paragraph("Tenant Workspace: IntelliSphere Global", bodyFont));
-            document.add(new Paragraph("Operational Domain: Agriculture Optimization Service", bodyFont));
+            document.add(new Paragraph("Operational Domain: " + domainText, bodyFont));
             document.add(new Paragraph("-------------------------------------------------------------------------------------------------------", bodyFont));
 
             // Add AI Analysis Text

@@ -13,6 +13,7 @@ import NotificationsPage from './modules/notifications/NotificationsPage';
 import SettingsPage from './modules/settings/SettingsPage';
 import ProfilePage from './modules/profile/ProfilePage';
 import AgriculturePage from './modules/industry/AgriculturePage';
+import HealthcarePage from './modules/industry/HealthcarePage';
 import UploadCenterPage from './modules/upload/UploadCenterPage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import NotFoundPage from './modules/error/NotFoundPage';
@@ -40,7 +41,7 @@ function App() {
                   <Route path="organizations" element={<OrganizationsPage />} />
                   <Route path="industry" element={<IndustryPage />} />
                   <Route path="agriculture" element={<AgriculturePage />} />
-                  <Route path="healthcare" element={<IndustryPage />} />
+                  <Route path="healthcare" element={<HealthcarePage />} />
                   <Route path="manufacturing" element={<IndustryPage />} />
                   <Route path="smart-city" element={<IndustryPage />} />
                   <Route path="analytics" element={<AnalyticsPage />} />

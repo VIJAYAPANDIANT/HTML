@@ -189,3 +189,42 @@ CREATE TABLE diseases (
 CREATE INDEX idx_farms_org ON farms(organization_id);
 CREATE INDEX idx_crops_farm ON crops(farm_id);
 CREATE INDEX idx_diseases_crop ON diseases(crop_id);
+
+-- 17. Hospitals Table
+CREATE TABLE hospitals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    beds_total INT DEFAULT 100,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 18. Patients Table
+CREATE TABLE patients (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    hospital_id UUID REFERENCES hospitals(id) ON DELETE CASCADE,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    admission_status VARCHAR(50) DEFAULT 'ADMITTED', -- 'ADMITTED', 'DISCHARGED', 'CRITICAL'
+    room_number VARCHAR(20),
+    stability_index DOUBLE PRECISION DEFAULT 100.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 19. Emergency Cases Table
+CREATE TABLE emergency_cases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    hospital_id UUID REFERENCES hospitals(id) ON DELETE CASCADE,
+    patient_id UUID REFERENCES patients(id) ON DELETE SET NULL,
+    category VARCHAR(100) NOT NULL, -- e.g., 'Trauma', 'Stroke', 'Cardiac'
+    severity VARCHAR(50) NOT NULL, -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+    triage_level INT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for Healthcare optimization
+CREATE INDEX idx_hospitals_org ON hospitals(organization_id);
+CREATE INDEX idx_patients_hospital ON patients(hospital_id);
+CREATE INDEX idx_emergencies_hospital ON emergency_cases(hospital_id);
