@@ -71,7 +71,7 @@ graph TD
 
 ## 📄 Database Architecture (`database/`)
 
-The PostgreSQL relational database is structured around 16 core tables:
+The PostgreSQL relational database is structured around 24 core tables:
 1. **`roles`**: User authorization levels (`SUPER_ADMIN`, `ORG_ADMIN`, `ANALYST`, `OPERATOR`) and permissions arrays.
 2. **`users`**: Identity credentials and role mappings with BCrypt hashing.
 3. **`organizations`**: Workspace management and tenant groupings.
@@ -88,6 +88,13 @@ The PostgreSQL relational database is structured around 16 core tables:
 14. **`farms`**: Tracks location, organization ties, and acreage.
 15. **`crops`**: Logs growth stages, active health index ratios, and target farm references.
 16. **`diseases`**: Logs localized disease names, probability risks, and mitigation action advice.
+17. **`hospitals`**: Tracks healthcare institutions.
+18. **`departments`**: Clinical departments (ER, ICU).
+19. **`patients`**: Patient diagnostic history logs.
+20. **`beds`**: Room bed statuses.
+21. **`medical_reports`**: Direct digital patient consult charts.
+22. **`healthcare_alerts`**: Alarm triggers for clinical environments.
+23. **`healthcare_recommendations`**: AI clinical recommendations.
 
 ---
 
@@ -114,6 +121,13 @@ The frontend SPA maps the following user paths:
   - **Field Map Selector**: Toggle system supporting sector grid schematics and Leaflet GIS mapping layer overlays.
   - **Diagnostics Scanner**: Visual foliage computer vision scan simulation logs.
   - **Report Modal**: Dialog interface to write operator action notes and download decision PDFs.
+- `/healthcare` - Healthcare cockpit containing:
+  - **Overview Metrics**: Patients count, bed counts, emergency cases, doctors.
+  - **Triage Simulator**: Textbox to query Gemini triage priority levels.
+  - **SVG wing map vs Leaflet GIS branches map toggler**.
+  - **ECharts Department Admissions donut chart**.
+  - **AI Patient Brief Summarizer**: dropdown selector providing direct AI patient chart summaries.
+  - **Medical PDF brief download overlay**.
 - `/uploads` - Drag-and-drop Upload Center supporting CSV, Excel, PDF, and image uploads, file validation, progress bars, and upload history logs.
 - `/analytics` - Analytics dashboard containing **6 interactive ECharts**: Crop Health (bar), Water Usage (area), Yield Trend (line), Disease Share (donut), Risk Score (gauge), and Soil Performance (radar).
 - `/ai-center` / `/reports` / `/settings` - Standard operational panels.
@@ -130,6 +144,12 @@ To support the UI layout, the backend controllers expose the following endpoint 
 - `POST /api/agriculture/upload` - Logs telemetry uploads.
 - `POST /api/ai/chat` - Submits prompts to the Gemini conversation engine.
 - `POST /api/ai/report` - Requests a compiled PDF report document binary.
+- `GET /api/healthcare/dashboard` - Fetches clinical KPIs, bed structures, alerts.
+- `GET /api/healthcare/patients` - Fetches admitted patient rosters.
+- `GET /api/healthcare/alerts` - Fetches clinical critical alert logs.
+- `POST /api/healthcare/report` - Generates healthcare PDF briefs.
+- `POST /api/ai/healthcare-summary` - Direct patient consult diagnosis briefs.
+- `POST /api/healthcare/simulate-triage` - Submits triage diagnostic symptoms.
 
 ---
 
