@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { 
   Heart, 
-  Activity, 
   ActivitySquare, 
   Sparkles, 
   FileText, 
@@ -10,18 +9,14 @@ import {
   Stethoscope,
   ChevronRight,
   Download,
-  Brain
+  Brain,
+  AlertTriangle,
+  Users,
+  FileCheck2,
+  Clock
 } from 'lucide-react';
 import api from '@/lib/axios';
 import HospitalMap from '../../components/ui/HospitalMap';
-
-interface EmergencyCase {
-  id: string;
-  category: string;
-  severity: 'Critical' | 'High' | 'Medium' | 'Low';
-  triage: string;
-  arrival: string;
-}
 
 interface AdmittedPatient {
   id: string;
@@ -37,15 +32,27 @@ interface BedStatus {
   status: 'OCCUPIED' | 'OCCUPIED_CRITICAL' | 'UNOCCUPIED';
 }
 
+interface AlertItem {
+  id: string;
+  category: string;
+  severity: string;
+  message: string;
+  timestamp: string;
+}
+
 interface HealthcareDashboardData {
-  bedOccupancy: string;
-  activeEmergencies: string;
-  avgWaitTime: string;
-  activeStaff: string;
-  emergencies: EmergencyCase[];
+  totalPatients: number;
+  availableBeds: number;
+  emergencyCases: number;
+  activeStaff: number;
   patients: AdmittedPatient[];
-  bedGrid: BedStatus[];
+  alerts: AlertItem[];
   aiRecommendations: string[];
+  bedGrid: BedStatus[];
+  departmentAnalytics: {
+    departments: string[];
+    admissions: number[];
+  };
 }
 
 export default function HealthcarePage() {
@@ -61,10 +68,18 @@ export default function HealthcarePage() {
   const [simulatingTriage, setSimulatingTriage] = useState(false);
   const [triageOutput, setTriageOutput] = useState<string | null>(null);
 
+  // AI Medical Summary states
+  const [selectedPatient, setSelectedPatient] = useState<AdmittedPatient | null>(null);
+  const [aiSummaryText, setAiSummaryText] = useState<string | null>(null);
+  const [generatingSummary, setGeneratingSummary] = useState(false);
+
   const fetchDashboardData = async () => {
     try {
       const response = await api.get('/api/healthcare/dashboard');
       setData(response.data);
+      if (response.data.patients && response.data.patients.length > 0) {
+        setSelectedPatient(response.data.patients[0]);
+      }
       setLoading(false);
     } catch (err) {
       console.error('Failed to load healthcare metrics:', err);
@@ -88,26 +103,41 @@ export default function HealthcarePage() {
     }
   };
 
+  const handleGetSummary = async () => {
+    if (!selectedPatient) return;
+    setGeneratingSummary(true);
+    setAiSummaryText(null);
+    try {
+      const response = await api.post('/api/ai/healthcare-summary', {
+        name: selectedPatient.name,
+        stability: selectedPatient.stability,
+        symptoms: 'Re-evaluating admission status indicators and heart rates.'
+      });
+      setAiSummaryText(response.data.summary);
+    } catch (err) {
+      console.error('Failed to query patient summary:', err);
+    } finally {
+      setGeneratingSummary(false);
+    }
+  };
+
   const handleDownloadPdf = async () => {
     if (!data) return;
     setGeneratingReport(true);
     try {
       const payload = {
         metrics: {
-          bedOccupancy: data.bedOccupancy,
-          activeEmergencies: data.activeEmergencies,
-          avgWaitTime: data.avgWaitTime,
+          totalPatients: data.totalPatients,
+          availableBeds: data.availableBeds,
+          emergencyCases: data.emergencyCases,
           activeStaff: data.activeStaff
         },
-        alerts: [
-          'ICU ventilator capacity reaches 90% peak threshold limit.',
-          'Critical trauma alert on emergency bay Sector 2.'
-        ],
-        predictions: 'ER queue queue-load predicted to jump by 24% over next 45 minutes.',
+        alerts: data.alerts.map(a => a.message),
+        predictions: 'ICU Bed utility predicted to remain steady at 84% over next 24 hours.',
         userNotes: notes || 'Medical brief generated for cardiology consult review.'
       };
 
-      const response = await api.post('/api/ai/report', payload, {
+      const response = await api.post('/api/healthcare/report', payload, {
         responseType: 'blob'
       });
 
@@ -128,30 +158,28 @@ export default function HealthcarePage() {
     return (
       <div className="h-64 flex flex-col items-center justify-center space-y-4">
         <Loader2 className="h-8 w-8 text-primary animate-spin" />
-        <p className="text-sm text-muted-foreground">Loading Healthcare dashboard...</p>
+        <p className="text-sm text-muted-foreground">Loading Healthcare cockpit...</p>
       </div>
     );
   }
 
-  // ER wait time line options
-  const waitTimeChartOption = {
+  // Admissions ECharts Pie options
+  const admissionsChartOption = {
     backgroundColor: 'transparent',
-    tooltip: { trigger: 'axis', backgroundColor: '#1e293b', textStyle: { color: '#f8fafc' } },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: {
-      type: 'category',
-      data: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
-      axisLabel: { color: '#94a3b8', fontSize: 10 }
-    },
-    yAxis: { type: 'value', name: 'Mins', axisLabel: { color: '#94a3b8', fontSize: 10 }, splitLine: { lineStyle: { color: '#1e293b' } } },
+    tooltip: { trigger: 'item', backgroundColor: '#1e293b', textStyle: { color: '#f8fafc' } },
+    legend: { textStyle: { color: '#94a3b8', fontSize: 10 }, bottom: '0%' },
     series: [
       {
-        name: 'ER Average Wait Time',
-        type: 'line',
-        smooth: true,
-        data: [14, 18, 25, 30, 22, 18, 15],
-        itemStyle: { color: '#EF4444' },
-        lineStyle: { width: 3 }
+        name: 'Admissions by Wing',
+        type: 'pie',
+        radius: ['45%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 8, borderColor: '#1e293b', borderWidth: 2 },
+        label: { show: false },
+        data: data.departmentAnalytics.departments.map((dept, i) => ({
+          name: dept,
+          value: data.departmentAnalytics.admissions[i]
+        }))
       }
     ]
   };
@@ -159,65 +187,60 @@ export default function HealthcarePage() {
   return (
     <div className="space-y-8 pb-16">
       
-      {/* Overview statistics */}
+      {/* 1. Animated KPI cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Bed Occupancy Rate', value: data.bedOccupancy, icon: ActivitySquare, color: 'text-primary' },
-          { title: 'Active Emergencies', value: data.activeEmergencies, icon: Heart, color: 'text-destructive' },
-          { title: 'Avg ER Wait Time', value: data.avgWaitTime, icon: Activity, color: 'text-secondary' },
-          { title: 'Doctors On-Duty', value: data.activeStaff, icon: Stethoscope, color: 'text-accent' }
+          { title: 'Total Active Patients', value: data.totalPatients.toString(), sub: '12 admissions today', icon: Users, color: 'text-primary' },
+          { title: 'Available Beds Count', value: data.availableBeds.toString(), sub: 'ICU: 4 available', icon: ActivitySquare, color: 'text-[#14B8A6]' },
+          { title: 'Emergency Trauma Cases', value: data.emergencyCases.toString(), sub: '2 critical status', icon: Heart, color: 'text-destructive' },
+          { title: 'Clinicians On-Duty', value: data.activeStaff.toString(), sub: 'Shift: Morning A', icon: Stethoscope, color: 'text-accent' }
         ].map((card) => (
-          <div key={card.title} className="bg-card border border-border rounded-xl p-6 shadow hover:border-primary/30 transition-colors">
+          <div key={card.title} className="bg-card border border-border rounded-xl p-6 shadow-lg hover:border-primary/40 transition-colors relative overflow-hidden group cursor-pointer">
+            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{card.title}</span>
               <card.icon className={`h-5 w-5 ${card.color}`} />
             </div>
             <div className="text-3xl font-extrabold text-white tracking-tight">{card.value}</div>
+            <span className="text-[10px] text-muted-foreground block mt-1.5">{card.sub}</span>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: Emergency, Patients lists, SVG bed grid */}
+        {/* Left Column: Alerts, Patients, Map layouts */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Emergency case monitoring list */}
+          {/* Smart Alerts */}
           <div className="bg-card border border-border rounded-xl p-6 shadow">
-            <h3 className="text-lg font-bold text-white mb-4">Emergency Cases Monitor</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left text-slate-300">
-                <thead>
-                  <tr className="border-b border-border/80 text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
-                    <th className="pb-3">Diagnosis / Case</th>
-                    <th className="pb-3">Severity</th>
-                    <th className="pb-3">AI Triage Classification</th>
-                    <th className="pb-3">Arrival Time</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/50">
-                  {data.emergencies.map((e) => (
-                    <tr key={e.id} className="hover:bg-muted/10 transition-colors">
-                      <td className="py-3 font-semibold text-white">{e.category}</td>
-                      <td className="py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                          e.severity === 'Critical' ? 'bg-destructive/10 text-destructive' : 'bg-accent/10 text-accent'
-                        }`}>
-                          {e.severity}
-                        </span>
-                      </td>
-                      <td className="py-3 text-slate-400">{e.triage}</td>
-                      <td className="py-3">{e.arrival}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              <span>Critical Alerts Feed</span>
+            </h3>
+            <div className="space-y-3">
+              {data.alerts.map((alert) => (
+                <div key={alert.id} className="bg-background border border-border rounded-xl p-4 flex items-start justify-between gap-4 text-xs">
+                  <div className="flex items-start space-x-3">
+                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
+                      alert.severity === 'CRITICAL' ? 'bg-destructive/10 text-destructive' : 'bg-accent/10 text-accent'
+                    }`}>
+                      {alert.severity}
+                    </span>
+                    <div>
+                      <span className="font-bold text-white block">{alert.category}</span>
+                      <p className="text-slate-300 mt-1 leading-normal">{alert.message}</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">{alert.timestamp}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Admitted Patient roster */}
           <div className="bg-card border border-border rounded-xl p-6 shadow">
-            <h3 className="text-lg font-bold text-white mb-4">Admitted Patient roster</h3>
+            <h3 className="text-lg font-bold text-white mb-4">Admitted Patient Overview</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left text-slate-300">
                 <thead>
@@ -244,12 +267,12 @@ export default function HealthcarePage() {
             </div>
           </div>
 
-          {/* Map and Hospital wings tab selector */}
+          {/* Map & Hospital wings tab selector */}
           <div className="bg-card border border-border rounded-xl p-6 shadow">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="text-lg font-bold text-white">Hospital Spatial Tracking</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">Toggle between internal emergency wing plans and Leaflet GIS branches.</p>
+                <h3 className="text-lg font-bold text-white">Hospital GIS Coordinate Tracking</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Toggle between internal wing layouts and Leaflet GIS mapping.</p>
               </div>
 
               {/* Tab toggler buttons */}
@@ -302,14 +325,71 @@ export default function HealthcarePage() {
 
         </div>
 
-        {/* Right Column: Wait time charts, Bed visual grid, Triage Simulator, AI recommendations */}
+        {/* Right Column: ECharts pie, AI Brief summarizer, Triage simulator, recommendations */}
         <div className="space-y-8">
           
+          {/* ECharts: Department Analytics */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow">
+            <h3 className="text-lg font-bold text-white mb-4">Department Admissions</h3>
+            <div className="h-56">
+              <ReactECharts option={admissionsChartOption} style={{ height: '100%' }} />
+            </div>
+          </div>
+
+          {/* AI Patient Brief Summarizer */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+              <Brain className="h-4.5 w-4.5 text-primary" />
+              <span>AI Patient Brief Summary</span>
+            </h3>
+
+            <div className="space-y-3">
+              <label className="block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Select Patient</label>
+              <select
+                value={selectedPatient?.name || ''}
+                onChange={(e) => {
+                  const pt = data.patients.find(p => p.name === e.target.value);
+                  if (pt) setSelectedPatient(pt);
+                }}
+                className="w-full px-2 py-1 bg-background border border-border rounded text-xs text-foreground focus:outline-none"
+              >
+                {data.patients.map((p) => (
+                  <option key={p.name} value={p.name}>{p.name} ({p.room})</option>
+                ))}
+              </select>
+
+              <button 
+                onClick={handleGetSummary}
+                disabled={generatingSummary}
+                className="w-full py-2 bg-[#14B8A6]/20 border border-[#14B8A6]/30 hover:bg-[#14B8A6]/35 text-[#14B8A6] font-bold rounded-lg text-xs transition-colors flex items-center justify-center space-x-2"
+              >
+                {generatingSummary ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Analyzing Patient Stats...</span>
+                  </>
+                ) : (
+                  <>
+                    <FileCheck2 className="h-3.5 w-3.5" />
+                    <span>Generate AI Medical Summary</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {aiSummaryText && (
+              <div className="bg-background border border-border rounded-lg p-3 text-[11px] text-slate-350 leading-relaxed max-h-36 overflow-y-auto">
+                <span className="font-bold text-white text-[10px] block mb-1 uppercase tracking-wide">Diagnosis Briefing</span>
+                {aiSummaryText}
+              </div>
+            )}
+          </div>
+
           {/* Triage Simulator Panel */}
           <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center space-x-2">
               <Brain className="h-4.5 w-4.5 text-primary" />
-              <span>Gemini AI Triage Assistant</span>
+              <span>AI Emergency Triage Simulator</span>
             </h3>
             
             <div className="space-y-2">
@@ -346,36 +426,6 @@ export default function HealthcarePage() {
             )}
           </div>
 
-          {/* Bed Occupancy Grid */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
-            <h3 className="text-lg font-bold text-white">ICU Bed Layout</h3>
-            <div className="grid grid-cols-3 gap-3">
-              {data.bedGrid.map((bed, idx) => (
-                <div 
-                  key={idx} 
-                  className={`border rounded-lg p-2.5 text-center transition-all ${
-                    bed.status === 'OCCUPIED_CRITICAL' 
-                      ? 'bg-destructive/10 border-destructive/30 text-destructive animate-pulse'
-                      : bed.status === 'OCCUPIED'
-                      ? 'bg-primary/10 border-primary/20 text-primary'
-                      : 'bg-background border-border text-slate-500'
-                  }`}
-                >
-                  <span className="text-[10px] font-bold block">Room {bed.room}</span>
-                  <span className="text-[9px] block opacity-80">{bed.type}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Wait Time Timeline ECharts */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow">
-            <h3 className="text-lg font-bold text-white mb-4">Average ER Wait Time</h3>
-            <div className="h-44">
-              <ReactECharts option={waitTimeChartOption} style={{ height: '100%' }} />
-            </div>
-          </div>
-
           {/* AI Clinical Recommendations panel */}
           <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
             <h3 className="text-lg font-bold text-white flex items-center space-x-2">
@@ -399,6 +449,29 @@ export default function HealthcarePage() {
               <FileText className="h-4 w-4" />
               <span>Generate Patient Medical Brief</span>
             </button>
+          </div>
+
+          {/* Recent Activity logs */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
+            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+              <Clock className="h-5 w-5 text-muted-foreground" />
+              <span>Recent Activities</span>
+            </h3>
+            
+            <div className="space-y-3 text-xs text-slate-400">
+              <div className="flex justify-between items-start">
+                <span>Room ICU-102 occupancy status modified.</span>
+                <span className="text-[10px] text-muted-foreground">4m ago</span>
+              </div>
+              <div className="flex justify-between items-start">
+                <span>Triage simulation classification loop complete for Trauma Sector.</span>
+                <span className="text-[10px] text-muted-foreground">12m ago</span>
+              </div>
+              <div className="flex justify-between items-start">
+                <span>Dr. Sarah Jenkins assigned to patient John Doe.</span>
+                <span className="text-[10px] text-muted-foreground">1h ago</span>
+              </div>
+            </div>
           </div>
 
         </div>

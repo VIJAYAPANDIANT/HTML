@@ -228,3 +228,56 @@ CREATE TABLE emergency_cases (
 CREATE INDEX idx_hospitals_org ON hospitals(organization_id);
 CREATE INDEX idx_patients_hospital ON patients(hospital_id);
 CREATE INDEX idx_emergencies_hospital ON emergency_cases(hospital_id);
+
+-- 20. Departments Table
+CREATE TABLE departments (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    hospital_id UUID REFERENCES hospitals(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 21. Beds Table
+CREATE TABLE beds (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    department_id UUID REFERENCES departments(id) ON DELETE CASCADE,
+    room_number VARCHAR(20) NOT NULL,
+    bed_number VARCHAR(20) NOT NULL,
+    status VARCHAR(50) DEFAULT 'UNOCCUPIED', -- 'UNOCCUPIED', 'OCCUPIED', 'OCCUPIED_CRITICAL'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 22. Medical Reports Table
+CREATE TABLE medical_reports (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    patient_id UUID REFERENCES patients(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    file_path VARCHAR(512),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 23. Healthcare Alerts Table
+CREATE TABLE healthcare_alerts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    hospital_id UUID REFERENCES hospitals(id) ON DELETE CASCADE,
+    severity VARCHAR(50) NOT NULL, -- 'CRITICAL', 'MEDIUM', 'LOW'
+    message TEXT NOT NULL,
+    is_resolved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 24. Healthcare Recommendations Table
+CREATE TABLE healthcare_recommendations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    patient_id UUID REFERENCES patients(id) ON DELETE CASCADE,
+    suggestion TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Additional Indexes for Healthcare Module
+CREATE INDEX idx_departments_hospital ON departments(hospital_id);
+CREATE INDEX idx_beds_department ON beds(department_id);
+CREATE INDEX idx_medreports_patient ON medical_reports(patient_id);
+CREATE INDEX idx_hcalerts_hospital ON healthcare_alerts(hospital_id);
+CREATE INDEX idx_hcrecs_patient ON healthcare_recommendations(patient_id);
