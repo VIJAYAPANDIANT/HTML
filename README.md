@@ -188,3 +188,10 @@ npm install --legacy-peer-deps
 npm run dev
 ```
 Open `http://localhost:5173` to explore the platform.
+
+### 4. Running Test Suites
+To run the automated backend test suites (which execute against H2 in-memory databases and exclude external API dependencies):
+```bash
+cd server
+./mvnw test
+```
