@@ -57,6 +57,9 @@ public class ReportGeneratorService {
             if (metrics != null && (metrics.containsKey("bedOccupancy") || metrics.containsKey("activeEmergencies"))) {
                 titleText = "INTELLISPHERE CLINICAL DECISION BRIEF";
                 domainText = "Healthcare Optimization Service";
+            } else if (metrics != null && (metrics.containsKey("overallOee") || metrics.containsKey("activeMachines"))) {
+                titleText = "INTELLISPHERE INDUSTRIAL PRODUCTION BRIEF";
+                domainText = "Manufacturing Optimization Service";
             }
 
             // Add Header Title
