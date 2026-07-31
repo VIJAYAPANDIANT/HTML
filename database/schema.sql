@@ -281,3 +281,136 @@ CREATE INDEX idx_beds_department ON beds(department_id);
 CREATE INDEX idx_medreports_patient ON medical_reports(patient_id);
 CREATE INDEX idx_hcalerts_hospital ON healthcare_alerts(hospital_id);
 CREATE INDEX idx_hcrecs_patient ON healthcare_recommendations(patient_id);
+
+-- 25. Manufacturing Factories Table
+CREATE TABLE mfg_factories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    status VARCHAR(50) DEFAULT 'OPERATIONAL',
+    oee_percentage DOUBLE PRECISION DEFAULT 87.5,
+    active_lines INT DEFAULT 4,
+    total_machines INT DEFAULT 24,
+    active_workers INT DEFAULT 142,
+    daily_output_target DOUBLE PRECISION DEFAULT 12000.0,
+    current_daily_output DOUBLE PRECISION DEFAULT 10850.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 26. Manufacturing Production Lines Table
+CREATE TABLE mfg_production_lines (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    factory_id UUID REFERENCES mfg_factories(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    status VARCHAR(50) DEFAULT 'OPERATIONAL',
+    target_output DOUBLE PRECISION DEFAULT 3000.0,
+    actual_output DOUBLE PRECISION DEFAULT 2890.0,
+    oee_percentage DOUBLE PRECISION DEFAULT 91.2,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 27. Manufacturing Machines Table
+CREATE TABLE mfg_machines (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    production_line_id UUID REFERENCES mfg_production_lines(id) ON DELETE SET NULL,
+    name VARCHAR(255) NOT NULL,
+    machine_code VARCHAR(100) NOT NULL UNIQUE,
+    type VARCHAR(100) NOT NULL,
+    status VARCHAR(50) DEFAULT 'OPERATIONAL',
+    health_score INT DEFAULT 100,
+    temperature DOUBLE PRECISION DEFAULT 65.0,
+    vibration DOUBLE PRECISION DEFAULT 1.0,
+    spindle_speed INT DEFAULT 3000,
+    hydraulic_pressure INT DEFAULT 1400,
+    age_months INT DEFAULT 12,
+    last_maintenance VARCHAR(50),
+    next_maintenance VARCHAR(50),
+    failure_risk VARCHAR(100) DEFAULT 'Low',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 28. Manufacturing Production Metrics Table
+CREATE TABLE mfg_production_metrics (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    factory_id UUID REFERENCES mfg_factories(id) ON DELETE CASCADE,
+    target_units INT DEFAULT 12000,
+    actual_units INT DEFAULT 10850,
+    scrap_units INT DEFAULT 195,
+    yield_rate DOUBLE PRECISION DEFAULT 98.2,
+    defect_rate DOUBLE PRECISION DEFAULT 1.8,
+    throughput_per_hour DOUBLE PRECISION DEFAULT 1350.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 29. Manufacturing Maintenance Logs Table
+CREATE TABLE mfg_maintenance_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    machine_id UUID REFERENCES mfg_machines(id) ON DELETE CASCADE,
+    work_order_number VARCHAR(100) NOT NULL UNIQUE,
+    issue_description TEXT NOT NULL,
+    priority VARCHAR(50) DEFAULT 'MEDIUM',
+    status VARCHAR(50) DEFAULT 'SCHEDULED',
+    failure_probability DOUBLE PRECISION DEFAULT 0.0,
+    assigned_technician VARCHAR(255),
+    scheduled_date VARCHAR(50),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 30. Manufacturing Energy Usage Table
+CREATE TABLE mfg_energy_usage (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    factory_id UUID REFERENCES mfg_factories(id) ON DELETE CASCADE,
+    current_kwh DOUBLE PRECISION DEFAULT 0.0,
+    daily_kwh_total DOUBLE PRECISION DEFAULT 0.0,
+    cost_today_usd DOUBLE PRECISION DEFAULT 0.0,
+    efficiency_kwh_per_unit DOUBLE PRECISION DEFAULT 0.0,
+    peak_demand_mw DOUBLE PRECISION DEFAULT 0.0,
+    carbon_footprint_kg DOUBLE PRECISION DEFAULT 0.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 31. Manufacturing Alerts Table
+CREATE TABLE mfg_alerts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    factory_id UUID REFERENCES mfg_factories(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    severity VARCHAR(50) NOT NULL,
+    message TEXT NOT NULL,
+    machine_code VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'ACTIVE',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 32. Manufacturing Predictions Table
+CREATE TABLE mfg_predictions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    machine_id UUID REFERENCES mfg_machines(id) ON DELETE CASCADE,
+    predicted_failure_time TIMESTAMP WITH TIME ZONE,
+    probability DOUBLE PRECISION NOT NULL,
+    confidence DOUBLE PRECISION NOT NULL,
+    details TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 33. Manufacturing Recommendations Table
+CREATE TABLE mfg_recommendations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    machine_id UUID REFERENCES mfg_machines(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    suggestion TEXT NOT NULL,
+    impact VARCHAR(50) DEFAULT 'MEDIUM',
+    estimated_savings VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for Manufacturing optimization
+CREATE INDEX idx_mfg_prodlines_factory ON mfg_production_lines(factory_id);
+CREATE INDEX idx_mfg_machines_line ON mfg_machines(production_line_id);
+CREATE INDEX idx_mfg_metrics_factory ON mfg_production_metrics(factory_id);
+CREATE INDEX idx_mfg_maint_machine ON mfg_maintenance_logs(machine_id);
+CREATE INDEX idx_mfg_energy_factory ON mfg_energy_usage(factory_id);
+CREATE INDEX idx_mfg_alerts_factory ON mfg_alerts(factory_id);
+CREATE INDEX idx_mfg_pred_machine ON mfg_predictions(machine_id);
+CREATE INDEX idx_mfg_recs_machine ON mfg_recommendations(machine_id);

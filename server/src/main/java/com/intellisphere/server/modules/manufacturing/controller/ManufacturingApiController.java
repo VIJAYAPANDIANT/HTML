@@ -29,22 +29,37 @@ public class ManufacturingApiController {
         this.aiService = aiService;
     }
 
-    @GetMapping("/api/v1/manufacturing/dashboard")
+    @GetMapping({"/api/v1/manufacturing/dashboard", "/api/manufacturing/dashboard"})
     public ResponseEntity<ManufacturingDashboardDto> getDashboard() {
         return ResponseEntity.ok(manufacturingService.getDashboardData());
     }
 
-    @GetMapping("/api/v1/manufacturing/machines")
+    @GetMapping({"/api/v1/manufacturing/machines", "/api/manufacturing/machines"})
     public ResponseEntity<List<MachineStatusDto>> getMachines() {
         return ResponseEntity.ok(manufacturingService.getMachines());
     }
 
-    @PostMapping("/api/v1/manufacturing/simulate")
+    @GetMapping({"/api/v1/manufacturing/analytics", "/api/manufacturing/analytics"})
+    public ResponseEntity<Map<String, Object>> getAnalytics() {
+        return ResponseEntity.ok(Map.of(
+            "productionYield", 98.2,
+            "overallOee", 88.4,
+            "downtimeMinutes", 145,
+            "energySavingsUsd", 3400
+        ));
+    }
+
+    @GetMapping({"/api/v1/manufacturing/alerts", "/api/manufacturing/alerts"})
+    public ResponseEntity<List<ManufacturingAlertDto>> getAlerts() {
+        return ResponseEntity.ok(manufacturingService.getDashboardData().getAlerts());
+    }
+
+    @PostMapping({"/api/v1/manufacturing/simulate", "/api/manufacturing/simulate"})
     public ResponseEntity<Map<String, Object>> runSimulation(@RequestBody Map<String, Object> params) {
         return ResponseEntity.ok(manufacturingService.simulate(params));
     }
 
-    @PostMapping("/api/v1/manufacturing/report")
+    @PostMapping({"/api/v1/manufacturing/report", "/api/manufacturing/report"})
     public ResponseEntity<byte[]> generateReport(@RequestBody Map<String, Object> body) {
         @SuppressWarnings("unchecked")
         Map<String, Object> metrics = (Map<String, Object>) body.getOrDefault("metrics", Map.of(
@@ -55,8 +70,8 @@ public class ManufacturingApiController {
         ));
         @SuppressWarnings("unchecked")
         List<String> alerts = (List<String>) body.getOrDefault("alerts", List.of(
-                "Stamping Press 500T temperature high (94.8°C)",
-                "KUKA Weld-Arm 4 joint vibration spike"
+                "Robotic Weld-Arm joint lock failure detected on Joint 3",
+                "Light curtain safety barrier violation detected"
         ));
         String predictions = String.valueOf(body.getOrDefault("predictions", "Predictive maintenance required for Press 500T within 24 hours to prevent hydraulic valve failure."));
         String userNotes = String.valueOf(body.getOrDefault("userNotes", "Shift 1 calibration finished. Overall plant OEE optimal at 88.4%."));
@@ -122,7 +137,7 @@ public class ManufacturingApiController {
         return ResponseEntity.ok(Map.of("incident", alertTitle, "rootCauseAnalysis", rootCauseText));
     }
 
-    @PostMapping("/api/ai/manufacturing/production-summary")
+    @PostMapping({"/api/ai/manufacturing-summary", "/api/ai/manufacturing/production-summary"})
     public ResponseEntity<Map<String, Object>> getProductionSummary(@RequestBody Map<String, Object> metrics) {
         double oee = Double.parseDouble(String.valueOf(metrics.getOrDefault("overallOee", "88.4")));
         double output = Double.parseDouble(String.valueOf(metrics.getOrDefault("currentDailyOutput", "10850")));
