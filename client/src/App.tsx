@@ -14,7 +14,7 @@ import SettingsPage from './modules/settings/SettingsPage';
 import ProfilePage from './modules/profile/ProfilePage';
 import AgriculturePage from './modules/industry/AgriculturePage';
 import HealthcarePage from './modules/industry/HealthcarePage';
-import ManufacturingPage from './modules/manufacturing/ManufacturingPage';
+import ManufacturingPage from './modules/industry/ManufacturingPage';
 import UploadCenterPage from './modules/upload/UploadCenterPage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import NotFoundPage from './modules/error/NotFoundPage';
