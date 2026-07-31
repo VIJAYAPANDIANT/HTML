@@ -76,7 +76,7 @@ graph TD
 
 ## 📄 Database Architecture (`database/`)
 
-The PostgreSQL relational database is structured around 24 core tables:
+The PostgreSQL relational database is structured around 32 core tables:
 1. **`roles`**: User authorization levels (`SUPER_ADMIN`, `ORG_ADMIN`, `ANALYST`, `OPERATOR`) and permissions arrays.
 2. **`users`**: Identity credentials and role mappings with BCrypt hashing.
 3. **`organizations`**: Workspace management and tenant groupings.
@@ -92,7 +92,7 @@ The PostgreSQL relational database is structured around 24 core tables:
 13. **`audit_logs`**: Audit trail of system actions and network IPs.
 14. **`farms`**: Tracks location, organization ties, and acreage.
 15. **`crops`**: Logs growth stages, active health index ratios, and target farm references.
-16. **`diseases`**: Logs localized disease names, probability risks, and mitigation action advice.
+16. **`diseases`**: Logs localized disease names, probability risks, and mitigation advice.
 17. **`hospitals`**: Tracks healthcare institutions.
 18. **`departments`**: Clinical departments (ER, ICU).
 19. **`patients`**: Patient diagnostic history logs.
@@ -100,6 +100,15 @@ The PostgreSQL relational database is structured around 24 core tables:
 21. **`medical_reports`**: Direct digital patient consult charts.
 22. **`healthcare_alerts`**: Alarm triggers for clinical environments.
 23. **`healthcare_recommendations`**: AI clinical recommendations.
+24. **`mfg_factories`**: Plant names, OEE percentages, active machines, and daily target metrics.
+25. **`mfg_production_lines`**: Assembly line targets, outputs, and OEE performance trackers.
+26. **`mfg_machines`**: Telemetry sensor boundaries (temp, vibration, spindle speed, hydraulic PSI, age).
+27. **`mfg_production_metrics`**: Target vs completed units, scrap log values, and yield rates.
+28. **`mfg_maintenance_logs`**: Work orders schedule logs, severities, and assigned technicians.
+29. **`mfg_energy_usage`**: Energy consumption levels, peak loads, and cost tracking logs.
+30. **`mfg_alerts`**: Alarm categories (Machine Failure, Safety curtains, temperature spikes) and statuses.
+31. **`mfg_predictions`**: Equipment failure probabilities, confidence parameters, and diagnostics.
+32. **`mfg_recommendations`**: Preventative repair guidance cards and estimated financial savings.
 
 ---
 
@@ -133,8 +142,13 @@ The frontend SPA maps the following user paths:
   - **ECharts Department Admissions donut chart**.
   - **AI Patient Brief Summarizer**: dropdown selector providing direct AI patient chart summaries.
   - **Medical PDF brief download overlay**.
+- `/manufacturing` - Manufacturing cockpit containing:
+  - **Overview Metrics**: Factories counts, active machinery utilities, overall plant OEE rates, daily targets completed.
+  - **Machine Monitoring Center**: Side-by-side interactive machinery registry list with filter options (Assembly lines A/B/C and warning status select boxes). Renders detailed temperature, vibration, spindle speeds, hydraulic PSI, age months, last maintenance, and failure risks.
+  - **AI Predictive Maintenance**: Diagnostics simulator with 4 IoT range sliders (temp, vibration, speed, pressure) running automated neural predictive scan simulations and timeline logs.
 - `/uploads` - Drag-and-drop Upload Center supporting CSV, Excel, PDF, and image uploads, file validation, progress bars, and upload history logs.
-- `/analytics` - Analytics dashboard containing **6 interactive ECharts**: Crop Health (bar), Water Usage (area), Yield Trend (line), Disease Share (donut), Risk Score (gauge), and Soil Performance (radar).
+- `/analytics` - Analytics dashboard toggling dynamically between Agriculture (6 charts) and Manufacturing analytics (7 interactive ECharts: Production trend, Machine Utilization, Downtime analysis, Grid Peak energy draw, OEE indices, Monthly Target completion, and Maintenance Cost allocations).
+- `/notifications` - Alert Center toggling between System Log notifications and Mfg Smart Alerts (Machine Failure, Safety Warning, Temperature spike, Production Delays) with red flashing warning pings.
 - `/ai-center` / `/reports` / `/settings` - Standard operational panels.
 
 ---
@@ -155,6 +169,13 @@ To support the UI layout, the backend controllers expose the following endpoint 
 - `POST /api/healthcare/report` - Generates healthcare PDF briefs.
 - `POST /api/ai/healthcare-summary` - Direct patient consult diagnosis briefs.
 - `POST /api/healthcare/simulate-triage` - Submits triage diagnostic symptoms.
+- `GET /api/manufacturing/dashboard` - Fetches overall factory KPIs, OEE indices, alerts.
+- `GET /api/manufacturing/machines` - Lists active machines telemetry parameters.
+- `GET /api/manufacturing/analytics` - Fetches yield scores, downtime allocations, and cost values.
+- `GET /api/manufacturing/alerts` - Fetches pending smart alerts array.
+- `POST /api/manufacturing/report` - Compiles and downloads styled Industrial Production briefs.
+- `POST /api/ai/manufacturing-summary` - Generates Gemini AI executive production summary briefings.
+- `POST /api/ai/manufacturing/predictive-maintenance` - Runs diagnostic anomaly risk models.
 
 ---
 
