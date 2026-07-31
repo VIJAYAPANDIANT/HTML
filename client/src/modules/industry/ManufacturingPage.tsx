@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { 
-  Wrench, 
   Activity, 
   Cpu, 
   Sparkles, 
@@ -15,8 +14,8 @@ import {
   Building,
   CheckCircle,
   Gauge,
-  Clock,
-  Search
+  Search,
+  ShieldAlert
 } from 'lucide-react';
 import api from '@/lib/axios';
 
@@ -145,7 +144,7 @@ export default function ManufacturingPage() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
   const [activeAlerts, setActiveAlerts] = useState<ManufacturingAlert[]>([]);
-  const [activeTab, setActiveTab] = useState<'cockpit' | 'monitoring'>('cockpit');
+  const [activeTab, setActiveTab] = useState<'cockpit' | 'monitoring' | 'predictive'>('cockpit');
 
   // Interactive Filters for Machine Monitoring
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
@@ -153,11 +152,12 @@ export default function ManufacturingPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMachine, setSelectedMachine] = useState<MachineStatus | null>(null);
 
-  // Telemetry AI Predictor state
+  // Telemetry AI Predictor state (WOW Feature)
   const [selMachine, setSelMachine] = useState('PRESS-301');
   const [temperature, setTemperature] = useState(94.8);
   const [vibration, setVibration] = useState(7.2);
-  const [spindleSpeed] = useState(1200);
+  const [pressure, setPressure] = useState(2100);
+  const [spindleSpeed, setSpindleSpeed] = useState(1200);
   const [predicting, setPredicting] = useState(false);
   const [predictionOutput, setPredictionOutput] = useState<string | null>(null);
   const [predictedRisk, setPredictedRisk] = useState<string | null>(null);
@@ -251,7 +251,7 @@ export default function ManufacturingPage() {
           plantStatus: data.factoryOverview.plantStatus
         },
         alerts: activeAlerts.map(a => a.message),
-        predictions: 'Predictive maintenance recommended on Stamping Press PRESS-301 to avoid valve seal failure.',
+        predictions: predictionOutput || 'Predictive maintenance recommended on Stamping Press PRESS-301 to avoid valve seal failure.',
         userNotes: notes || 'Production brief generated for Michigan plant oversight.'
       };
 
@@ -349,7 +349,7 @@ export default function ManufacturingPage() {
     <div className="space-y-8 pb-16">
       
       {/* Tab selection header */}
-      <div className="flex justify-between items-center border-b border-border pb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-border pb-4 gap-4">
         <div>
           <h2 className="text-xl font-extrabold text-white tracking-tight">Detroit Production Hub</h2>
           <p className="text-xs text-muted-foreground mt-0.5">Real-time automotive assembly lines & predictive maintenance telemetry.</p>
@@ -358,7 +358,7 @@ export default function ManufacturingPage() {
         <div className="flex bg-muted/20 p-1 rounded-lg border border-border">
           <button
             onClick={() => setActiveTab('cockpit')}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'cockpit' ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
             }`}
           >
@@ -366,16 +366,25 @@ export default function ManufacturingPage() {
           </button>
           <button
             onClick={() => setActiveTab('monitoring')}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'monitoring' ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
             }`}
           >
             Machine Monitoring Center
           </button>
+          <button
+            onClick={() => setActiveTab('predictive')}
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center space-x-1 ${
+              activeTab === 'predictive' ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>AI Predictive Center</span>
+          </button>
         </div>
       </div>
 
-      {activeTab === 'cockpit' ? (
+      {activeTab === 'cockpit' && (
         <>
           {/* 1. Animated KPI cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -497,44 +506,6 @@ export default function ManufacturingPage() {
                 </div>
               </div>
 
-              {/* Defect Analysis / Work Orders */}
-              <div className="bg-card border border-border rounded-xl p-6 shadow">
-                <h3 className="text-lg font-bold text-white mb-4">Pending Predictive Maintenance</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left text-slate-300">
-                    <thead>
-                      <tr className="border-b border-border/80 text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
-                        <th className="pb-3">Work Order</th>
-                        <th className="pb-3">Priority</th>
-                        <th className="pb-3">Assigned Technician</th>
-                        <th className="pb-3">Scheduled Date</th>
-                        <th className="pb-3">Failure Risk</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/50">
-                      {data.maintenanceOverview.workOrders.map((wo) => (
-                        <tr key={wo.id} className="hover:bg-muted/10 transition-colors">
-                          <td className="py-3 font-semibold text-white">
-                            <span>{wo.workOrderNumber}</span>
-                            <span className="block text-[10px] text-muted-foreground">{wo.machineName}</span>
-                          </td>
-                          <td className="py-3">
-                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
-                              wo.priority === 'CRITICAL' ? 'bg-destructive/10 text-destructive' : 'bg-slate-800 text-slate-300'
-                            }`}>
-                              {wo.priority}
-                            </span>
-                          </td>
-                          <td className="py-3 text-slate-400">{wo.assignedTechnician}</td>
-                          <td className="py-3">{wo.scheduledDate}</td>
-                          <td className="py-3 text-secondary font-bold">{wo.failureProbability}%</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
             </div>
 
             {/* Right Column: ECharts output lines, AI briefing summary, Telemetry Predictor, Energy charts */}
@@ -581,80 +552,6 @@ export default function ManufacturingPage() {
                 )}
               </div>
 
-              {/* AI Telemetry Predictor Panel */}
-              <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center space-x-2">
-                  <Wrench className="h-4.5 w-4.5 text-primary" />
-                  <span>AI Machine Failure Predictor</span>
-                </h3>
-                
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Select Machine</label>
-                    <select
-                      value={selMachine}
-                      onChange={(e) => setSelMachine(e.target.value)}
-                      className="w-full px-2 py-1.5 bg-background border border-border rounded text-xs text-foreground focus:outline-none"
-                    >
-                      <option value="PRESS-301">Stamping Press 500T (PRESS-301)</option>
-                      <option value="WELD-204">Robotic Weld-Arm 4 (WELD-204)</option>
-                      <option value="CNC-101">CNC Lathe Ultra 5X (CNC-101)</option>
-                    </select>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Operating Temp (°C)</label>
-                      <input
-                        type="number"
-                        value={temperature}
-                        onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                        className="w-full px-2 py-1 bg-background border border-border rounded text-xs text-foreground"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Vibration (mm/s)</label>
-                      <input
-                        type="number"
-                        value={vibration}
-                        onChange={(e) => setVibration(parseFloat(e.target.value))}
-                        className="w-full px-2 py-1 bg-background border border-border rounded text-xs text-foreground"
-                      />
-                    </div>
-                  </div>
-
-                  <button 
-                    onClick={handlePredictFailure}
-                    disabled={predicting}
-                    className="w-full py-2 bg-primary hover:bg-primary/95 text-white font-bold rounded-lg text-xs transition-colors flex items-center justify-center space-x-2 shadow"
-                  >
-                    {predicting ? (
-                      <>
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        <span>Analyzing Failure Models...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Brain className="h-3.5 w-3.5" />
-                        <span>Predict Anomaly Risk</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {predictionOutput && (
-                  <div className="bg-background border border-border rounded-lg p-3 text-[11px] text-slate-350 leading-relaxed max-h-36 overflow-y-auto">
-                    <span className="font-bold text-white text-[10px] block mb-1 uppercase tracking-wide">
-                      Triage:{' '}
-                      <span className={predictedRisk === 'HIGH' ? 'text-destructive' : 'text-emerald-500'}>
-                        {predictedRisk} RISK
-                      </span>
-                    </span>
-                    {predictionOutput}
-                  </div>
-                )}
-              </div>
-
               {/* ECharts: Energy Consumption */}
               <div className="bg-card border border-border rounded-xl p-6 shadow">
                 <h3 className="text-lg font-bold text-white mb-4">Hourly Energy usage</h3>
@@ -692,35 +589,16 @@ export default function ManufacturingPage() {
                 </button>
               </div>
 
-              {/* Recent Activity logs */}
-              <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
-                <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-muted-foreground" />
-                  <span>Recent Activities</span>
-                </h3>
-                
-                <div className="space-y-3 text-xs text-slate-400">
-                  {data.recentActivities.map((act) => (
-                    <div key={act.id} className="flex justify-between items-start">
-                      <div>
-                        <span className="font-semibold text-white">{act.title}</span>
-                        <p className="text-[10px] text-slate-500">{act.description}</p>
-                      </div>
-                      <span className="text-[10px] text-muted-foreground">{act.timestamp}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
             </div>
 
           </div>
         </>
-      ) : (
-        /* 2. Machine Monitoring Center */
+      )}
+
+      {activeTab === 'monitoring' && (
+        /* Machine Monitoring Center */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Left Column: Interactive Machine List & Filters */}
           <div className="lg:col-span-1 bg-card border border-border rounded-xl p-6 shadow h-[650px] flex flex-col">
             <h3 className="text-lg font-bold text-white mb-4">Machine Registry</h3>
             
@@ -813,12 +691,11 @@ export default function ManufacturingPage() {
             </div>
           </div>
 
-          {/* Right Column: Detailed Machine card with progress indicators and dynamic AI recommendations */}
+          {/* Right Column: Detailed Machine card with progress indicators */}
           <div className="lg:col-span-2 space-y-8">
             {selectedMachine ? (
               <div className="bg-card border border-border rounded-xl p-6 shadow space-y-6">
                 
-                {/* Machine title status */}
                 <div className="flex justify-between items-start border-b border-border pb-4">
                   <div>
                     <h3 className="text-lg font-bold text-white flex items-center space-x-2">
@@ -840,10 +717,8 @@ export default function ManufacturingPage() {
                   </span>
                 </div>
 
-                {/* Progress Indicators: Health Score and Failure probability */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   
-                  {/* Health score progress */}
                   <div className="bg-background border border-border rounded-xl p-4 space-y-2">
                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Asset Health Score</span>
                     <div className="flex items-baseline justify-between">
@@ -860,7 +735,6 @@ export default function ManufacturingPage() {
                     </div>
                   </div>
 
-                  {/* Failure risk progress */}
                   <div className="bg-background border border-border rounded-xl p-4 space-y-2">
                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Predictive Failure Probability</span>
                     <div className="flex items-baseline justify-between">
@@ -887,7 +761,6 @@ export default function ManufacturingPage() {
 
                 </div>
 
-                {/* Machine sensors parameters */}
                 <div className="space-y-3">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Live IoT Telemetry</h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
@@ -910,7 +783,6 @@ export default function ManufacturingPage() {
                   </div>
                 </div>
 
-                {/* Maintenance details */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div className="bg-background/40 border border-border p-4 rounded-xl">
                     <span className="text-muted-foreground block">Operating Age</span>
@@ -926,7 +798,6 @@ export default function ManufacturingPage() {
                   </div>
                 </div>
 
-                {/* AI Machine Recommendation panel */}
                 <div className="bg-[#2563EB]/5 border border-[#2563EB]/15 rounded-xl p-4 space-y-3">
                   <h4 className="text-xs font-bold text-[#2563EB] uppercase tracking-wider flex items-center space-x-1.5">
                     <Sparkles className="h-4 w-4" />
@@ -947,6 +818,272 @@ export default function ManufacturingPage() {
                 <p className="text-xs text-muted-foreground">Select a machine from the registry to view monitoring sensors.</p>
               </div>
             )}
+          </div>
+
+        </div>
+      )}
+
+      {activeTab === 'predictive' && (
+        /* WOW Feature: AI Predictive Maintenance Center */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Left Column: Interactive Simulation Sliders */}
+          <div className="lg:col-span-1 bg-card border border-border rounded-xl p-6 shadow space-y-6 flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+                <Gauge className="h-5.5 w-5.5 text-primary" />
+                <span>Diagnostics Simulator</span>
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Manipulate IoT sensors parameter limits to trigger predictive model responses.</p>
+            </div>
+
+            <div className="space-y-5 my-4">
+              <div>
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Select Targeting Machine</label>
+                <select
+                  value={selMachine}
+                  onChange={(e) => setSelMachine(e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-xs text-foreground focus:outline-none"
+                >
+                  <option value="PRESS-301">Schuler Stamping Press (PRESS-301)</option>
+                  <option value="WELD-204">KUKA Robotic Weld-Arm (WELD-204)</option>
+                  <option value="CNC-101">CNC Lathe Ultra 5X (CNC-101)</option>
+                </select>
+              </div>
+
+              {/* Slider 1: Temperature */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-300 font-semibold">Operating Temperature</span>
+                  <span className={`font-bold ${temperature > 90 ? 'text-destructive animate-pulse' : 'text-slate-200'}`}>
+                    {temperature} °C
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="30"
+                  max="120"
+                  step="0.5"
+                  value={temperature}
+                  onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>30°C (Min)</span>
+                  <span>90°C (Warning Bound)</span>
+                  <span>120°C (Max)</span>
+                </div>
+              </div>
+
+              {/* Slider 2: Vibration */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-300 font-semibold">Vibration Defect Scale</span>
+                  <span className={`font-bold ${vibration > 6.0 ? 'text-destructive animate-pulse' : 'text-slate-200'}`}>
+                    {vibration} mm/s
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="12.0"
+                  step="0.1"
+                  value={vibration}
+                  onChange={(e) => setVibration(parseFloat(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>0.5 mm/s</span>
+                  <span>6.0 mm/s (High Alert)</span>
+                  <span>12.0 mm/s</span>
+                </div>
+              </div>
+
+              {/* Slider 3: Pressure */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-300 font-semibold">Hydraulic Load Pressure</span>
+                  <span className={`font-bold ${pressure > 2000 ? 'text-destructive animate-pulse' : 'text-slate-200'}`}>
+                    {pressure} PSI
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="500"
+                  max="3000"
+                  step="50"
+                  value={pressure}
+                  onChange={(e) => setPressure(parseInt(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>500 PSI</span>
+                  <span>2,000 PSI (Safety Limit)</span>
+                  <span>3,000 PSI</span>
+                </div>
+              </div>
+
+              {/* Slider 4: Spindle Speed */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-300 font-semibold">Spindle Speed Frequency</span>
+                  <span className="text-slate-200 font-bold">{spindleSpeed} RPM</span>
+                </div>
+                <input
+                  type="range"
+                  min="500"
+                  max="5000"
+                  step="100"
+                  value={spindleSpeed}
+                  onChange={(e) => setSpindleSpeed(parseInt(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>500 RPM</span>
+                  <span>5,000 RPM (Max)</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handlePredictFailure}
+              disabled={predicting}
+              className="w-full py-3 bg-primary hover:bg-primary/95 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-primary/20"
+            >
+              {predicting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Scanning Telemetry Signals...</span>
+                </>
+              ) : (
+                <>
+                  <Activity className="h-4 w-4" />
+                  <span>Execute AI Telemetry Diagnostic</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Right Column: AI Scan Prognosis & Dynamic Output Results */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {predicting ? (
+              /* Animated Radar Scan Effect */
+              <div className="bg-card border border-border rounded-xl p-8 shadow h-[400px] flex flex-col items-center justify-center space-y-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-primary/5 animate-pulse" />
+                <div className="relative h-32 w-32 rounded-full border border-primary/20 flex items-center justify-center animate-spin duration-3000">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-16 bg-gradient-to-t from-primary/80 to-transparent origin-bottom" />
+                  <div className="h-20 w-20 rounded-full border border-primary/10 flex items-center justify-center">
+                    <Brain className="h-8 w-8 text-primary animate-pulse" />
+                  </div>
+                </div>
+                <div className="text-center space-y-2 z-10">
+                  <span className="text-sm font-bold text-white block">Evaluating Neural Telemetry Models</span>
+                  <p className="text-xs text-muted-foreground max-w-sm">Cross-referencing vibration frequency spectrums and thermodynamic delta boundaries against historical failure vectors.</p>
+                </div>
+              </div>
+            ) : predictionOutput ? (
+              /* Prognosis Output Details */
+              <div className="bg-card border border-border rounded-xl p-6 shadow space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                
+                {/* Severity header and confidence */}
+                <div className="flex justify-between items-start border-b border-border pb-4">
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-white flex items-center space-x-1.5">
+                      <ShieldAlert className="h-4.5 w-4.5 text-primary" />
+                      <span>Failure Diagnostic Report</span>
+                    </h3>
+                    <div className="flex items-center space-x-2 text-[10px] text-muted-foreground font-semibold">
+                      <span>MACHINE ID: {selMachine}</span>
+                      <span>•</span>
+                      <span>CONFIDENCE INDEX: 96.4%</span>
+                    </div>
+                  </div>
+
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    predictedRisk === 'HIGH' 
+                      ? 'bg-destructive/10 text-destructive animate-pulse' 
+                      : 'bg-emerald-600/10 text-emerald-500'
+                  }`}>
+                    {predictedRisk === 'HIGH' ? 'SEVERE / CRITICAL FAILURE RISK' : 'STABLE OPERATING SYSTEM'}
+                  </span>
+                </div>
+
+                {/* KPI metrics row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-background border border-border p-4 rounded-xl">
+                    <span className="text-[10px] text-muted-foreground block uppercase font-bold tracking-wider">Estimated Outage Cost</span>
+                    <span className={`text-xl font-extrabold block mt-1 ${predictedRisk === 'HIGH' ? 'text-destructive' : 'text-slate-400'}`}>
+                      {predictedRisk === 'HIGH' ? '$85,250 / Shift' : '$0.00'}
+                    </span>
+                  </div>
+                  <div className="bg-background border border-border p-4 rounded-xl">
+                    <span className="text-[10px] text-muted-foreground block uppercase font-bold tracking-wider">Mitigated Savings Potential</span>
+                    <span className="text-xl font-extrabold text-emerald-500 block mt-1">
+                      {predictedRisk === 'HIGH' ? '$78,400 (Avoids Downtime)' : '$0.00'}
+                    </span>
+                  </div>
+                  <div className="bg-background border border-border p-4 rounded-xl">
+                    <span className="text-[10px] text-muted-foreground block uppercase font-bold tracking-wider">Maintenance Action</span>
+                    <span className="text-xl font-extrabold text-primary block mt-1">
+                      {predictedRisk === 'HIGH' ? 'IMMEDIATE PAUSE' : 'ROUTINE CHECK'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* AI diagnosis text */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">AI Root Cause Anomaly Analysis</h4>
+                  <div className="bg-background border border-border rounded-xl p-4 text-xs text-slate-350 leading-relaxed">
+                    {predictionOutput}
+                  </div>
+                </div>
+
+                {/* Timeline degradation */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Failure Progression Timeline</h4>
+                  <div className="relative pl-6 border-l border-border space-y-5 text-xs">
+                    <div className="relative">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-primary flex items-center justify-center text-[8px] font-bold text-primary">1</span>
+                      <span className="font-semibold text-white block">Hour 0: Telemetry Anomaly Detected</span>
+                      <p className="text-[10px] text-slate-500">Thermodynamics delta exceeds {temperature}°C and vibration peaks past normal tolerances.</p>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-accent flex items-center justify-center text-[8px] font-bold text-accent">2</span>
+                      <span className="font-semibold text-white block">Hour 12: Mechanical Friction Wear</span>
+                      <p className="text-[10px] text-slate-500">Friction seal expansion causes hydraulic leak. Spindle speed efficiency drops by 14%.</p>
+                    </div>
+                    <div className="relative animate-pulse">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-destructive flex items-center justify-center text-[8px] font-bold text-destructive">3</span>
+                      <span className="font-semibold text-destructive block">Hour 24: Spindle Lock & Press Fracture</span>
+                      <p className="text-[10px] text-slate-500">Catastrophic pump failure. Line A assembly shutdown occurs immediately ($85k downtime loss).</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Exporter button */}
+                <div className="flex justify-end pt-3">
+                  <button
+                    onClick={() => setShowReportModal(true)}
+                    className="px-5 py-2.5 bg-primary hover:bg-primary/95 text-white font-bold rounded-lg text-xs transition-colors flex items-center space-x-2 shadow-md shadow-primary/25"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Export AI Diagnostics Report PDF</span>
+                  </button>
+                </div>
+
+              </div>
+            ) : (
+              /* Awaiting Simulation */
+              <div className="bg-card border border-border border-dashed rounded-xl p-8 h-[550px] flex flex-col items-center justify-center space-y-4 text-center">
+                <Brain className="h-12 w-12 text-muted-foreground animate-pulse" />
+                <div className="space-y-1">
+                  <span className="font-semibold text-xs text-white block">Awaiting Diagnostic Execution</span>
+                  <p className="text-[10px] text-muted-foreground max-w-xs">Adjust the IoT telemetry sliders on the left and click "Execute AI Telemetry Diagnostic" to boot the linear regression neural model.</p>
+                </div>
+              </div>
+            )}
+
           </div>
 
         </div>
