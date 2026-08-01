@@ -15,7 +15,7 @@ import api from '@/lib/axios';
 interface ManufacturingAlert {
   id: string;
   title: string;
-  category: string; // Machine Failure, High Temperature, High Energy Usage, Maintenance Due, Production Delay, Safety Warning
+  category: string;
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   message: string;
   machineCode: string;
@@ -23,9 +23,20 @@ interface ManufacturingAlert {
   timestamp: string;
 }
 
+interface SmartCityAlert {
+  id: string;
+  title: string;
+  category: string;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  message: string;
+  status: string;
+  timestamp: string;
+}
+
 export default function NotificationsPage() {
-  const [activeTab, setActiveTab] = useState<'system' | 'manufacturing'>('system');
+  const [activeTab, setActiveTab] = useState<'system' | 'manufacturing' | 'smartcity'>('system');
   const [mfgAlerts, setMfgAlerts] = useState<ManufacturingAlert[]>([]);
+  const [scAlerts, setScAlerts] = useState<SmartCityAlert[]>([]);
   const [loading, setLoading] = useState(false);
 
   // System alerts mock
@@ -49,8 +60,23 @@ export default function NotificationsPage() {
     }
   };
 
+  const fetchScAlerts = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/api/smartcity/dashboard');
+      if (response.data && response.data.alerts) {
+        setScAlerts(response.data.alerts);
+      }
+    } catch (err) {
+      console.error('Failed to load smart city alerts:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchMfgAlerts();
+    fetchScAlerts();
   }, []);
 
   const handleAcknowledgeMfg = async (id: string) => {
@@ -71,14 +97,36 @@ export default function NotificationsPage() {
     }
   };
 
+  const handleAcknowledgeSc = async (id: string) => {
+    try {
+      await api.post(`/api/smartcity/alerts/${id}/acknowledge`);
+      setScAlerts(prev => prev.map(a => a.id === id ? { ...a, status: 'ACKNOWLEDGED' } : a));
+    } catch (err) {
+      console.error('Failed to acknowledge smart city alert:', err);
+    }
+  };
+
+  const handleResolveSc = async (id: string) => {
+    try {
+      await api.post(`/api/smartcity/alerts/${id}/resolve`);
+      setScAlerts(prev => prev.filter(a => a.id !== id));
+    } catch (err) {
+      console.error('Failed to resolve smart city alert:', err);
+    }
+  };
+
   const handleClearAllSys = () => {
     setSysAlerts([]);
   };
 
   // Severities counts
-  const criticalCount = mfgAlerts.filter(a => a.severity === 'CRITICAL' && a.status === 'ACTIVE').length;
-  const highCount = mfgAlerts.filter(a => a.severity === 'HIGH' && a.status === 'ACTIVE').length;
-  const warningCount = mfgAlerts.filter(a => (a.severity === 'MEDIUM' || a.severity === 'LOW') && a.status === 'ACTIVE').length;
+  const criticalCountMfg = mfgAlerts.filter(a => a.severity === 'CRITICAL' && a.status === 'ACTIVE').length;
+  const highCountMfg = mfgAlerts.filter(a => a.severity === 'HIGH' && a.status === 'ACTIVE').length;
+  const warningCountMfg = mfgAlerts.filter(a => (a.severity === 'MEDIUM' || a.severity === 'LOW') && a.status === 'ACTIVE').length;
+
+  const criticalCountSc = scAlerts.filter(a => a.severity === 'CRITICAL' && a.status === 'ACTIVE').length;
+  const highCountSc = scAlerts.filter(a => a.severity === 'HIGH' && a.status === 'ACTIVE').length;
+  const warningCountSc = scAlerts.filter(a => (a.severity === 'MEDIUM' || a.severity === 'LOW') && a.status === 'ACTIVE').length;
 
   return (
     <div className="space-y-6">
@@ -100,7 +148,7 @@ export default function NotificationsPage() {
               activeTab === 'system' ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
             }`}
           >
-            System Log Notifications ({sysAlerts.length})
+            System Logs ({sysAlerts.length})
           </button>
           <button
             onClick={() => setActiveTab('manufacturing')}
@@ -110,10 +158,18 @@ export default function NotificationsPage() {
           >
             Mfg Smart Alerts ({mfgAlerts.length})
           </button>
+          <button
+            onClick={() => setActiveTab('smartcity')}
+            className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              activeTab === 'smartcity' ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
+            }`}
+          >
+            Smart City Alerts ({scAlerts.length})
+          </button>
         </div>
       </div>
 
-      {activeTab === 'system' ? (
+      {activeTab === 'system' && (
         /* System Alerts View */
         <div className="space-y-4">
           <div className="flex justify-between items-center text-xs">
@@ -149,30 +205,30 @@ export default function NotificationsPage() {
             )}
           </div>
         </div>
-      ) : (
+      )}
+
+      {activeTab === 'manufacturing' && (
         /* Manufacturing Smart Alerts View */
         <div className="space-y-6">
-          
-          {/* Summary counters */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
               <div>
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Critical Failures</span>
-                <span className="text-2xl font-extrabold text-white mt-1 block">{criticalCount}</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{criticalCountMfg}</span>
               </div>
               <ShieldAlert className="h-7 w-7 text-destructive animate-pulse" />
             </div>
             <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
               <div>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">High Priority alerts</span>
-                <span className="text-2xl font-extrabold text-white mt-1 block">{highCount}</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">High Priority</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{highCountMfg}</span>
               </div>
               <AlertTriangle className="h-7 w-7 text-accent" />
             </div>
             <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
               <div>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Standard Warning alerts</span>
-                <span className="text-2xl font-extrabold text-white mt-1 block">{warningCount}</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Warnings</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{warningCountMfg}</span>
               </div>
               <Info className="h-7 w-7 text-primary" />
             </div>
@@ -212,7 +268,6 @@ export default function NotificationsPage() {
                       }`}
                     >
                       <div className="flex items-start space-x-4">
-                        {/* Animated pulse badge for Critical/High */}
                         <div className="relative mt-1">
                           <span className={`h-2.5 w-2.5 rounded-full block ${
                             isCritical ? 'bg-destructive' : isHigh ? 'bg-accent' : 'bg-primary'
@@ -255,7 +310,6 @@ export default function NotificationsPage() {
                         </div>
                       </div>
 
-                      {/* Action buttons */}
                       <div className="flex items-center space-x-2 sm:self-center self-end">
                         {alert.status === 'ACTIVE' && (
                           <button
@@ -272,7 +326,6 @@ export default function NotificationsPage() {
                           Resolve
                         </button>
                       </div>
-
                     </div>
                   );
                 })}
@@ -284,9 +337,139 @@ export default function NotificationsPage() {
                 )}
               </div>
             )}
+          </div>
+        </div>
+      )}
 
+      {activeTab === 'smartcity' && (
+        /* Smart City Smart Alerts View */
+        <div className="space-y-6">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
+              <div>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Critical Emergencies</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{criticalCountSc}</span>
+              </div>
+              <ShieldAlert className="h-7 w-7 text-destructive animate-pulse" />
+            </div>
+            <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
+              <div>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">High Priority</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{highCountSc}</span>
+              </div>
+              <AlertTriangle className="h-7 w-7 text-accent" />
+            </div>
+            <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between shadow">
+              <div>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Warnings</span>
+                <span className="text-2xl font-extrabold text-white mt-1 block">{warningCountSc}</span>
+              </div>
+              <Info className="h-7 w-7 text-primary" />
+            </div>
           </div>
 
+          <div className="space-y-4">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-muted-foreground font-medium">Real-time Municipal Alerts Stream</span>
+              <button 
+                onClick={fetchScAlerts}
+                className="text-secondary hover:underline font-semibold flex items-center space-x-1"
+              >
+                <span>Refresh notifications</span>
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="h-32 flex flex-col items-center justify-center space-y-2">
+                <Loader2 className="h-6 w-6 text-primary animate-spin" />
+                <p className="text-xs text-muted-foreground">Polling alerts stream...</p>
+              </div>
+            ) : (
+              <div className="space-y-3.5">
+                {scAlerts.map((alert) => {
+                  const isCritical = alert.severity === 'CRITICAL';
+                  const isHigh = alert.severity === 'HIGH';
+
+                  return (
+                    <div 
+                      key={alert.id} 
+                      className={`bg-card border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow transition-all ${
+                        isCritical 
+                          ? 'border-destructive/30 hover:border-destructive/50' 
+                          : isHigh 
+                          ? 'border-accent/30 hover:border-accent/50' 
+                          : 'border-border hover:border-primary/30'
+                      }`}
+                    >
+                      <div className="flex items-start space-x-4">
+                        <div className="relative mt-1">
+                          <span className={`h-2.5 w-2.5 rounded-full block ${
+                            isCritical ? 'bg-destructive' : isHigh ? 'bg-accent' : 'bg-primary'
+                          }`} />
+                          {isCritical && (
+                            <span className="absolute -inset-0.5 rounded-full bg-destructive animate-ping opacity-75" />
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-bold text-xs text-white">{alert.title}</span>
+                            <span className="text-[10px] text-muted-foreground font-bold">•</span>
+                            <span className="text-[9px] text-muted-foreground uppercase font-semibold">{alert.category}</span>
+                          </div>
+                          
+                          <p className="text-xs text-slate-350 leading-relaxed pr-6">{alert.message}</p>
+                          
+                          <div className="flex items-center space-x-2 pt-1 text-[10px] text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span>{alert.timestamp}</span>
+                            <span>•</span>
+                            <span className={`font-semibold ${
+                              isCritical ? 'text-destructive' : isHigh ? 'text-accent' : 'text-primary'
+                            }`}>
+                              {alert.severity} SEVERITY
+                            </span>
+                            {alert.status !== 'ACTIVE' && (
+                              <>
+                                <span>•</span>
+                                <span className="text-emerald-500 font-bold uppercase tracking-wider flex items-center space-x-0.5">
+                                  <Check className="h-3 w-3" />
+                                  <span>{alert.status}</span>
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-2 sm:self-center self-end">
+                        {alert.status === 'ACTIVE' && (
+                          <button
+                            onClick={() => handleAcknowledgeSc(alert.id)}
+                            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-350 font-bold rounded-lg text-[10px] transition-colors"
+                          >
+                            Acknowledge
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleResolveSc(alert.id)}
+                          className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-500 font-bold rounded-lg text-[10px] transition-colors"
+                        >
+                          Resolve
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+                {scAlerts.length === 0 && (
+                  <div className="text-center py-12 border border-dashed border-border rounded-xl">
+                    <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-2" />
+                    <p className="text-xs text-muted-foreground">No pending smart city alerts.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
