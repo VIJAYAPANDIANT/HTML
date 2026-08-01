@@ -7,7 +7,7 @@ IntelliSphere is a state-of-the-art Decision Intelligence Platform designed to h
 ---
 
 > [!NOTE]
-> **Day 4 Milestone Achieved**: The **Healthcare Module** and **Shared AI Clinical Features** have been successfully added to the platform, equipping operators with patient roster grids, ECharts admissions metrics, AI triage analyzers, and dynamic medical brief PDF exports.
+> **Day 6 Milestone Achieved**: The **Smart City Module**, **Interactive GIS Map**, **Sustainability & ESG Command Dashboard**, and **Flagship AI Smart City Command Center** have been successfully added to the platform. Operators can now toggle custom map layers, run emergency disaster risk scenarios, analyze carbon footprints, and download compiled executive briefs.
 
 ---
 
@@ -17,7 +17,7 @@ IntelliSphere is organized as a unified monorepo for seamless integration, testi
 
 ```
 intellisphere/
-├── client/          # React Frontend (Vite, TypeScript, Tailwind CSS v4, shadcn/ui)
+├── client/          # React Frontend (Vite, TypeScript, Tailwind CSS, shadcn/ui)
 ├── server/          # Spring Boot Backend (Java 21, Maven)
 ├── docs/            # Platform & Architecture Documentation
 ├── assets/          # Brand Assets, Logos, and Media
@@ -55,7 +55,7 @@ graph TD
 - **Query & Fetching**: TanStack Query, Axios (configured with bearer token headers)
 - **Styling**: Tailwind CSS v4, shadcn/ui (Radix UI core & Nova preset)
 - **Data Visualization**: Apache ECharts (`echarts-for-react`)
-- **GIS Mapping**: Leaflet Map Integration with OpenStreetMap standard tiles
+- **GIS Mapping**: Leaflet Map Integration with OpenStreetMap standard tiles and custom badged divIcons
 
 ### Backend (`server/`)
 - **Framework**: Spring Boot 3.3.1 (Java 21)
@@ -67,7 +67,7 @@ graph TD
 - **REST Documentation**: SpringDoc OpenAPI Swagger UI
 
 ### Database & DevOps
-- **Relational DB**: PostgreSQL 15+ (comprehensive 16-table schema)
+- **Relational DB**: PostgreSQL 15+ (comprehensive 42-table schema)
 - **Caching & Messaging**: Redis 7+
 - **Containerization**: Docker & Docker Compose
 - **CI/CD**: GitHub Actions workflows validating client packages (legacy peer dependency bypasses) and Maven compilation under JDK 21.
@@ -76,7 +76,7 @@ graph TD
 
 ## 📄 Database Architecture (`database/`)
 
-The PostgreSQL relational database is structured around 32 core tables:
+The PostgreSQL relational database is structured around 42 core tables:
 1. **`roles`**: User authorization levels (`SUPER_ADMIN`, `ORG_ADMIN`, `ANALYST`, `OPERATOR`) and permissions arrays.
 2. **`users`**: Identity credentials and role mappings with BCrypt hashing.
 3. **`organizations`**: Workspace management and tenant groupings.
@@ -109,6 +109,16 @@ The PostgreSQL relational database is structured around 32 core tables:
 30. **`mfg_alerts`**: Alarm categories (Machine Failure, Safety curtains, temperature spikes) and statuses.
 31. **`mfg_predictions`**: Equipment failure probabilities, confidence parameters, and diagnostics.
 32. **`mfg_recommendations`**: Preventative repair guidance cards and estimated financial savings.
+33. **`sc_cities`**: Tracks metropolitan coordinates and population details.
+34. **`sc_traffic_zones`**: Congestion index, speeds, and status limits.
+35. **`sc_air_pollution_logs`**: Air Quality Index (AQI) logs, PM2.5, and PM10 parameters.
+36. **`sc_waste_containers`**: Bin capacity readings and fill percentage sensors.
+37. **`sc_water_stations`**: flow rates, pump pressures, and purity percentages.
+38. **`sc_power_grids`**: Operating capacities and current grid loads.
+39. **`sc_citizen_complaints`**: Logs complaints categorized by category with reporter info.
+40. **`sc_infrastructure_assets`**: Bridges and subways status checks and structural health scores.
+41. **`sc_alerts`**: Flashing alarms for active incidents and warnings.
+42. **`sc_recommendations`**: AI recommendations with estimated financial savings and emission reductions.
 
 ---
 
@@ -127,28 +137,20 @@ The platform implements a unified, central AI engine service (`AIService.java` &
 The frontend SPA maps the following user paths:
 - `/` - Public marketing landing page.
 - `/login` / `/register` - Secure authentication gateways.
-- `/dashboard` - Operational cockpit containing animated KPI cards, live weather overlay widget, smart alerts list with dismiss triggers, recent predictions list, recent uploads list, and ECharts risk heatmaps.
-- `/agriculture` - Agriculture cockpit containing:
-  - **Overview Metrics**: Active area, water consumption, and soil hydration ratios.
-  - **Soil Health Cards**: Real-time NPK levels, pH ratios, temperature, and moisture.
-  - **Crop Monitoring**: Cultivated crop statuses, growth stages, and health status indicators.
-  - **Field Map Selector**: Toggle system supporting sector grid schematics and Leaflet GIS mapping layer overlays.
-  - **Diagnostics Scanner**: Visual foliage computer vision scan simulation logs.
-  - **Report Modal**: Dialog interface to write operator action notes and download decision PDFs.
-- `/healthcare` - Healthcare cockpit containing:
-  - **Overview Metrics**: Patients count, bed counts, emergency cases, doctors.
-  - **Triage Simulator**: Textbox to query Gemini triage priority levels.
-  - **SVG wing map vs Leaflet GIS branches map toggler**.
-  - **ECharts Department Admissions donut chart**.
-  - **AI Patient Brief Summarizer**: dropdown selector providing direct AI patient chart summaries.
-  - **Medical PDF brief download overlay**.
-- `/manufacturing` - Manufacturing cockpit containing:
-  - **Overview Metrics**: Factories counts, active machinery utilities, overall plant OEE rates, daily targets completed.
-  - **Machine Monitoring Center**: Side-by-side interactive machinery registry list with filter options (Assembly lines A/B/C and warning status select boxes). Renders detailed temperature, vibration, spindle speeds, hydraulic PSI, age months, last maintenance, and failure risks.
-  - **AI Predictive Maintenance**: Diagnostics simulator with 4 IoT range sliders (temp, vibration, speed, pressure) running automated neural predictive scan simulations and timeline logs.
-- `/uploads` - Drag-and-drop Upload Center supporting CSV, Excel, PDF, and image uploads, file validation, progress bars, and upload history logs.
-- `/analytics` - Analytics dashboard toggling dynamically between Agriculture (6 charts) and Manufacturing analytics (7 interactive ECharts: Production trend, Machine Utilization, Downtime analysis, Grid Peak energy draw, OEE indices, Monthly Target completion, and Maintenance Cost allocations).
-- `/notifications` - Alert Center toggling between System Log notifications and Mfg Smart Alerts (Machine Failure, Safety Warning, Temperature spike, Production Delays) with red flashing warning pings.
+- `/dashboard` - Operational cockpit containing animated KPI cards, live weather overlay widget, smart alerts list, and recent predictions list.
+- `/agriculture` - Agriculture cockpit containing overview metrics, NPK soil health cards, crop monitoring table, field map, diagnostics scanner, and report generators.
+- `/healthcare` - Healthcare cockpit containing triage simulator, admitted patient rosters, admissions charts, and AI clinical report briefs.
+- `/manufacturing` - Manufacturing cockpit containing machine monitoring center, filterable assembly lines, and predictive maintenance anomaly risk models.
+- `/smart-city` - Smart City operations center containing:
+  - **Live Dashboard**: KPI cards, Leaflet map overlays with 7 togglable layers, and active alarms resolving center.
+  - **Sensors Registry**: IoT registers tracking waste fills, water station flows, and infrastructure health score cards.
+  - **Citizen Hub**: Public forum submitting municipal complaints directly to backend.
+  - **AI Optimizer**: Parametric evaluation running detour and power load models.
+  - **AI Command Center (WOW)**: Flagship simulation dashboard with flood heights sliders, neural rotating scanners, double gauges (City Health 92% and Sustainability 88%), and vertical deterioration timelines.
+- `/sustainability` - Standalone sustainability dashboard displaying carbon emissions trends, solar/wind renewable mixes, water conservation step lines, waste gauges, green canopy coverage meters, and AI ESG recommendations.
+- `/uploads` - Drag-and-drop Upload Center.
+- `/analytics` - Analytics dashboard toggling agriculture, manufacturing, and smart city charts (8 ECharts: Traffic, Pollution, Water flow, Grid loads, Complaint shares, Incident alarms, Waste, and City Performance radar indices).
+- `/notifications` - Alert Center toggling between System Log notifications, Mfg Smart Alerts, and Smart City Alerts.
 - `/ai-center` / `/reports` / `/settings` - Standard operational panels.
 
 ---
@@ -157,25 +159,25 @@ The frontend SPA maps the following user paths:
 
 To support the UI layout, the backend controllers expose the following endpoint structures:
 - `GET /api/agriculture/dashboard` - Fetches overall crop stats, soil matrices, and Alerts.
-- `GET /api/agriculture/farms` - Fetches active farm entities.
 - `GET /api/agriculture/weather` - Fetches live weather conditions from Open-Meteo.
-- `GET /api/agriculture/predictions` - Fetches recent AI predictions.
-- `POST /api/agriculture/upload` - Logs telemetry uploads.
 - `POST /api/ai/chat` - Submits prompts to the Gemini conversation engine.
 - `POST /api/ai/report` - Requests a compiled PDF report document binary.
 - `GET /api/healthcare/dashboard` - Fetches clinical KPIs, bed structures, alerts.
-- `GET /api/healthcare/patients` - Fetches admitted patient rosters.
-- `GET /api/healthcare/alerts` - Fetches clinical critical alert logs.
 - `POST /api/healthcare/report` - Generates healthcare PDF briefs.
-- `POST /api/ai/healthcare-summary` - Direct patient consult diagnosis briefs.
-- `POST /api/healthcare/simulate-triage` - Submits triage diagnostic symptoms.
 - `GET /api/manufacturing/dashboard` - Fetches overall factory KPIs, OEE indices, alerts.
-- `GET /api/manufacturing/machines` - Lists active machines telemetry parameters.
-- `GET /api/manufacturing/analytics` - Fetches yield scores, downtime allocations, and cost values.
-- `GET /api/manufacturing/alerts` - Fetches pending smart alerts array.
 - `POST /api/manufacturing/report` - Compiles and downloads styled Industrial Production briefs.
-- `POST /api/ai/manufacturing-summary` - Generates Gemini AI executive production summary briefings.
-- `POST /api/ai/manufacturing/predictive-maintenance` - Runs diagnostic anomaly risk models.
+- `GET /api/smartcity/dashboard` - Fetches city KPIs, grids load, air indices, and alerts.
+- `GET /api/smartcity/traffic` - Fetches active congestion zone tables.
+- `GET /api/smartcity/pollution` - Fetches particulate levels.
+- `GET /api/smartcity/waste` - Fetches trash capacities data.
+- `GET /api/smartcity/complaints` - Fetches active citizen complaints register.
+- `GET /api/smartcity/analytics` - Fetches overall performance indices.
+- `POST /api/smartcity/complaints` - Submits citizen service ticket logs.
+- `POST /api/smartcity/report` - Generates smart city PDF executive briefs.
+- `POST /api/ai/smartcity-summary` - Direct city brief summaries.
+- `POST /api/ai/smartcity/optimize-traffic` - Reroutes traffic detours.
+- `POST /api/ai/smartcity/optimize-grid` - Sheds grid power overload.
+- `POST /api/ai/smartcity/emergency-risk` - Neural emergency disaster simulations.
 
 ---
 
