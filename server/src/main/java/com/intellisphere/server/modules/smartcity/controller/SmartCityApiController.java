@@ -41,6 +41,16 @@ public class SmartCityApiController {
         return ResponseEntity.ok(smartCityService.getTraffic());
     }
 
+    @GetMapping("/api/smartcity/pollution")
+    public ResponseEntity<SmartCityDashboardDto.PollutionMetrics> getPollution() {
+        return ResponseEntity.ok(smartCityService.getDashboardData().getPollutionMetrics());
+    }
+
+    @GetMapping("/api/smartcity/waste")
+    public ResponseEntity<List<Map<String, Object>>> getWaste() {
+        return ResponseEntity.ok(smartCityService.getDashboardData().getWasteContainers());
+    }
+
     @GetMapping("/api/smartcity/alerts")
     public ResponseEntity<List<Map<String, Object>>> getAlerts() {
         return ResponseEntity.ok(smartCityService.getDashboardData().getAlerts());
