@@ -54,7 +54,7 @@ interface SmartCityDashboardData {
 export default function SmartCityPage() {
   const [data, setData] = useState<SmartCityDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'sensors' | 'citizen' | 'ai'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'sensors' | 'citizen' | 'ai' | 'command'>('dashboard');
   const [activeAlerts, setActiveAlerts] = useState<any[]>([]);
 
   // Report parameters
@@ -81,6 +81,15 @@ export default function SmartCityPage() {
   // AI Executive Summary
   const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [generatingSummary, setGeneratingSummary] = useState(false);
+
+  // Flagship WOW Feature States (AI Smart City Command Center)
+  const [targetSubstation, setTargetSubstation] = useState('Sector 7 Substation B');
+  const [floodLevel, setFloodLevel] = useState(4.2);
+  const [simGridLoad, setSimGridLoad] = useState(192.5);
+  const [simCongestion, setSimCongestion] = useState(82);
+  const [diagnosing, setDiagnosing] = useState(false);
+  const [diagnosticRisk, setDiagnosticRisk] = useState<string | null>(null);
+  const [diagnosticText, setDiagnosticText] = useState<string | null>(null);
 
   const fetchDashboardData = async () => {
     try {
@@ -110,7 +119,6 @@ export default function SmartCityPage() {
         reporterName: complaintReporter || 'Anonymous'
       });
       setComplaintLogged(response.data);
-      // Append to local list
       if (data) {
         setData({
           ...data,
@@ -169,6 +177,26 @@ export default function SmartCityPage() {
     }
   };
 
+  const handleExecuteDiagnostic = async () => {
+    setDiagnosing(true);
+    setDiagnosticText(null);
+    try {
+      // Call Emergency Risk prediction endpoint
+      const response = await api.post('/api/ai/smartcity/emergency-risk', {
+        asset: targetSubstation,
+        currentLoad: simGridLoad,
+        floodLevel: floodLevel,
+        congestion: simCongestion
+      });
+      setDiagnosticText(response.data.riskAnalysis);
+      setDiagnosticRisk(response.data.riskLevel);
+    } catch (err) {
+      console.error('Command center diagnostics failed:', err);
+    } finally {
+      setDiagnosing(false);
+    }
+  };
+
   const handleGetSummary = async () => {
     if (!data) return;
     setGeneratingSummary(true);
@@ -198,7 +226,7 @@ export default function SmartCityPage() {
           cityStatus: data.cityDetails.status
         },
         alerts: activeAlerts.map(a => a.message),
-        predictions: 'AI Signal Timing Detroit Bypass detour active. Grid load shedding scheduled for Substation 7.',
+        predictions: diagnosticText || 'AI Signal Timing Detroit Bypass detour active. Grid load shedding scheduled for Substation 7.',
         userNotes: notes || 'Municipal brief compiled for city oversight.'
       };
 
@@ -223,7 +251,7 @@ export default function SmartCityPage() {
     return (
       <div className="h-64 flex flex-col items-center justify-center space-y-4">
         <Loader2 className="h-8 w-8 text-primary animate-spin" />
-        <p className="text-sm text-muted-foreground">Loading Smart City operations center...</p>
+        <p className="text-sm text-muted-foreground">Loading Smart City cockpit...</p>
       </div>
     );
   }
@@ -302,18 +330,23 @@ export default function SmartCityPage() {
           <p className="text-xs text-muted-foreground mt-0.5">Municipal infrastructure telemetry, AQI indices, power grid balance, and citizen portal.</p>
         </div>
 
-        <div className="flex bg-muted/20 p-1 rounded-lg border border-border">
+        <div className="flex bg-muted/20 p-1 rounded-lg border border-border self-start lg:self-auto">
           {[
             { id: 'dashboard', label: 'Live Dashboard' },
             { id: 'sensors', label: 'Sensors Registry' },
             { id: 'citizen', label: 'Citizen Hub' },
-            { id: 'ai', label: 'AI Optimizer' }
+            { id: 'ai', label: 'AI Optimizer' },
+            { id: 'command', label: '★ AI Command Center' }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
-                activeTab === tab.id ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-white'
+                activeTab === tab.id 
+                  ? 'bg-primary text-white shadow' 
+                  : tab.id === 'command' 
+                  ? 'text-accent hover:text-white font-bold' 
+                  : 'text-muted-foreground hover:text-white'
               }`}
             >
               {tab.label}
@@ -558,12 +591,9 @@ export default function SmartCityPage() {
       )}
 
       {activeTab === 'sensors' && (
-        /* Sensors registry listing waste fill levels, flow rates, grid load, infra health */
+        /* Sensors registry */
         <div className="space-y-8">
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {/* Waste containers sensors */}
             <div className="bg-card border border-border rounded-xl p-6 shadow">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center space-x-2">
                 <Trash2 className="h-4.5 w-4.5 text-primary" />
@@ -589,7 +619,6 @@ export default function SmartCityPage() {
               </div>
             </div>
 
-            {/* Water station pressure flow metrics */}
             <div className="bg-card border border-border rounded-xl p-6 shadow">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center space-x-2">
                 <Droplet className="h-4.5 w-4.5 text-primary" />
@@ -618,10 +647,8 @@ export default function SmartCityPage() {
                 </table>
               </div>
             </div>
-
           </div>
 
-          {/* Public infrastructure assets health scores */}
           <div className="bg-card border border-border rounded-xl p-6 shadow">
             <h3 className="text-sm font-bold text-white mb-4">Infrastructure Asset Health Indexes</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -655,15 +682,12 @@ export default function SmartCityPage() {
               ))}
             </div>
           </div>
-
         </div>
       )}
 
       {activeTab === 'citizen' && (
-        /* Citizen complaints portal logging complaints */
+        /* Citizen complaints portal */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Complaint logging form */}
           <div className="lg:col-span-1 bg-card border border-border rounded-xl p-6 shadow h-fit space-y-4">
             <div>
               <h3 className="text-base font-bold text-white">Log Citizen Service Request</h3>
@@ -748,10 +772,8 @@ export default function SmartCityPage() {
             )}
           </div>
 
-          {/* Complaints list */}
           <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6 shadow h-[550px] flex flex-col">
             <h3 className="text-lg font-bold text-white mb-4">Municipal Service Complaint Register</h3>
-            
             <div className="flex-1 overflow-y-auto space-y-3">
               {data.citizenComplaints.map((c) => (
                 <div key={c.id} className="bg-background border border-border p-4 rounded-xl flex items-start justify-between text-xs">
@@ -772,15 +794,12 @@ export default function SmartCityPage() {
               ))}
             </div>
           </div>
-
         </div>
       )}
 
       {activeTab === 'ai' && (
-        /* AI Operations Optimizer running Gemini traffic detouring and grid load-shedding models */
+        /* AI Resources Optimizer */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Optimization parameters panel */}
           <div className="lg:col-span-1 bg-card border border-border rounded-xl p-6 shadow space-y-6 flex flex-col justify-between">
             <div>
               <h3 className="text-lg font-bold text-white flex items-center space-x-2">
@@ -890,7 +909,6 @@ export default function SmartCityPage() {
             </button>
           </div>
 
-          {/* AI Optimizer output text panel */}
           <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6 shadow h-[400px] flex flex-col justify-between">
             <h3 className="text-xs font-bold text-white uppercase tracking-wider">AI Operations Detour Strategy</h3>
 
@@ -916,11 +934,273 @@ export default function SmartCityPage() {
               <span className="font-bold text-emerald-500">14 mins average trip drop / $3,400 peak cost drop</span>
             </div>
           </div>
+        </div>
+      )}
+
+      {activeTab === 'command' && (
+        /* Flagship WOW Feature: AI Smart City Command Center */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Left Column: Diagnostics Simulator Controls */}
+          <div className="lg:col-span-1 bg-card border border-border rounded-xl p-6 shadow space-y-6 flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+                <Gauge className="h-5.5 w-5.5 text-primary" />
+                <span>Simulated Command Diagnostics</span>
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Simulate severe flooding or transformer overloads to execute AI emergency plans.</p>
+            </div>
+
+            <div className="space-y-5 my-4 text-xs">
+              <div>
+                <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Target Asset Substation</label>
+                <select
+                  value={targetSubstation}
+                  onChange={(e) => setTargetSubstation(e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-xs text-foreground focus:outline-none"
+                >
+                  <option value="Sector 7 Substation B">Metropolitan Grid B (Sector 7)</option>
+                  <option value="Madison Crossing Bridge Area">Madison Crossing Bridge (Flood Area)</option>
+                  <option value="Reservoir 4 Pump Gate">Metro Pressure Reservoir 4</option>
+                </select>
+              </div>
+
+              {/* Slider 1: Flood water height */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-350">Flood Water Rise</span>
+                  <span className={`font-bold ${floodLevel > 3.5 ? 'text-destructive animate-pulse' : 'text-slate-200'}`}>
+                    {floodLevel} meters
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="0.0"
+                  max="6.0"
+                  step="0.1"
+                  value={floodLevel}
+                  onChange={(e) => setFloodLevel(parseFloat(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>0.0m</span>
+                  <span>3.5m (Warning limit)</span>
+                  <span>6.0m</span>
+                </div>
+              </div>
+
+              {/* Slider 2: Grid Load */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-350">Substation Load</span>
+                  <span className={`font-bold ${simGridLoad > 180 ? 'text-destructive animate-pulse' : 'text-slate-200'}`}>
+                    {simGridLoad} MW
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="100"
+                  max="220"
+                  step="1.0"
+                  value={simGridLoad}
+                  onChange={(e) => setSimGridLoad(parseFloat(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+                <div className="flex justify-between text-[9px] text-muted-foreground">
+                  <span>100 MW</span>
+                  <span>180 MW (Shed limit)</span>
+                  <span>220 MW</span>
+                </div>
+              </div>
+
+              {/* Slider 3: Congestion */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-350">Commute Congestion Index</span>
+                  <span className="text-slate-200 font-bold">{simCongestion}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  step="2"
+                  value={simCongestion}
+                  onChange={(e) => setSimCongestion(parseInt(e.target.value))}
+                  className="w-full accent-primary bg-slate-800 h-1 rounded-lg cursor-pointer"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleExecuteDiagnostic}
+              disabled={diagnosing}
+              className="w-full py-3 bg-primary hover:bg-primary/95 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-primary/25"
+            >
+              {diagnosing ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Computing Neural Risk Vectors...</span>
+                </>
+              ) : (
+                <>
+                  <Activity className="h-4 w-4" />
+                  <span>Execute AI Emergency Plan</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Right Column: AI command scanners, double health dials, timeline, and root causes */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {diagnosing ? (
+              /* Glowing Circle Command Scanner Animation */
+              <div className="bg-card border border-border rounded-xl p-8 h-[450px] flex flex-col items-center justify-center space-y-6 relative overflow-hidden shadow">
+                <div className="absolute inset-0 bg-primary/5 animate-pulse" />
+                <div className="relative h-32 w-32 rounded-full border border-primary/20 flex items-center justify-center animate-spin duration-3000">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-16 bg-gradient-to-t from-primary/80 to-transparent origin-bottom" />
+                  <div className="h-20 w-20 rounded-full border border-primary/10 flex items-center justify-center">
+                    <Brain className="h-8 w-8 text-primary animate-pulse" />
+                  </div>
+                </div>
+                <div className="text-center space-y-2 z-10">
+                  <span className="text-sm font-bold text-white block">Evaluating City-wide Grid lock & Infrastructure Failure Models</span>
+                  <p className="text-xs text-muted-foreground max-w-sm">Cross-referencing flood meters, thermal load factors, and grid balance margins against historical diagnostic matrices.</p>
+                </div>
+              </div>
+            ) : diagnosticText ? (
+              /* Diagnostic Output */
+              <div className="bg-card border border-border rounded-xl p-6 shadow space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                
+                {/* Risk Severity Status Header */}
+                <div className="flex justify-between items-start border-b border-border pb-4">
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-white flex items-center space-x-1.5">
+                      <ShieldAlert className="h-4.5 w-4.5 text-primary" />
+                      <span>City Diagnostic & Disaster Risk Report</span>
+                    </h3>
+                    <div className="flex items-center space-x-2 text-[10px] text-muted-foreground font-semibold">
+                      <span>ASSET ID: {targetSubstation}</span>
+                      <span>•</span>
+                      <span>CONFIDENCE SCORE: 94.8%</span>
+                    </div>
+                  </div>
+
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    diagnosticRisk === 'HIGH' 
+                      ? 'bg-destructive/10 text-destructive animate-pulse' 
+                      : 'bg-emerald-600/10 text-emerald-500'
+                  }`}>
+                    {diagnosticRisk === 'HIGH' ? 'SEVERE / CRITICAL FAILURE RISK' : 'NORMAL / STABLE MUNICIPAL LOAD'}
+                  </span>
+                </div>
+
+                {/* Double Gauges widget: Health Score and Sustainability Score */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-background border border-border p-4 rounded-xl">
+                  
+                  {/* Gauge 1: City Health Score */}
+                  <div className="space-y-2 text-center md:text-left">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">City Health Index</span>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xl font-extrabold text-white">92 / 100</span>
+                      <span className="text-xs text-emerald-500 font-medium">STABLE</span>
+                    </div>
+                    <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-emerald-500" style={{ width: '92%' }} />
+                    </div>
+                  </div>
+
+                  {/* Gauge 2: Sustainability Score */}
+                  <div className="space-y-2 text-center md:text-left">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Sustainability Index</span>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xl font-extrabold text-white">88 / 100</span>
+                      <span className="text-xs text-primary font-medium">OPTIMAL</span>
+                    </div>
+                    <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-primary" style={{ width: '88%' }} />
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* AI Root Cause & Diagnosis text */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">AI Root Cause & Emergency Strategy</h4>
+                  <div className="bg-background border border-border rounded-xl p-4 text-xs text-slate-350 leading-relaxed">
+                    {diagnosticText}
+                  </div>
+                </div>
+
+                {/* Vertical Incident Timeline */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Disaster Deterioration Timeline</h4>
+                  <div className="relative pl-6 border-l border-border space-y-5 text-xs">
+                    <div className="relative">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-primary flex items-center justify-center text-[8px] font-bold text-primary">1</span>
+                      <span className="font-semibold text-white block">Hour 0: Flooding Anomaly Alert</span>
+                      <p className="text-[10px] text-slate-500">Water levels rises past {floodLevel} meters. Sub-station B safety valves compromised.</p>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-accent flex items-center justify-center text-[8px] font-bold text-accent">2</span>
+                      <span className="font-semibold text-white block">Hour 12: Grid Substation Short-circuit</span>
+                      <p className="text-[10px] text-slate-500">Transformer overload past {simGridLoad} MW causes safety breaker shutdown. Outage starts.</p>
+                    </div>
+                    <div className="relative animate-pulse">
+                      <span className="absolute -left-[30px] top-1 h-4 w-4 rounded-full bg-slate-800 border-2 border-destructive flex items-center justify-center text-[8px] font-bold text-destructive">3</span>
+                      <span className="font-semibold text-destructive block">Hour 24: Sector 7 Commute Shutdown</span>
+                      <p className="text-[10px] text-slate-500">Subway Line A maintenance closed. Multi-grid blackout hits Loop district.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Exporter button */}
+                <div className="flex justify-end pt-3">
+                  <button
+                    onClick={() => setShowReportModal(true)}
+                    className="px-5 py-2.5 bg-primary hover:bg-primary/95 text-white font-bold rounded-lg text-xs transition-colors flex items-center space-x-2 shadow-md shadow-primary/25"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Export AI Command Brief PDF</span>
+                  </button>
+                </div>
+
+              </div>
+            ) : (
+              /* Awaiting Simulation */
+              <div className="bg-card border border-border border-dashed rounded-xl p-8 h-[550px] flex flex-col items-center justify-center space-y-4 text-center">
+                <Brain className="h-12 w-12 text-muted-foreground animate-pulse" />
+                <div className="space-y-1">
+                  <span className="font-semibold text-xs text-white block">Awaiting Command Diagnostics</span>
+                  <p className="text-[10px] text-muted-foreground max-w-xs">Adjust the flood levels and grid MW loads parameters on the left and click "Execute AI Emergency Plan" to run neural city disaster planning models.</p>
+                </div>
+              </div>
+            )}
+
+            {/* Live AI Insights Panel */}
+            <div className="bg-card border border-border rounded-xl p-6 shadow space-y-3.5">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <span>Live AI Command Insights Stream</span>
+              </h4>
+              <div className="space-y-3">
+                {[
+                  { text: 'Bus Route 4 detour deployed through Madison River crossing to bypass Grand Avenue congestion. Saves 15,000 lbs CO2 emissions today.', color: 'border-primary' },
+                  { text: 'Dispatched secondary emergency pump teams to Reservoir 4 to restore pipeline pressures. Estimated service restoration in 2 hours.', color: 'border-emerald-600' }
+                ].map((item, idx) => (
+                  <div key={idx} className={`bg-background border-l-2 ${item.color} p-3 rounded-r-lg text-xs text-slate-350 leading-relaxed shadow-sm`}>
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
 
         </div>
       )}
 
-      {/* PDF Exporter Modal */}
+      {/* PDF Generation Modal */}
       {showReportModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-card border border-border rounded-xl p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
@@ -942,7 +1222,7 @@ export default function SmartCityPage() {
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Enter actions taken or details (e.g. Traffic light adjustments, grid substation allocations)..."
+                placeholder="Enter actions taken or details (e.g. Substation grids shedding, flood barriers deployments)..."
                 className="w-full h-28 px-3 py-2 bg-background border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-muted-foreground resize-none"
               />
             </div>
