@@ -414,3 +414,131 @@ CREATE INDEX idx_mfg_energy_factory ON mfg_energy_usage(factory_id);
 CREATE INDEX idx_mfg_alerts_factory ON mfg_alerts(factory_id);
 CREATE INDEX idx_mfg_pred_machine ON mfg_predictions(machine_id);
 CREATE INDEX idx_mfg_recs_machine ON mfg_recommendations(machine_id);
+
+-- 34. Smart City Cities Table
+CREATE TABLE sc_cities (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    population INT DEFAULT 500000,
+    status VARCHAR(50) DEFAULT 'NORMAL',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 35. Smart City Traffic Zones Table
+CREATE TABLE sc_traffic_zones (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    zone_name VARCHAR(255) NOT NULL,
+    average_speed_kmh DOUBLE PRECISION DEFAULT 45.0,
+    congestion_percentage INT DEFAULT 20,
+    status VARCHAR(50) DEFAULT 'FLOWING', -- 'FLOWING', 'CONGESTED', 'BLOCKED'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 36. Smart City Air Pollution Logs Table
+CREATE TABLE sc_air_pollution_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    aqi_index INT DEFAULT 50,
+    pm25_level DOUBLE PRECISION DEFAULT 12.0,
+    pm10_level DOUBLE PRECISION DEFAULT 24.0,
+    co2_level DOUBLE PRECISION DEFAULT 400.0,
+    status VARCHAR(50) DEFAULT 'GOOD', -- 'GOOD', 'MODERATE', 'UNHEALTHY'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 37. Smart City Waste Containers Table
+CREATE TABLE sc_waste_containers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    location_name VARCHAR(255) NOT NULL,
+    fill_percentage INT DEFAULT 10,
+    status VARCHAR(50) DEFAULT 'NORMAL', -- 'NORMAL', 'WARNING', 'FULL'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 38. Smart City Water Stations Table
+CREATE TABLE sc_water_stations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    station_name VARCHAR(255) NOT NULL,
+    flow_rate_lps DOUBLE PRECISION DEFAULT 120.0,
+    pressure_bar DOUBLE PRECISION DEFAULT 4.2,
+    purity_percentage DOUBLE PRECISION DEFAULT 99.1,
+    status VARCHAR(50) DEFAULT 'NORMAL',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 39. Smart City Power Grids Table
+CREATE TABLE sc_power_grids (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    grid_name VARCHAR(255) NOT NULL,
+    load_mw DOUBLE PRECISION DEFAULT 150.0,
+    capacity_mw DOUBLE PRECISION DEFAULT 200.0,
+    outages_count INT DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'STABLE', -- 'STABLE', 'WARNING', 'SHEDDING'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 40. Smart City Citizen Complaints Table
+CREATE TABLE sc_citizen_complaints (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(100) NOT NULL, -- 'TRAFFIC', 'POLLUTION', 'WASTE', 'WATER', 'ENERGY', 'INFRASTRUCTURE'
+    status VARCHAR(50) DEFAULT 'OPEN', -- 'OPEN', 'IN_PROGRESS', 'RESOLVED'
+    reporter_name VARCHAR(255) DEFAULT 'Anonymous',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 41. Smart City Infrastructure Assets Table
+CREATE TABLE sc_infrastructure_assets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    asset_name VARCHAR(255) NOT NULL,
+    type VARCHAR(100) NOT NULL, -- 'BRIDGE', 'ROAD', 'SUBWAY', 'PARK'
+    health_score INT DEFAULT 100,
+    status VARCHAR(50) DEFAULT 'OPERATIONAL',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 42. Smart City Alerts Table
+CREATE TABLE sc_alerts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    severity VARCHAR(50) NOT NULL, -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'ACTIVE',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 43. Smart City Recommendations Table
+CREATE TABLE sc_recommendations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES sc_cities(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    suggestion TEXT NOT NULL,
+    impact VARCHAR(50) DEFAULT 'MEDIUM',
+    estimated_savings VARCHAR(100),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for Smart City optimization
+CREATE INDEX idx_sc_cities_org ON sc_cities(organization_id);
+CREATE INDEX idx_sc_traffic_city ON sc_traffic_zones(city_id);
+CREATE INDEX idx_sc_pollution_city ON sc_air_pollution_logs(city_id);
+CREATE INDEX idx_sc_waste_city ON sc_waste_containers(city_id);
+CREATE INDEX idx_sc_water_city ON sc_water_stations(city_id);
+CREATE INDEX idx_sc_grid_city ON sc_power_grids(city_id);
+CREATE INDEX idx_sc_complaints_city ON sc_citizen_complaints(city_id);
+CREATE INDEX idx_sc_infra_city ON sc_infrastructure_assets(city_id);
+CREATE INDEX idx_sc_alerts_city ON sc_alerts(city_id);
+CREATE INDEX idx_sc_recs_city ON sc_recommendations(city_id);
+

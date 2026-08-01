@@ -60,6 +60,9 @@ public class ReportGeneratorService {
             } else if (metrics != null && (metrics.containsKey("overallOee") || metrics.containsKey("activeMachines"))) {
                 titleText = "INTELLISPHERE INDUSTRIAL PRODUCTION BRIEF";
                 domainText = "Manufacturing Optimization Service";
+            } else if (metrics != null && (metrics.containsKey("aqiIndex") || metrics.containsKey("gridLoad"))) {
+                titleText = "INTELLISPHERE SMART CITY ACTION BRIEF";
+                domainText = "Municipal Intelligence Service";
             }
 
             // Add Header Title
