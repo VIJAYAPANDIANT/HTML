@@ -81,14 +81,16 @@ public class SmartCityService {
                 Map.of("id", "COMP-965", "title", "Traffic Light Timing Issue", "category", "TRAFFIC", "description", "Light cycles at I-90 offramp causing gridlock.", "status", "RESOLVED", "reporter", "Marcus Vance")
         );
 
-        // Alerts Panel (Including all 6 requested types across critical/high/medium/low)
+        // Alerts Panel (Including all 8 requested types across critical/high/medium/low)
         List<Map<String, Object>> alerts = List.of(
-                Map.of("id", "10000000-0000-0000-0000-000000000001", "title", "Grid Load shedding Alert", "category", "POWER_GRID", "severity", "CRITICAL", "message", "Metropolitan Grid B peak demand exceeded 186 MW. Automatic load shedding initiated.", "status", "ACTIVE", "timestamp", "5m ago"),
-                Map.of("id", "15000000-0000-0000-0000-000000000001", "title", "Major Multi-Car Accident", "category", "TRAFFIC", "severity", "CRITICAL", "message", "Collision on Grand Ave blocking Residential Boulevard loop completely. Emergency units dispatched.", "status", "ACTIVE", "timestamp", "12m ago"),
-                Map.of("id", "20000000-0000-0000-0000-000000000002", "title", "Water Main Anomaly", "category", "WATER_MAIN", "severity", "HIGH", "message", "Metro Pressure Reservoir 4 drop in pressure below 2.1 bar, suspect pipeline main break.", "status", "ACTIVE", "timestamp", "20m ago"),
-                Map.of("id", "25000000-0000-0000-0000-000000000002", "title", "Critical AQI Breach", "category", "POLLUTION", "severity", "HIGH", "message", "Industrial bypass zone PM2.5 levels rose to 45 ug/m3. Citizen safety alerts pushed.", "status", "ACTIVE", "timestamp", "45m ago"),
-                Map.of("id", "30000000-0000-0000-0000-000000000003", "title", "Waste Overflow Warning", "category", "WASTE", "severity", "MEDIUM", "message", "Expressway Transit Terminal Bin filled to 94% capacity. Schedule dump route.", "status", "ACKNOWLEDGED", "timestamp", "1h ago"),
-                Map.of("id", "35000000-0000-0000-0000-000000000003", "title", "Infrastructure Inspection", "category", "INFRASTRUCTURE", "severity", "LOW", "message", "Madison River Crossing Bridge bi-annual structural safety audit is scheduled.", "status", "ACTIVE", "timestamp", "3h ago")
+                Map.of("id", "10000000-0000-0000-0000-000000000001", "title", "Power Failure Grid B", "category", "POWER_FAILURE", "severity", "CRITICAL", "message", "Metropolitan Grid B substation transformer failure. Outage reported.", "status", "ACTIVE", "timestamp", "5m ago"),
+                Map.of("id", "15000000-0000-0000-0000-000000000001", "title", "Warehouse Fire Alert", "category", "FIRE_ALERT", "severity", "CRITICAL", "message", "Smoke alarm trigger reported at Sector 7 warehouse block. Units en route.", "status", "ACTIVE", "timestamp", "12m ago"),
+                Map.of("id", "18000000-0000-0000-0000-000000000001", "title", "Madison Crossing Flood Warning", "category", "FLOOD_WARNING", "severity", "CRITICAL", "message", "River levels at Madison Crossing rose past safety limits. High flood risk.", "status", "ACTIVE", "timestamp", "15m ago"),
+                Map.of("id", "20000000-0000-0000-0000-000000000002", "title", "Water Leakage Anomaly", "category", "WATER_LEAKAGE", "severity", "HIGH", "message", "Metro Pressure Reservoir 4 drop in pressure below 2.1 bar, suspect pipeline main break.", "status", "ACTIVE", "timestamp", "20m ago"),
+                Map.of("id", "25000000-0000-0000-0000-000000000002", "title", "Air Pollution AQI Breach", "category", "AIR_POLLUTION", "severity", "HIGH", "message", "Industrial bypass zone PM2.5 levels rose to 45 ug/m3. Citizen safety alerts pushed.", "status", "ACTIVE", "timestamp", "45m ago"),
+                Map.of("id", "28000000-0000-0000-0000-000000000002", "title", "Traffic Congestion Delay", "category", "TRAFFIC_CONGESTION", "severity", "HIGH", "message", "Congestion on Interstate-90 Expressway off-ramp timing delay.", "status", "ACTIVE", "timestamp", "50m ago"),
+                Map.of("id", "30000000-0000-0000-0000-000000000003", "title", "Emergency Incident Traffic short", "category", "EMERGENCY_INCIDENT", "severity", "MEDIUM", "message", "Traffic signal control board power supply shorted out.", "status", "ACKNOWLEDGED", "timestamp", "1h ago"),
+                Map.of("id", "35000000-0000-0000-0000-000000000003", "title", "Road Damage Pot-hole", "category", "ROAD_DAMAGE", "severity", "LOW", "message", "Deep pothole report filed for Residential Boulevard outer lane.", "status", "ACTIVE", "timestamp", "3h ago")
         );
 
         // AI Recommendations
