@@ -21,8 +21,25 @@ public class ReportGeneratorService {
     public ReportGeneratorService(GeminiService geminiService) {
         this.geminiService = geminiService;
     }
-
     public byte[] generatePdfReport(Map<String, Object> metrics, List<String> alerts, String predictions, String userNotes) {
+        String sections = "1. Executive Summary\n" +
+                "2. Key Findings\n" +
+                "3. Operational Recommendations\n" +
+                "4. Future Risks\n" +
+                "5. Strategic Action Plan\n";
+
+        boolean isSmartCity = metrics != null && (metrics.containsKey("aqiIndex") || metrics.containsKey("gridLoad"));
+        if (isSmartCity) {
+            sections = "1. Executive Summary\n" +
+                    "2. Critical Risks\n" +
+                    "3. Traffic Analysis\n" +
+                    "4. Pollution Analysis\n" +
+                    "5. Emergency Analysis\n" +
+                    "6. Infrastructure Status\n" +
+                    "7. Recommendations\n" +
+                    "8. Future Predictions\n";
+        }
+
         // 1. Build prompt for Gemini
         String prompt = "You are a professional enterprise report generator. Create a detailed business report incorporating the following data:\n" +
                 "Dashboard Metrics: " + metrics.toString() + "\n" +
@@ -30,11 +47,7 @@ public class ReportGeneratorService {
                 "AI Predictions: " + predictions + "\n" +
                 "Operator Notes: " + userNotes + "\n\n" +
                 "Structure the response into these clear sections:\n" +
-                "1. Executive Summary\n" +
-                "2. Key Findings\n" +
-                "3. Operational Recommendations\n" +
-                "4. Future Risks\n" +
-                "5. Strategic Action Plan\n" +
+                sections + "\n" +
                 "Respond in plain, structured text.";
 
         String aiAnalysis = geminiService.generateContent(prompt);
@@ -83,7 +96,7 @@ public class ReportGeneratorService {
                 String cleanText = pText.replace("###", "").replace("##", "").replace("#", "").trim();
                 if (cleanText.isEmpty()) continue;
                 
-                if (pText.trim().startsWith("#") || pText.trim().startsWith("1.") || pText.trim().startsWith("2.") || pText.trim().startsWith("3.") || pText.trim().startsWith("4.") || pText.trim().startsWith("5.")) {
+                if (pText.trim().startsWith("#") || pText.trim().startsWith("1.") || pText.trim().startsWith("2.") || pText.trim().startsWith("3.") || pText.trim().startsWith("4.") || pText.trim().startsWith("5.") || pText.trim().startsWith("6.") || pText.trim().startsWith("7.") || pText.trim().startsWith("8.")) {
                     Paragraph sec = new Paragraph(cleanText, sectionFont);
                     sec.setSpacingBefore(12);
                     sec.setSpacingAfter(6);
