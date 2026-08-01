@@ -16,6 +16,7 @@ import AgriculturePage from './modules/industry/AgriculturePage';
 import HealthcarePage from './modules/industry/HealthcarePage';
 import ManufacturingPage from './modules/industry/ManufacturingPage';
 import SmartCityPage from './modules/industry/SmartCityPage';
+import SustainabilityDashboardPage from './modules/industry/SustainabilityDashboardPage';
 import UploadCenterPage from './modules/upload/UploadCenterPage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import NotFoundPage from './modules/error/NotFoundPage';
@@ -46,6 +47,7 @@ function App() {
                   <Route path="healthcare" element={<HealthcarePage />} />
                   <Route path="manufacturing" element={<ManufacturingPage />} />
                   <Route path="smart-city" element={<SmartCityPage />} />
+                  <Route path="sustainability" element={<SustainabilityDashboardPage />} />
                   <Route path="analytics" element={<AnalyticsPage />} />
                   <Route path="reports" element={<ReportsPage />} />
                   <Route path="uploads" element={<UploadCenterPage />} />

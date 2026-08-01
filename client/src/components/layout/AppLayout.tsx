@@ -21,7 +21,8 @@ import {
   Coins,
   Compass,
   Truck,
-  Upload
+  Upload,
+  Leaf
 } from 'lucide-react';
 
 interface AppLayoutProps {
@@ -117,6 +118,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               { name: 'Healthcare', href: '/healthcare', icon: Activity },
               { name: 'Manufacturing', href: '/manufacturing', icon: Compass },
               { name: 'Smart City', href: '/smart-city', icon: Truck },
+              { name: 'Sustainability', href: '/sustainability', icon: Leaf },
               { name: 'Analytics', href: '/analytics', icon: BarChart3 },
               { name: 'Reports', href: '/reports', icon: FileSpreadsheet },
               { name: 'Upload Center', href: '/uploads', icon: Upload },
