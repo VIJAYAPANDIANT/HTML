@@ -20,6 +20,7 @@ import {
   X
 } from 'lucide-react';
 import api from '@/lib/axios';
+import SmartCityMap from '@/components/ui/SmartCityMap';
 
 interface CityDetails {
   name: string;
@@ -396,45 +397,51 @@ export default function SmartCityPage() {
                 </div>
               </div>
 
-              {/* Traffic Monitoring zone levels */}
-              <div className="bg-card border border-border rounded-xl p-6 shadow">
-                <h3 className="text-lg font-bold text-white mb-4">Traffic Congestion Index</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left text-slate-300">
-                    <thead>
-                      <tr className="border-b border-border/80 text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
-                        <th className="pb-3">Traffic Zone</th>
-                        <th className="pb-3">Status</th>
-                        <th className="pb-3">Congestion %</th>
-                        <th className="pb-3">Average Speed</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/50">
-                      {data.trafficZones.map((z) => (
-                        <tr key={z.id} className="hover:bg-muted/10 transition-colors">
-                          <td className="py-3 font-semibold text-white">
-                            <span>{z.name}</span>
-                            <span className="block text-[10px] text-muted-foreground">{z.id}</span>
-                          </td>
-                          <td className="py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                              z.status === 'BLOCKED' 
-                                ? 'bg-destructive/10 text-destructive' 
-                                : z.status === 'CONGESTED' 
-                                ? 'bg-accent/10 text-accent' 
-                                : 'bg-emerald-600/10 text-emerald-500'
-                            }`}>
-                              {z.status}
-                            </span>
-                          </td>
-                          <td className="py-3">
-                            <span className={`font-bold ${z.congestion > 50 ? 'text-destructive' : 'text-slate-200'}`}>{z.congestion}%</span>
-                          </td>
-                          <td className="py-3">{z.averageSpeedKmh} km/h</td>
+              {/* Traffic Monitoring & GIS Map */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border rounded-xl p-6 shadow">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-white">Traffic Congestion Index</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-left text-slate-300">
+                      <thead>
+                        <tr className="border-b border-border/80 text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
+                          <th className="pb-3">Traffic Zone</th>
+                          <th className="pb-3">Status</th>
+                          <th className="pb-3">Congestion %</th>
+                          <th className="pb-3">Average Speed</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-border/50">
+                        {data.trafficZones.map((z) => (
+                          <tr key={z.id} className="hover:bg-muted/10 transition-colors">
+                            <td className="py-3 font-semibold text-white">
+                              <span>{z.name}</span>
+                              <span className="block text-[10px] text-muted-foreground">{z.id}</span>
+                            </td>
+                            <td className="py-3">
+                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                                z.status === 'BLOCKED' 
+                                  ? 'bg-destructive/10 text-destructive' 
+                                  : z.status === 'CONGESTED' 
+                                  ? 'bg-accent/10 text-accent' 
+                                  : 'bg-emerald-600/10 text-emerald-500'
+                              }`}>
+                                {z.status}
+                              </span>
+                            </td>
+                            <td className="py-3">
+                              <span className={`font-bold ${z.congestion > 50 ? 'text-destructive' : 'text-slate-200'}`}>{z.congestion}%</span>
+                            </td>
+                            <td className="py-3">{z.averageSpeedKmh} km/h</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="h-[280px] rounded-xl overflow-hidden border border-border">
+                  <SmartCityMap />
                 </div>
               </div>
 
