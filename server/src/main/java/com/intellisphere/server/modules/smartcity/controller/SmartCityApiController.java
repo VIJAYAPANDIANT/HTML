@@ -51,6 +51,21 @@ public class SmartCityApiController {
         return ResponseEntity.ok(smartCityService.getDashboardData().getWasteContainers());
     }
 
+    @GetMapping("/api/smartcity/complaints")
+    public ResponseEntity<List<Map<String, Object>>> getComplaints() {
+        return ResponseEntity.ok(smartCityService.getDashboardData().getCitizenComplaints());
+    }
+
+    @GetMapping("/api/smartcity/analytics")
+    public ResponseEntity<Map<String, Object>> getAnalytics() {
+        return ResponseEntity.ok(Map.of(
+            "averageCongestion", 24.2,
+            "overallAqi", 64.0,
+            "gridLoadMw", 142.5,
+            "waterFlowLps", 3370.0
+        ));
+    }
+
     @GetMapping("/api/smartcity/alerts")
     public ResponseEntity<List<Map<String, Object>>> getAlerts() {
         return ResponseEntity.ok(smartCityService.getDashboardData().getAlerts());
