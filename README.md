@@ -218,3 +218,13 @@ To run the automated backend test suites (which execute against H2 in-memory dat
 cd server
 ./mvnw test
 ```
+
+## 🚀 Production Deployment & Dockerization
+
+For complete production hosting instructions and docker compose details:
+- **Deployment Manual**: [Production Deployment Guide](file:///c:/Intellisphere/docs/deployment_guide.md) outlines Vercel, Render, serverless Neon PostgreSQL, and Cloudinary integrations.
+- **Docker Compose**: Start all client, server, postgres, and caching containers together via:
+  ```bash
+  docker compose up --build
+  ```
+
