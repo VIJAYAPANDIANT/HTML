@@ -138,7 +138,7 @@ export default function DashboardPage() {
         ].map((card) => (
           <div 
             key={card.title} 
-            className={`bg-card border rounded-xl p-6 shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl relative overflow-hidden group cursor-pointer ${card.color}`}
+            className={`premium-card relative overflow-hidden group cursor-pointer ${card.color}`}
           >
             {/* Visual glow background inside hover group */}
             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -159,7 +159,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Weather Widget connected to Weather API */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md relative overflow-hidden">
+          <div className="premium-card relative overflow-hidden">
             <div className="absolute top-[20%] right-[10%] w-[120px] h-[120px] bg-primary/10 rounded-full blur-[40px] pointer-events-none" />
 
             <div className="flex justify-between items-center mb-6">
@@ -208,7 +208,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Smart Alerts Feed */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md">
+          <div className="premium-card">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
               <span className="flex items-center space-x-2">
                 <AlertTriangle className="h-5.5 w-5.5 text-destructive" />
@@ -261,7 +261,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Risk Heatmap grid */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md">
+          <div className="premium-card">
             <h3 className="text-lg font-bold text-white mb-2">Sector Risk Heatmap</h3>
             <p className="text-xs text-muted-foreground mb-4">Coordinates NPK indexes, pest risks, and moisture ratios per active zone.</p>
             <div className="h-64">
@@ -275,7 +275,7 @@ export default function DashboardPage() {
         <div className="space-y-8">
           
           {/* AI Predictions */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+          <div className="premium-card space-y-4">
             <h3 className="text-lg font-bold text-white flex items-center space-x-2">
               <BrainCircuit className="h-5.5 w-5.5 text-primary" />
               <span>AI Predictions</span>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
           </div>
 
           {/* AI Recommendations */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+          <div className="premium-card space-y-4">
             <h3 className="text-lg font-bold text-white flex items-center space-x-2">
               <Sparkles className="h-5.5 w-5.5 text-accent" />
               <span>AI Recommendations</span>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Ingestion logs / Uploads tracker */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
+          <div className="premium-card space-y-4">
             <h3 className="text-lg font-bold text-white flex items-center space-x-2">
               <UploadCloud className="h-5.5 w-5.5 text-muted-foreground" />
               <span>Latest Ingestion Logs</span>

@@ -180,7 +180,7 @@ export default function SustainabilityDashboardPage() {
           { title: 'Water Saved Index', value: waterConservation, sub: 'Recycled pressure systems', icon: Droplet, color: 'text-primary' },
           { title: 'Waste Recycled Rate', value: recyclingRate, sub: 'Target: 80% recycling rate', icon: Recycle, color: 'text-purple-500' }
         ].map((card) => (
-          <div key={card.title} className="bg-card border border-border rounded-xl p-6 shadow hover:border-primary/45 transition-colors relative overflow-hidden group cursor-pointer">
+          <div key={card.title} className="premium-card relative overflow-hidden group cursor-pointer hover:border-primary/45">
             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{card.title}</span>
@@ -201,7 +201,7 @@ export default function SustainabilityDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Carbon Footprint Trend */}
-            <div className="bg-card border border-border rounded-xl p-6 shadow">
+            <div className="premium-card">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center space-x-2">
                 <TrendingDown className="h-4.5 w-4.5 text-destructive animate-bounce" />
                 <span>CO2 Emissions Trend</span>
@@ -212,7 +212,7 @@ export default function SustainabilityDashboardPage() {
             </div>
 
             {/* Renewable Power Mix */}
-            <div className="bg-card border border-border rounded-xl p-6 shadow">
+            <div className="premium-card">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center space-x-2">
                 <Sun className="h-4.5 w-4.5 text-emerald-500" />
                 <span>Renewable Mix Share</span>
@@ -227,7 +227,7 @@ export default function SustainabilityDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Water Saved Step Chart */}
-            <div className="bg-card border border-border rounded-xl p-6 shadow">
+            <div className="premium-card">
               <h3 className="text-sm font-bold text-white mb-4">Daily Water Conservation Logs</h3>
               <div className="h-56">
                 <ReactECharts option={waterOption} style={{ height: '100%' }} />
@@ -235,7 +235,7 @@ export default function SustainabilityDashboardPage() {
             </div>
 
             {/* Waste Recycling Progress Gauge */}
-            <div className="bg-card border border-border rounded-xl p-6 shadow flex flex-col justify-between">
+            <div className="premium-card flex flex-col justify-between">
               <h3 className="text-sm font-bold text-white">Waste Recycling Rate Gauge</h3>
               <div className="h-44 my-auto">
                 <ReactECharts option={wasteGaugeOption} style={{ height: '100%' }} />
@@ -250,7 +250,7 @@ export default function SustainabilityDashboardPage() {
         <div className="space-y-8">
           
           {/* Green Zone coverage */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
+          <div className="premium-card space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center space-x-2">
               <Trees className="h-4.5 w-4.5 text-emerald-500" />
               <span>Green Zone Coverage</span>
@@ -290,7 +290,7 @@ export default function SustainabilityDashboardPage() {
           </div>
 
           {/* AI recommendations */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow space-y-4">
+          <div className="premium-card space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center space-x-2">
               <Sparkles className="h-4.5 w-4.5 text-primary" />
               <span>AI Sustainability Recommendations</span>

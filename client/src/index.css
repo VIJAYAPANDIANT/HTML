@@ -46,41 +46,41 @@
 }
 
 :root {
-    --background: #0F172A;          /* Slate 900 */
-    --foreground: #F8FAFC;          /* Slate 50 */
-    --card: #1E293B;                /* Slate 800 */
+    --background: #0B0F19;          /* Deep premium slate-black */
+    --foreground: #F8FAFC;
+    --card: #131B2E;                /* Premium slate-navy card background */
     --card-foreground: #F8FAFC;
-    --popover: #1E293B;
+    --popover: #131B2E;
     --popover-foreground: #F8FAFC;
-    --primary: #2563EB;              /* Blue 600 */
+    --primary: #3B82F6;              /* Vibrant Blue */
     --primary-foreground: #FFFFFF;
-    --secondary: #14B8A6;            /* Teal 500 */
+    --secondary: #10B981;            /* Vibrant Emerald/Teal */
     --secondary-foreground: #0F172A;
-    --muted: #334155;               /* Slate 700 */
-    --muted-foreground: #94A3B8;    /* Slate 400 */
-    --accent: #F59E0B;              /* Amber 500 */
+    --muted: #1E293B;               /* Muted slate background */
+    --muted-foreground: #94A3B8;
+    --accent: #F59E0B;              /* Amber */
     --accent-foreground: #0F172A;
-    --destructive: #EF4444;          /* Red 500 */
+    --destructive: #EF4444;
     --destructive-foreground: #FFFFFF;
-    --border: #334155;              /* Slate 700 */
-    --input: #334155;
-    --ring: #2563EB;
-    --radius: 0.5rem;
+    --border: #1E293B;              /* Premium clean border */
+    --input: #1E293B;
+    --ring: #3B82F6;
+    --radius: 0.75rem;              /* Smoother border radius */
     
-    --chart-1: #2563EB;
-    --chart-2: #14B8A6;
+    --chart-1: #3B82F6;
+    --chart-2: #10B981;
     --chart-3: #F59E0B;
     --chart-4: #A855F7;
     --chart-5: #EC4899;
 
-    --sidebar: #0F172A;
+    --sidebar: #0B0F19;
     --sidebar-foreground: #F8FAFC;
-    --sidebar-primary: #2563EB;
+    --sidebar-primary: #3B82F6;
     --sidebar-primary-foreground: #FFFFFF;
-    --sidebar-accent: #1E293B;
+    --sidebar-accent: #131B2E;
     --sidebar-accent-foreground: #F8FAFC;
-    --sidebar-border: #334155;
-    --sidebar-ring: #2563EB;
+    --sidebar-border: #1E293B;
+    --sidebar-ring: #3B82F6;
 }
 
 @layer base {
@@ -92,5 +92,66 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* --- PREMIUM GRAPHIC CLASSES --- */
+
+/* Stripe/Linear style cards with glassmorphism and ambient hover glows */
+.premium-card {
+  background: linear-gradient(135deg, rgba(19, 27, 46, 0.75) 0%, rgba(11, 15, 25, 0.9) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15);
+}
+
+.glow-teal:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.15);
+}
+
+.glow-accent:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 40px rgba(245, 158, 11, 0.15);
+}
+
+.glow-destructive:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15);
+}
+
+/* Metallic gradient text headings */
+.text-metallic {
+  background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-brand-gradient {
+  background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Entrance animation for loading views */
+.fade-in-up {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
