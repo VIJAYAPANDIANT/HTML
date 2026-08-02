@@ -16,6 +16,7 @@ public class WeatherService {
     private static final long CACHE_DURATION_MS = 15 * 60 * 1000; // 15 Minutes
 
     @SuppressWarnings({"rawtypes", "unchecked"})
+    @org.springframework.cache.annotation.Cacheable("weather")
     public synchronized Map<String, Object> getLiveWeather() {
         long now = System.currentTimeMillis();
         if (cachedWeather != null && now < cacheExpiryTime) {
