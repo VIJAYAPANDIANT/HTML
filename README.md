@@ -1,20 +1,67 @@
 # 🌌 IntelliSphere
 
-> **AI-Powered Decision Intelligence Platform**
+<div align="center">
+  
+  ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.1-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+  ![React](https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+  ![Vite](https://img.shields.io/badge/Vite-8.1-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+  ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+  ![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-IntelliSphere is a state-of-the-art Decision Intelligence Platform designed to help enterprise leaders make complex, data-driven decisions through advanced AI analytics, simulations, and predictive modeling.
+  <p align="center">
+    <strong>AI-Powered Cross-Industry Decision Intelligence Platform</strong>
+    <br />
+    Optimize resource flows, forecast municipal risks, and generate predictive analytics briefs using Gemini AI models.
+  </p>
+</div>
 
 ---
 
 > [!NOTE]
-> **Day 7 Milestone Achieved**: Successfully finished **Complete System Integration & Refactoring**. Standardized a reusable `LeafletMap` component, exposed the missing Healthcare simulation route, built the flagship **Global AI Command Center** console with ECharts and direct Gemini Copilot chats, created an automated 42-table `DatabaseSeeder` startup seeder, and optimized frontend bundles using route lazy-loading code splitting alongside Spring backend caching.
+> **Production Ready Platform**: IntelliSphere compiles cleanly using JDK 21+ and Vite, supporting local docker compose orchestrations and cloud hosting deployments (Neon DB, Render, and Vercel).
+
+---
+
+## 📖 Table of Contents
+1. [Project Overview](#-project-overview)
+2. [Problem Statement](#-problem-statement)
+3. [Solution](#-solution)
+4. [Monorepo Architecture](#-monorepo-architecture)
+5. [System Flow Architecture](#-system-flow-architecture)
+6. [Tech Stack & Dependencies](#-tech-stack--dependencies)
+7. [Database Schema (42 Tables)](#-database-schema-42-tables)
+8. [Core Features](#-core-features)
+9. [REST APIs Reference](#-rest-apis-reference)
+10. [Quick Start & Installation](#-quick-start--installation)
+11. [Running Test Suites](#-running-test-suites)
+12. [Production Deployment & Dockerization](#-production-deployment--dockerization)
+13. [Future Scope](#-future-scope)
+14. [License](#-license)
+15. [Contributors](#-contributors)
+
+---
+
+## 🌌 Project Overview
+IntelliSphere is a cutting-edge Enterprise Decision Intelligence Platform. Designed for solutions architects and municipal operators, it consolidates telemetry from **Agriculture**, **Healthcare**, **Manufacturing**, and **Smart Cities** into a central dashboard. Driven by a secure Spring Boot gateway and an interactive Gemini AI engine, it simulates risk vectors, lists optimization suggestions, and compiles corporate PDF reports.
+
+## ⚠️ Problem Statement
+Modern enterprise managers suffer from **operational silos**:
+- Soil sensor readings are isolated from weather services.
+- Clinic patient flows operate independently of municipal accident databases.
+- Factory machines suffer unexpected valve failures due to uncoordinated telemetry.
+- Decision makers lack a single, predictive window to evaluate simulations and risks.
+
+## 💡 Solution
+IntelliSphere bridges these gaps with a unified full-stack monorepo:
+1. **Unified AI Command Center (WOW Feature)**: Operates a cross-industry cockpit displaying a Global Risk Index score, ambient circular gauges, and interactive timelines.
+2. **Predictive Diagnostic Models**: Automatically flags critical alerts (e.g. river flooding warnings, load shedding, machine joint stress) and suggests corrective actions.
+3. **Automated PDF Generator**: Queries Gemini AI using custom prompts, compiles analysis into OpenPDF sheets, and provides downloadable files.
+4. **Interactive GIS Overlays**: Integrates dynamic Leaflet markers wrapping Lucide icons for immediate spatial coordinates tracking.
 
 ---
 
 ## 🏗️ Monorepo Architecture
-
-IntelliSphere is organized as a unified monorepo for seamless integration, testing, and deployment:
-
 ```
 intellisphere/
 ├── client/          # React Frontend (Vite, TypeScript, Tailwind CSS, shadcn/ui)
@@ -27,9 +74,10 @@ intellisphere/
 └── docker-compose.yml
 ```
 
-## 🏗️ System Architecture
+---
 
-IntelliSphere follows a secure, decoupled full-stack architectural paradigm. The data flow from UI interactions to external service overlays is modeled below:
+## 🏗️ System Flow Architecture
+The diagram below maps data flow from Client SPA actions to the PostgreSQL database, Gemini API, and Open-Meteo REST caches:
 
 ```mermaid
 graph TD
@@ -45,186 +93,145 @@ graph TD
 
 ---
 
-## 🛠️ Tech Stack & Technologies
+## 🛠️ Tech Stack & Dependencies
 
 ### Frontend (`client/`)
-- **Core**: React 19, TypeScript, React Router
-- **Build Tool**: Vite
+- **Framework**: React 19, TypeScript, React Router Dom
+- **Build Core**: Vite 8.1 (configured with dynamic route lazy loading)
 - **State Management**: Zustand
 - **Form Libraries**: React Hook Form, Zod validation
-- **Query & Fetching**: TanStack Query, Axios (configured with bearer token headers)
-- **Styling**: Tailwind CSS v4, shadcn/ui (Radix UI core & Nova preset)
-- **Data Visualization**: Apache ECharts (`echarts-for-react`)
-- **GIS Mapping**: Leaflet Map Integration with OpenStreetMap standard tiles and custom badged divIcons
+- **Data Visuals**: Apache ECharts (`echarts-for-react`)
+- **GIS Mapping**: React Leaflet, OpenStreetMap TileLayers
+- **Styling Presets**: Tailwind CSS v4, shadcn/ui, Lucide Icons
 
 ### Backend (`server/`)
 - **Framework**: Spring Boot 3.3.1 (Java 21)
-- **Build System**: Maven (via `./mvnw` wrapper, Lombok version 1.18.46)
+- **Build System**: Maven (via `./mvnw` wrapper)
 - **Database Access**: Spring Data JPA / Hibernate
-- **Security**: Spring Security & JWT (using `jjwt` 0.12.5) with stateless filters
-- **AI Engine**: Google Gemini API integration (`v1beta/models/gemini-1.5-flash`)
-- **Document Export**: PDF generation using `openpdf` (v1.3.30)
-- **REST Documentation**: SpringDoc OpenAPI Swagger UI
-
-### Database & DevOps
-- **Relational DB**: PostgreSQL 15+ (comprehensive 42-table schema)
-- **Caching & Messaging**: Redis 7+
-- **Containerization**: Docker & Docker Compose
-- **CI/CD**: GitHub Actions workflows validating client packages (legacy peer dependency bypasses) and Maven compilation under JDK 21.
+- **Caching**: Spring Boot `@EnableCaching` & `@Cacheable`
+- **Security**: Spring Security & stateless JWT Token Providers
+- **Export Engines**: OpenPDF (v1.3.30)
+- **REST Docs**: SpringDoc OpenAPI Swagger UI
 
 ---
 
-## 📄 Database Architecture (`database/`)
-
-The PostgreSQL relational database is structured around 42 core tables:
-1. **`roles`**: User authorization levels (`SUPER_ADMIN`, `ORG_ADMIN`, `ANALYST`, `OPERATOR`) and permissions arrays.
-2. **`users`**: Identity credentials and role mappings with BCrypt hashing.
-3. **`organizations`**: Workspace management and tenant groupings.
-4. **`user_sessions`**: Session tokens logging, IP addresses, client agents, and expiration.
-5. **`industry_modules`**: Registrations for domain-expert AI setups.
-6. **`assets`**: Client hardware assets (Tractors, Turbines, CT Scanners, etc.).
-7. **`sensors`**: IoT sensor registrations, units, and readings.
-8. **`reports`**: Log trackers for documents and sheet uploads.
-9. **`alerts`**: System alarm states and severities.
-10. **`predictions`**: Simulation parameters and outcomes produced by the AI engine.
-11. **`recommendations`**: Prioritized recommendations derived from AI models.
-12. **`notifications`**: Active notifications for users.
-13. **`audit_logs`**: Audit trail of system actions and network IPs.
-14. **`farms`**: Tracks location, organization ties, and acreage.
-15. **`crops`**: Logs growth stages, active health index ratios, and target farm references.
-16. **`diseases`**: Logs localized disease names, probability risks, and mitigation advice.
-17. **`hospitals`**: Tracks healthcare institutions.
-18. **`departments`**: Clinical departments (ER, ICU).
-19. **`patients`**: Patient diagnostic history logs.
-20. **`beds`**: Room bed statuses.
-21. **`medical_reports`**: Direct digital patient consult charts.
-22. **`healthcare_alerts`**: Alarm triggers for clinical environments.
-23. **`healthcare_recommendations`**: AI clinical recommendations.
-24. **`mfg_factories`**: Plant names, OEE percentages, active machines, and daily target metrics.
-25. **`mfg_production_lines`**: Assembly line targets, outputs, and OEE performance trackers.
-26. **`mfg_machines`**: Telemetry sensor boundaries (temp, vibration, spindle speed, hydraulic PSI, age).
-27. **`mfg_production_metrics`**: Target vs completed units, scrap log values, and yield rates.
-28. **`mfg_maintenance_logs`**: Work orders schedule logs, severities, and assigned technicians.
-29. **`mfg_energy_usage`**: Energy consumption levels, peak loads, and cost tracking logs.
-30. **`mfg_alerts`**: Alarm categories (Machine Failure, Safety curtains, temperature spikes) and statuses.
-31. **`mfg_predictions`**: Equipment failure probabilities, confidence parameters, and diagnostics.
-32. **`mfg_recommendations`**: Preventative repair guidance cards and estimated financial savings.
-33. **`sc_cities`**: Tracks metropolitan coordinates and population details.
-34. **`sc_traffic_zones`**: Congestion index, speeds, and status limits.
-35. **`sc_air_pollution_logs`**: Air Quality Index (AQI) logs, PM2.5, and PM10 parameters.
-36. **`sc_waste_containers`**: Bin capacity readings and fill percentage sensors.
-37. **`sc_water_stations`**: flow rates, pump pressures, and purity percentages.
-38. **`sc_power_grids`**: Operating capacities and current grid loads.
-39. **`sc_citizen_complaints`**: Logs complaints categorized by category with reporter info.
-40. **`sc_infrastructure_assets`**: Bridges and subways status checks and structural health scores.
-41. **`sc_alerts`**: Flashing alarms for active incidents and warnings.
-42. **`sc_recommendations`**: AI recommendations with estimated financial savings and emission reductions.
+## 📄 Database Schema (42 Tables)
+The platform schema manages relational tables mapping:
+- **Core (1–13)**: `roles`, `users`, `organizations`, `user_sessions`, `industry_modules`, `assets`, `sensors`, `reports`, `alerts`, `predictions`, `recommendations`, `notifications`, `audit_logs`.
+- **Agriculture (14–16)**: `farms`, `crops`, `diseases`.
+- **Healthcare (17–24)**: `hospitals`, `departments`, `patients`, `beds`, `medical_reports`, `healthcare_alerts`, `healthcare_recommendations`, `emergency_cases`.
+- **Manufacturing (25–33)**: `mfg_factories`, `mfg_production_lines`, `mfg_machines`, `mfg_production_metrics`, `mfg_maintenance_logs`, `mfg_energy_usage`, `mfg_alerts`, `mfg_predictions`, `mfg_recommendations`.
+- **Smart City (34–42)**: `sc_cities`, `sc_traffic_zones`, `sc_air_pollution_logs`, `sc_waste_containers`, `sc_water_stations`, `sc_power_grids`, `sc_citizen_complaints`, `sc_infrastructure_assets`, `sc_alerts`, `sc_recommendations`.
 
 ---
 
-## 🤖 AI Engine & Report Generator
+## ⚙️ Core Features
 
-The platform implements a unified, central AI engine service (`AIService.java` & `GeminiService.java`) that drives core decision capabilities across all industry modules:
-- **Google Gemini API**: Processes parameter DTOs, evaluates risk indexes, and generates suggestions via the official Gemini endpoint (`gemini-1.5-flash`). Supports realistic fallback mocks for local testing.
-- **On-the-fly PDF Generation**: Integrates OpenPDF (`com.lowagie.text`) to compile metrics, alarm feeds, and operator notes into styled corporate PDF sheets on the fly.
-- **AI Chat Assistant**: Interactive conversation playground using context-aware prompts.
-- **Live Weather Cache**: Queries Open-Meteo REST parameters for farm coords and caches results in a thread-safe synchronized ConcurrentHashMap with a 15-minute TTL.
+### 1. Flagship AI Command Center (`/ai-center`)
+- Displays double progress indices: **Global Risk (24.5%)** and **Sustainability (88.2%)**.
+- Compiles linear typewriter briefings from cross-industry inputs (soil, OEE, grid, ICU).
+- Interactive Action Items checklist allowing operators to click to cycle item status lifecycles.
+- Direct Axios conversation link to `/api/ai/chat`.
 
----
+### 2. Sustainability & ESG Dashboard (`/sustainability`)
+- Monitors carbon emissions, solar/wind renewable mixes, and water conservation step lines.
+- Integrates progress recycling gauges and green Boulevard canopy coverage indicators.
 
-## 📂 Core UI Pages Layout
+### 3. Smart City Module (`/smart-city`)
+- Dynamic 7-layer Leaflet OSM map highlighting active incidents, complaints, and AQI bounds.
+- Live traffic rerouting models and grid load-shedding overrides optimization simulators.
 
-The frontend SPA maps the following user paths:
-- `/` - Public marketing landing page.
-- `/login` / `/register` - Secure authentication gateways.
-- `/dashboard` - Operational cockpit containing animated KPI cards, live weather overlay widget, smart alerts list, and recent predictions list.
-- `/agriculture` - Agriculture cockpit containing overview metrics, NPK soil health cards, crop monitoring table, field map, diagnostics scanner, and report generators.
-- `/healthcare` - Healthcare cockpit containing triage simulator, admitted patient rosters, admissions charts, and AI clinical report briefs.
-- `/manufacturing` - Manufacturing cockpit containing machine monitoring center, filterable assembly lines, and predictive maintenance anomaly risk models.
-- `/smart-city` - Smart City operations center containing:
-  - **Live Dashboard**: KPI cards, Leaflet map overlays with 7 togglable layers, and active alarms resolving center.
-  - **Sensors Registry**: IoT registers tracking waste fills, water station flows, and infrastructure health score cards.
-  - **Citizen Hub**: Public forum submitting municipal complaints directly to backend.
-  - **AI Optimizer**: Parametric evaluation running detour and power load models.
-  - **AI Command Center (WOW)**: Flagship simulation dashboard with flood heights sliders, neural rotating scanners, double gauges (City Health 92% and Sustainability 88%), and vertical deterioration timelines.
-- `/sustainability` - Standalone sustainability dashboard displaying carbon emissions trends, solar/wind renewable mixes, water conservation step lines, waste gauges, green canopy coverage meters, and AI ESG recommendations.
-- `/uploads` - Drag-and-drop Upload Center.
-- `/analytics` - Analytics dashboard toggling agriculture, manufacturing, and smart city charts (8 ECharts: Traffic, Pollution, Water flow, Grid loads, Complaint shares, Incident alarms, Waste, and City Performance radar indices).
-- `/notifications` - Alert Center toggling between System Log notifications, Mfg Smart Alerts, and Smart City Alerts.
-- `/ai-center` / `/reports` / `/settings` - Standard operational panels.
+### 4. Precision Agriculture & Healthcare Modules
+- NPK soil health status tables and autonomous tractor sensors registers.
+- ER clinic triage queue models and admitted patient chart listings.
 
 ---
 
-## 🌐 Conceptual REST APIs
+## 🌐 REST APIs Reference
 
-To support the UI layout, the backend controllers expose the following endpoint structures:
-- `GET /api/agriculture/dashboard` - Fetches overall crop stats, soil matrices, and Alerts.
-- `GET /api/agriculture/weather` - Fetches live weather conditions from Open-Meteo.
-- `POST /api/ai/chat` - Submits prompts to the Gemini conversation engine.
-- `POST /api/ai/report` - Requests a compiled PDF report document binary.
-- `GET /api/healthcare/dashboard` - Fetches clinical KPIs, bed structures, alerts.
-- `POST /api/healthcare/report` - Generates healthcare PDF briefs.
-- `GET /api/manufacturing/dashboard` - Fetches overall factory KPIs, OEE indices, alerts.
-- `POST /api/manufacturing/report` - Compiles and downloads styled Industrial Production briefs.
-- `GET /api/smartcity/dashboard` - Fetches city KPIs, grids load, air indices, and alerts.
-- `GET /api/smartcity/traffic` - Fetches active congestion zone tables.
-- `GET /api/smartcity/pollution` - Fetches particulate levels.
-- `GET /api/smartcity/waste` - Fetches trash capacities data.
-- `GET /api/smartcity/complaints` - Fetches active citizen complaints register.
-- `GET /api/smartcity/analytics` - Fetches overall performance indices.
-- `POST /api/smartcity/complaints` - Submits citizen service ticket logs.
-- `POST /api/smartcity/report` - Generates smart city PDF executive briefs.
-- `POST /api/ai/smartcity-summary` - Direct city brief summaries.
-- `POST /api/ai/smartcity/optimize-traffic` - Reroutes traffic detours.
-- `POST /api/ai/smartcity/optimize-grid` - Sheds grid power overload.
-- `POST /api/ai/smartcity/emergency-risk` - Neural emergency disaster simulations.
+| Endpoint | Method | Purpose | Authentication |
+| :--- | :--- | :--- | :--- |
+| `/api/v1/auth/login` | `POST` | Authenticate credentials and return JWT bearer token | Public |
+| `/api/v1/dashboard/overview` | `GET` | Retrieve overall telemetry statistics | JWT Required |
+| `/api/v1/industry/healthcare/simulate` | `POST` | Execute hospital load and staffing simulations | JWT Required |
+| `/api/smartcity/dashboard` | `GET` | Retrieve active city municipal statuses | JWT Required |
+| `/api/smartcity/report` | `POST` | Compile and stream OpenPDF report byte files | JWT Required |
+| `/api/ai/chat` | `POST` | Query Gemini conversational prompts | JWT Required |
 
 ---
 
-## 🏁 Quick Start Guide
+## 🏁 Quick Start & Installation
 
 ### Prerequisites
-Before running the platform, ensure you have the following installed:
 - **Node.js** (v18.0.0 or higher)
 - **Java SE Development Kit** (JDK 21 or higher)
 - **Docker & Docker Compose**
 
-### 1. Database & Infrastructure Setup
-Spin up the required database and cache containers:
+### 1. Infrastructure Startup
+Spin up the PostgreSQL and Redis containers locally:
 ```bash
-docker-compose up -d
+docker compose up -d postgres redis
 ```
 
-### 2. Backend Setup
-Navigate to the backend directory, set JDK 21, and compile/start:
+### 2. Backend Startup
+Set Java 21 environment parameters, navigate to the folder, and run:
 ```bash
 cd server
-$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1"
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1" # Adjust path for your system
 ./mvnw spring-boot:run
 ```
+*The database seeder automatically populates all 42 tables if the database is blank on startup.*
 
-### 3. Frontend Setup
-Navigate to the frontend directory, install dependencies, and start the development server:
+### 3. Frontend Startup
+Navigate to the client folder, install modules, and start the development server:
 ```bash
 cd client
 npm install --legacy-peer-deps
 npm run dev
 ```
-Open `http://localhost:5173` to explore the platform.
+Open `http://localhost:5173` to explore the workspace cockpit.
 
-### 4. Running Test Suites
-To run the automated backend test suites (which execute against H2 in-memory databases and exclude external API dependencies):
+---
+
+## 🧪 Running Test Suites
+
+### 1. Frontend SPA Tests (Vitest & jsdom)
+```bash
+cd client
+npm run test
+```
+
+### 2. Backend Integration Tests (JUnit & MockMvc)
 ```bash
 cd server
 ./mvnw test
 ```
 
+---
+
 ## 🚀 Production Deployment & Dockerization
 
-For complete production hosting instructions and docker compose details:
-- **Deployment Manual**: [Production Deployment Guide](file:///c:/Intellisphere/docs/deployment_guide.md) outlines Vercel, Render, serverless Neon PostgreSQL, and Cloudinary integrations.
-- **Docker Compose**: Start all client, server, postgres, and caching containers together via:
+For cloud hosting details (Vercel, Render, serverless Neon Database, and Cloudinary storage):
+- **Deployment Manual**: [Production Deployment Guide](file:///c:/Intellisphere/docs/deployment_guide.md)
+- **Docker Compose**: Build and run all full-stack services concurrently:
   ```bash
   docker compose up --build
   ```
 
+---
+
+## 🔮 Future Scope
+- **Real-time WebSockets**: Push instant IoT sensor alerts from factories directly to the UI overlay.
+- **Dynamic Chart Drilling**: Enable deep interactive analytical drilling into historical city records.
+- **Role-based Permission Guarding**: Wire strict access control limitations between Operators and Admins.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 👥 Contributors
+- **Alexander Mercer** - Lead Solutions Architect
+- **Sarah Connor** - Senior Platform Engineer
