@@ -805,7 +805,7 @@ export default function ManufacturingPage() {
                   </h4>
                   <p className="text-xs text-slate-350 leading-relaxed">
                     {selectedMachine.status === 'CRITICAL' 
-                      ? 'Critical overheating and vibration anomaly spike detected. Pause production line and dispatch technician Alex Mercer for immediate valve calibration.'
+                      ? 'Critical overheating and vibration anomaly spike detected. Pause production line and dispatch technician Alex Rivera for immediate valve calibration.'
                       : selectedMachine.status === 'WARNING'
                       ? 'Motor housing thermal decay warning on Joint #3. Schedule preventative vibration damper adjustments before August 2nd.'
                       : 'Asset performance values within nominal boundaries. Maintain schedule calibration audits.'}

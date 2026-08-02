@@ -56,9 +56,9 @@ public class DatabaseSeeder implements CommandLineRunner {
             String hashedOperatorPass = passwordEncoder.encode("operatorpassword");
 
             jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role_id) VALUES (?, ?, ?, ?, ?, ?)",
-                    adminUserId, "admin@intellisphere.com", hashedAdminPass, "Alexander", "Mercer", adminRoleId);
+                    adminUserId, "admin@intellisphere.com", hashedAdminPass, "Admin", "User", adminRoleId);
             jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role_id) VALUES (?, ?, ?, ?, ?, ?)",
-                    operatorUserId, "operator@intellisphere.com", hashedOperatorPass, "Sarah", "Connor", operatorRoleId);
+                    operatorUserId, "operator@intellisphere.com", hashedOperatorPass, "Operator", "User", operatorRoleId);
 
             // 3. Organizations
             UUID orgId = UUID.randomUUID();
