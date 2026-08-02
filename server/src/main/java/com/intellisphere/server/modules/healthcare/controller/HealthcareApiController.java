@@ -110,4 +110,26 @@ public class HealthcareApiController {
         
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/api/v1/industry/healthcare/simulate")
+    public ResponseEntity<Map<String, Object>> simulate(@RequestBody Map<String, Object> params) {
+        int staffCount = Integer.parseInt(String.valueOf(params.getOrDefault("staffCount", "12")));
+        int patientLoad = Integer.parseInt(String.valueOf(params.getOrDefault("patientLoad", "85")));
+        
+        String context = "Staff Count: " + staffCount + ", Patient Load: " + patientLoad;
+        
+        Map<String, Object> risks = aiService.predictRisks(context);
+        List<String> recommendations = aiService.getRecommendations("Optimize scheduling and staff patterns for patient load " + patientLoad);
+        String summary = aiService.generateExecutiveSummary(Map.of("staffCount", staffCount, "patientLoad", patientLoad));
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("industry", "Healthcare");
+        result.put("staffCount", staffCount);
+        result.put("patientLoad", patientLoad);
+        result.put("riskAnalysis", risks);
+        result.put("recommendations", recommendations);
+        result.put("executiveSummary", summary);
+        
+        return ResponseEntity.ok(result);
+    }
 }
