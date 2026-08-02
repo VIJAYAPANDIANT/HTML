@@ -37,6 +37,38 @@ services:
       timeout: 5s
       retries: 5
 
+  # Backend Server Application
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    container_name: intellisphere-server
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/intellisphere
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: adminpassword
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-mock}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - intellisphere-net
+
+  # Frontend Client SPA
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: intellisphere-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - intellisphere-net
+
 volumes:
   postgres_data:
   redis_data:
