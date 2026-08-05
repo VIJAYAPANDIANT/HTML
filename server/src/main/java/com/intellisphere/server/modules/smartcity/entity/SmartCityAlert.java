@@ -32,7 +32,9 @@ public class SmartCityAlert {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    @Builder.Default
     private String status = "ACTIVE"; // ACTIVE, ACKNOWLEDGED, RESOLVED
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }

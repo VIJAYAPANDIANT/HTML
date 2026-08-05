@@ -26,9 +26,11 @@ public class SmartCityRecommendation {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String suggestion;
 
+    @Builder.Default
     private String impact = "MEDIUM"; // HIGH, MEDIUM, LOW
 
     private String estimatedSavings;
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }

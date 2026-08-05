@@ -29,9 +29,12 @@ public class CitizenComplaint {
     @Column(nullable = false)
     private String category; // TRAFFIC, POLLUTION, WASTE, WATER, ENERGY, INFRASTRUCTURE
 
+    @Builder.Default
     private String status = "OPEN"; // OPEN, IN_PROGRESS, RESOLVED
 
+    @Builder.Default
     private String reporterName = "Anonymous";
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }
