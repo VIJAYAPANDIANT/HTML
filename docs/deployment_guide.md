@@ -9,10 +9,10 @@ A comprehensive architectural checklist and configuration manual to deploy the I
 ```mermaid
 graph LR
     User([End User]) -->|HTTPS| Vercel[Vercel SPA Hosting]
-    Vercel -->|REST API Mappings| Render[Render Web Service]
-    Render -->|Queries| Neon[(Neon Serverless PostgreSQL)]
-    Render -->|Ingested files| Cloudinary[Cloudinary CDN]
-    Render -->|Generative Prompts| Gemini[Google Gemini AI Engine]
+    Vercel -->|REST API Mappings| Koyeb[Koyeb Web Service]
+    Koyeb -->|Queries| Supabase[(Supabase PostgreSQL)]
+    Koyeb -->|Ingested files| Cloudinary[Cloudinary CDN]
+    Koyeb -->|Generative Prompts| Gemini[Google Gemini AI Engine]
 ```
 
 ---
@@ -24,20 +24,20 @@ Set these variables in the **Vercel Project Settings > Environment Variables**:
 
 | Variable Key | Purpose | Suggested Value |
 | :--- | :--- | :--- |
-| `VITE_API_URL` | Base API target URL for Render instance | `https://intellisphere-api.onrender.com` |
+| `VITE_API_URL` | Base API target URL for Koyeb instance | `https://intellisphere-xxxx.koyeb.app` |
 
 ---
 
-### 2. Backend API (Render)
-Set these variables in the **Render Web Service > Environment Variables**:
+### 2. Backend API (Koyeb)
+Set these variables in the **Koyeb Service > Environment Variables**:
 
 | Variable Key | Purpose | Example Value |
 | :--- | :--- | :--- |
 | `SPRING_PROFILES_ACTIVE` | Target Spring profile | `prod` |
-| `SPRING_DATASOURCE_URL` | Neon PostgreSQL pooled URL connection string | `jdbc:postgresql://ep-cool-breeze-123.us-east-2.aws.neon.tech/intellisphere?sslmode=require` |
-| `SPRING_DATASOURCE_USERNAME` | database owner | `admin` |
-| `SPRING_DATASOURCE_PASSWORD` | database secret key password | `my-neon-db-password` |
-| `GEMINI_API_KEY` | Google AI Studio Developer Key | `AIzaSyD-1234567890-abcdef` |
+| `SPRING_DATASOURCE_URL` | Supabase PostgreSQL pooled URL connection string | `jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require` |
+| `SPRING_DATASOURCE_USERNAME` | Database owner | `postgres.ogkusmyyovoizvdnoain` |
+| `SPRING_DATASOURCE_PASSWORD` | Database secret key password | `9nCJHf9TfaC6epWF` |
+| `GEMINI_API_KEY` | Google AI Studio Developer Key | `AIzaSyD-YOUR-GEMINI-API-KEY-HERE` |
 | `INTELLISPHERE_JWT_SECRET` | 256-bit Hex signature signing JWTs | `9a4f2c8d3e7b1a5f6c8d9e2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c` |
 | `CLOUDINARY_URL` | Cloudinary Storage CDN key | `cloudinary://12345:abcde@my-cloud-name` |
 
@@ -45,31 +45,28 @@ Set these variables in the **Render Web Service > Environment Variables**:
 
 ## 🛠️ Step-by-Step Deployment Instructions
 
-### 1. Database Deployment (Neon PostgreSQL)
-1. Sign up on [Neon.tech](https://neon.tech/) and create a new project.
+### 1. Database Deployment (Supabase PostgreSQL)
+1. Sign up on [Supabase.com](https://supabase.com/) and create a free project.
 2. Select PostgreSQL 15+ engine.
-3. In the Neon dashboard, click **Connection Details** and copy the connection parameters.
-4. Execute `database/schema.sql` inside the Neon SQL editor or using `psql`:
-   ```bash
-   psql -h ep-cool-breeze-123.us-east-2.aws.neon.tech -U admin -d intellisphere -f database/schema.sql
-   ```
+3. In the Supabase dashboard, navigate to the **SQL Editor**, create a new query, paste the contents of `database/schema.sql`, and execute it to compile the 42 tables.
+4. Go to **Project Settings > Database** to copy the PostgreSQL host, username, and password parameters.
 
 ### 2. File Storage Setup (Cloudinary)
 1. Create a free account on [Cloudinary](https://cloudinary.com/).
 2. Copy the **API Environment Variable** string (`CLOUDINARY_URL`) from your dashboard.
-3. Keep this URL ready for the Render environment setups.
+3. Keep this URL ready for the Koyeb environment setups.
 
-### 3. Backend Deployment (Render)
-1. Sign up on [Render.com](https://render.com/).
-2. Click **New + > Web Service**.
-3. Link your GitHub repository.
-4. Set the following parameters:
-   - **Name**: `intellisphere-api`
-   - **Language**: `Docker`
-   - **Docker Context**: `.`
+### 3. Backend Deployment (Koyeb)
+1. Sign up on [Koyeb.com](https://koyeb.com/).
+2. Click **Create Service**.
+3. Select **GitHub** as the deployment source and link your `intellisphere` repository.
+4. Configure these parameters:
+   - **Builder**: Select **Docker** (not Buildpack).
    - **Dockerfile Path**: `docker/Dockerfile.server`
-5. Click **Advanced** and populate the Environment Variables list mapping database, Gemini, and Cloudinary keys as listed in the matrix above.
-6. Press **Deploy Web Service**.
+   - **Docker Context**: `.` *(Leave as default/root)*
+   - **Instance Size**: Select **Nano** (free tier instance with 512 MB RAM).
+5. Scroll down to the **Environment Variables** section and add the keys as listed in the matrix above.
+6. Click **Deploy**. Koyeb will compile the Dockerfile and expose a public URL (e.g., `https://intellisphere-xxxx.koyeb.app`).
 
 ### 4. Frontend Deployment (Vercel)
 1. Sign up on [Vercel.com](https://vercel.com/).
@@ -79,7 +76,7 @@ Set these variables in the **Render Web Service > Environment Variables**:
    - **Root Directory**: `client`
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-4. Add the `VITE_API_URL` environment variable pointing to your deployed Render service.
+4. Add the `VITE_API_URL` environment variable pointing to your deployed Koyeb service URL.
 5. Create a `vercel.json` inside `client/` to handle SPA route redirection fallbacks:
    ```json
    {

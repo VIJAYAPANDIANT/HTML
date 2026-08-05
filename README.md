@@ -19,7 +19,7 @@
 ---
 
 > [!NOTE]
-> **Production Ready Platform**: IntelliSphere compiles cleanly using JDK 21+ and Vite, supporting local docker compose orchestrations and cloud hosting deployments (Neon DB, Render, and Vercel).
+> **Production Ready Platform**: IntelliSphere compiles cleanly using JDK 21+ and Vite, supporting local docker compose orchestrations and cloud hosting deployments (Supabase, Koyeb, and Vercel).
 
 ---
 
@@ -211,7 +211,7 @@ cd server
 
 ## 🚀 Production Deployment & Dockerization
 
-For cloud hosting details (Vercel, Render, serverless Neon Database, and Cloudinary storage):
+For cloud hosting details (Vercel, Koyeb, Supabase database, and Cloudinary storage):
 - **Deployment Manual**: [Production Deployment Guide](file:///c:/Intellisphere/docs/deployment_guide.md)
 - **Docker Compose**: Build and run all full-stack services concurrently:
   ```bash
