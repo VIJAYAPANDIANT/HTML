@@ -191,6 +191,16 @@ npm run dev
 ```
 Open `http://localhost:5173` to explore the workspace cockpit.
 
+### 🔑 Seeded Demo Credentials
+Use any of the following pre-seeded credentials to explore the dashboard roles:
+
+| Role | Email Address | Password |
+| :--- | :--- | :--- |
+| **Super Admin** | `superadmin@intellisphere.com` | `superadminpassword` |
+| **Organization Admin** | `admin@intellisphere.com` | `adminpassword` |
+| **Analyst** | `analyst@intellisphere.com` | `analystpassword` |
+| **Operator** | `operator@intellisphere.com` | `operatorpassword` |
+
 ---
 
 ## 🧪 Running Test Suites
