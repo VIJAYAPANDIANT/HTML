@@ -22,7 +22,8 @@ import {
   Compass,
   Truck,
   Upload,
-  Leaf
+  Leaf,
+  Menu
 } from 'lucide-react';
 
 interface AppLayoutProps {
@@ -94,7 +95,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           {isSidebarCollapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
         </button>
 
-        <div>
+        <div className="flex-1 overflow-y-auto min-h-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Logo & Platform Banner */}
           <div className="h-16 flex items-center px-5 border-b border-border space-x-3 overflow-hidden">
             <div className="p-2 bg-primary rounded-xl text-white flex-shrink-0">
@@ -170,7 +171,16 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <header className="sticky top-0 h-16 border-b border-border/80 flex items-center px-8 justify-between bg-card/75 backdrop-blur-lg z-30 flex-shrink-0">
           
           {/* Left Side: Org Switcher & Breadcrumbs */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
+            {/* Sidebar toggle menu button (three lines) */}
+            <button 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
             {/* Org Switcher */}
             <div className="relative">
               <button 
