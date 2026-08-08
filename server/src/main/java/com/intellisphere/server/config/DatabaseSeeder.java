@@ -50,20 +50,29 @@ public class DatabaseSeeder implements CommandLineRunner {
                     userRoleId, "USER", new String[]{"READ"});
 
             // 2. Users
+            UUID superAdminUserId = UUID.randomUUID();
             UUID adminUserId = UUID.randomUUID();
+            UUID analystUserId = UUID.randomUUID();
             UUID operatorUserId = UUID.randomUUID();
+
+            String hashedSuperAdminPass = passwordEncoder.encode("superadminpassword");
             String hashedAdminPass = passwordEncoder.encode("adminpassword");
+            String hashedAnalystPass = passwordEncoder.encode("analystpassword");
             String hashedOperatorPass = passwordEncoder.encode("operatorpassword");
 
             jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
-                    adminUserId, "admin@intellisphere.com", hashedAdminPass, "Admin", "User", "SUPER_ADMIN");
+                    superAdminUserId, "superadmin@intellisphere.com", hashedSuperAdminPass, "Super", "Admin", "SUPER_ADMIN");
+            jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                    adminUserId, "admin@intellisphere.com", hashedAdminPass, "Admin", "User", "ORG_ADMIN");
+            jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                    analystUserId, "analyst@intellisphere.com", hashedAnalystPass, "Analyst", "User", "ANALYST");
             jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
                     operatorUserId, "operator@intellisphere.com", hashedOperatorPass, "Operator", "User", "OPERATOR");
 
             // 3. Organizations
             UUID orgId = UUID.randomUUID();
             jdbcTemplate.update("INSERT INTO organizations (id, name, domain, created_by) VALUES (?, ?, ?, ?)",
-                    orgId, "IntelliSphere Global Solutions", "intellisphere.com", adminUserId);
+                    orgId, "IntelliSphere Global Solutions", "intellisphere.com", superAdminUserId);
 
             // 4. Industry Modules
             UUID agModuleId = UUID.randomUUID();
