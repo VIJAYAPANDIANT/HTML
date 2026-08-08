@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../../components/common/Logo';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -57,7 +58,7 @@ export default function LandingPage() {
       <header className="sticky top-0 h-20 border-b border-[#1E293B] bg-[#0F172A]/80 backdrop-blur-md flex items-center justify-between px-8 md:px-16 max-w-7xl w-full mx-auto z-40">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-[#2563EB] rounded-xl text-white shadow-md shadow-[#2563EB]/20">
-            <Sparkles className="h-5 w-5" />
+            <Logo className="h-5 w-5" />
           </div>
           <div>
             <h1 className="font-bold text-lg tracking-tight text-white leading-none">IntelliSphere</h1>

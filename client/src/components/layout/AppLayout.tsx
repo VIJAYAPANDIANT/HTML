@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Logo from '../common/Logo';
 import { 
   LayoutDashboard, 
   BrainCircuit, 
@@ -116,7 +117,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           {/* Logo & Platform Banner */}
           <div className="h-16 flex items-center px-5 border-b border-border space-x-3 overflow-hidden">
             <div className="p-2 bg-primary rounded-xl text-white flex-shrink-0">
-              <Sparkles className="h-5 w-5" />
+              <Logo className="h-5 w-5" />
             </div>
             {!isSidebarCollapsed && (
               <div className="animate-in fade-in duration-300">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../../components/common/Logo';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,7 +8,6 @@ import {
   Eye, 
   EyeOff, 
   Loader2, 
-  Sparkles, 
   AlertCircle 
 } from 'lucide-react';
 import api from '@/lib/axios';
@@ -73,7 +73,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md bg-card border border-border rounded-xl p-8 shadow-2xl relative z-10">
         <div className="text-center mb-8">
           <div className="inline-flex p-3 bg-primary/10 text-primary rounded-xl mb-4">
-            <Sparkles className="h-6 w-6" />
+            <Logo className="h-6 w-6" />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white">Create Workspace</h1>
           <p className="text-xs text-muted-foreground mt-2">Initialize your SaaS organization and credentials</p>
