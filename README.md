@@ -25,6 +25,12 @@
 > [!NOTE]
 > **Production Ready Platform**: IntelliSphere compiles cleanly using JDK 21+ and Vite, supporting local docker compose orchestrations and cloud hosting deployments (Supabase, Koyeb, and Vercel).
 
+> [!TIP]
+> **Project Resource Links**:
+> - 📄 **[Detailed Project Report (Google Drive)](https://drive.google.com/file/d/1QaOxJhh2lSUHei9JaQzXMNStbYtgy0YR/view?usp=sharing)**
+> - 📊 **[Hackathon Pitch Deck Presentation (Google Drive)](https://docs.google.com/presentation/d/1ER5fJZTWS1ZaSf_tu6VGaTVthKaC3caJ/edit?usp=sharing&ouid=107535823868913786052&rtpof=true&sd=true)**
+> - 🌐 **[Live Demo Website (Vercel)](https://intellisphere-one.vercel.app/)**
+
 ---
 
 ## 📖 Table of Contents
