@@ -1,0 +1,135 @@
+================================================================================
+🌌 INTELLISPHERE - ENTERPRISE DECISION INTELLIGENCE PLATFORM
+================================================================================
+User Guide & Platform Walkthrough: Start to End
+================================================================================
+
+1. INTRODUCTION TO INTELLISPHERE
+--------------------------------------------------------------------------------
+IntelliSphere is a senior-grade, cross-industry Decision Intelligence platform.
+It aggregates data from multiple operational silos—Agriculture, Healthcare, 
+Manufacturing, and Smart Cities—into a single glassmorphic dashboard interface.
+Using Google Gemini AI models, the platform forecasts risks, generates 
+remediation recommendations, and compiles detailed executive PDF reports.
+
+The project is built as a unified full-stack monorepo:
+  * Backend: Java 21 / Spring Boot 3.3.1 (Secured with JWT and CORS filters)
+  * Database: PostgreSQL (Neon Cloud / H2 In-Memory)
+  * Frontend: React 19 / Vite 8.1 / Tailwind CSS v4 / TypeScript
+
+
+2. WHERE TO START (LOGIN & REGISTRATION)
+--------------------------------------------------------------------------------
+To access the platform cockpit, you can choose to either register a new workspace
+or log in using pre-seeded test accounts.
+
+A. Accessing the Platform:
+   Open the frontend application URL in your browser:
+   https://intellisphere-one.vercel.app/
+
+B. Using Seeded Demo Credentials (Recommended):
+   You can log in instantly using any of the following accounts:
+   * Super Admin (Access to all admin functions and control logs):
+     - Email: superadmin@intellisphere.com
+     - Password: superadminpassword
+   * Organization Admin (Access to organization setup and analytics):
+     - Email: admin@intellisphere.com
+     - Password: adminpassword
+   * Analyst (Access to reports, charts, and AI Center):
+     - Email: analyst@intellisphere.com
+     - Password: analystpassword
+   * Operator (Access to smart cities, metrics, and upload logs):
+     - Email: operator@intellisphere.com
+     - Password: operatorpassword
+
+C. Registering a New Workspace:
+   1. Click "Register" on the top right of the landing page.
+   2. Input your First/Last Name, Email, Workspace Name, Role, and Password.
+   3. Click "Register Workspace" to sign up. The system automatically inserts
+      your database record and redirects you to the login screen.
+
+
+3. THE MAIN COCKPIT LAYOUT
+--------------------------------------------------------------------------------
+Once logged in, you will be greeted by the central dashboard. Key layout components:
+  * Sticky Glassmorphic Navbar (Top):
+    - Left: Organization Switcher dropdown and Breadcrumbs path.
+    - Right: Search input field, AI Sparkles indicator, Notification dropdown,
+             Light/Dark mode theme toggler, and User Avatar menu.
+  * Sidebar Navigation (Left):
+    - Collapsible panel containing 13 main modules.
+    - Can be collapsed/expanded via the arrow pill on the border or the 
+      hamburger (three-line) menu button next to the org switcher.
+    - Scrolls dynamically if the browser height is small.
+
+
+4. MODULE WALKTHROUGH (HOW TO USE)
+--------------------------------------------------------------------------------
+
+A. Dashboard (The Main Cockpit):
+   * KPI Metric Cards: Tracks active farms, soil moisture averages, outstanding 
+     AI actions, and critical warnings.
+   * Real-Time Weather Overlay: Click the "Refresh" button to pull live outlook,
+     temperature, humidity, and wind telemetry (synced via Open-Meteo REST API).
+   * Smart Alerts: Lists outstanding anomalies (e.g., Water Shortage, Disease
+     Risk). Click "X" to dismiss an alert.
+   * AI Predictions: Visualizes model confidence levels for simulated outcomes.
+   * Sector Risk Heatmap: Integrates interactive ECharts matrix displaying
+     risk grids per operational zone.
+
+B. AI Center (Generative Chat Console):
+   * Fully interactive chat interface connected to Google Gemini AI models.
+   * Ask questions regarding resource distribution, optimization logic,
+     agricultural forecasts, or municipal risks.
+   * The AI answers dynamically in real time.
+
+C. Organizations Manager:
+   * Displays all active corporate entities in the database.
+   * Click "Create Organization" to register a new tenant workspace division.
+
+D. Industry Modules:
+   * Agriculture: Shows hydration levels, active crop telemetry, and crop logs.
+     Allows downloading the Agricultural Yield PDF report.
+   * Healthcare: Tracks active emergency bed census, doctor schedules, and
+     patient timelines. Allows downloading the Medical PDF Brief.
+   * Manufacturing: Displays live machine line stress indicators, temperature
+     dials, and valve logs. Allows downloading the Production PDF Brief.
+   * Smart City: Displays traffic indexes, water main anomalies, and power grids.
+     Features an interactive Leaflet GIS map with spatial coordinate markers.
+
+E. Sustainability:
+   * Tracks carbon offset parameters, clean energy usage progress bars, and
+     environmental impact logs.
+
+F. Analytics:
+   * Displays historical multi-dimensional line charts plotting telemetry growth
+     indexes.
+
+G. Reports Archive:
+   * Displays a table of generated Excel sheets and PDF analysis files.
+   * View Button (Eye): Opens a modal overlay displaying an AI Executive Summary
+     of the document.
+   * Download Button: Instantly compiles and downloads the mock file directly
+     to your device.
+
+H. Upload Center:
+   * Drag-and-drop or select PDF/Excel telemetry logs to upload to the system.
+
+I. Notifications:
+   * View and read system notifications alerts.
+
+J. Settings:
+   * Modify your account First Name and Last Name.
+   * Save a custom Google Gemini API Key in localStorage to use your own model quota.
+   * Click "Save Settings"—the system saves the details and updates your top-right
+     avatar initials dynamically (e.g., John Doe -> JD).
+
+
+5. BACKEND DATABASE SEEDER SPECIFICS
+--------------------------------------------------------------------------------
+The backend is equipped with a 'DatabaseSeeder.java' script that checks the database
+state on startup. If the database is blank, it automatically populates the 42 SQL
+tables with organization rows, pre-seeded admin accounts, city records, sensors,
+weather grids, and mock reports. This ensures that the platform is ready for demoing
+and code reviews out-of-the-box.
+================================================================================
