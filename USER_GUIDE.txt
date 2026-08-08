@@ -1,0 +1,110 @@
+================================================================================
+🌌 INTELLISPHERE PLATFORM USER GUIDE & DOCUMENTATION
+📖 இண்டெல்லிஸ்பியர் தள பயனர் வழிகாட்டி மற்றும் ஆவணங்கள்
+📖 इंटेलिजेंस स्फीयर प्लेटफॉर्म यूजर गाइड और दस्तावेज़
+================================================================================
+
+================================================================================
+🌐 PART 1: ENGLISH - USER MANUAL
+================================================================================
+
+1. INTRODUCTION & PURPOSE
+IntelliSphere is a modern Enterprise Decision Intelligence Platform. It consolidates
+telemetry and sensors from four major industries—Agriculture, Smart Cities, 
+Healthcare, and Manufacturing—into a central dashboard. Using Google Gemini AI 
+models, it simulates risk vectors, lists recommendations, and generates PDF briefs.
+
+2. WHERE TO START (STEP-BY-STEP)
+   - Step 1: Open the website landing page (e.g., https://intellisphere-one.vercel.app/).
+   - Step 2: Click the "Launch Workspace" or "Sign In" button.
+   - Step 3: Log in using any of the pre-seeded demo accounts:
+     * Super Admin:         superadmin@intellisphere.com / superadminpassword
+     * Organization Admin:  admin@intellisphere.com      / adminpassword
+     * Analyst:             analyst@intellisphere.com    / analystpassword
+     * Operator:            operator@intellisphere.com   / operatorpassword
+   - Step 4: Alternatively, click "Register" to create a fresh custom workspace organization.
+
+3. HOW TO USE THE FEATURES
+   - 📊 Dashboard: View real-time weather overlays, smart alerts, risk heatmaps,
+     and AI predictions.
+   - 🤖 AI Center: Chat interactively with the Gemini AI model to ask analysis 
+     questions or evaluate sensors.
+   - 📁 Upload Center: Drag and drop or browse CSV/JSON telemetry logs to seed 
+     the database.
+   - 📄 Reports: Click the "Eye" icon to read executive summaries of simulated
+     documents, or the "Download" icon to save PDFs/Excel sheets to your device.
+   - ⚙️ Settings: Update profile first/last names, add your custom Gemini API key,
+     and toggle between Light (White) and Dark (Black) modes using the sun/moon icon.
+
+--------------------------------------------------------------------------------
+
+================================================================================
+🌐 PART 2: TAMIL (தமிழ்) - பயனர் வழிகாட்டி
+================================================================================
+
+1. அறிமுகம் மற்றும் நோக்கம்
+இண்டெல்லிஸ்பியர் (IntelliSphere) என்பது ஒரு மேம்பட்ட முடிவு நுண்ணறிவு (Decision 
+Intelligence) தளமாகும். இது விவசாயம், ஸ்மார்ட் நகரங்கள், சுகாதாரம் மற்றும் உற்பத்தி 
+ஆகிய நான்கு முக்கிய துறைகளின் தரவுகளையும் சென்சார்களையும் ஒரே கட்டுப்பாட்டு 
+அறையில் (Dashboard) இணைக்கிறது. கூகிள் ஜெமினி செயற்கை நுண்ணறிவு (Gemini AI) 
+மூலம், இது ஆபத்துகளைக் கணித்து, ஆலோசனைகளை வழங்கி, PDF அறிக்கைகளை உருவாக்குகிறது.
+
+2. எங்கு தொடங்க வேண்டும்? (படிப் படியாக)
+   - படி 1: இணையதளத்தின் முகப்புப் பக்கத்தைத் திறக்கவும் (https://intellisphere-one.vercel.app/).
+   - படி 2: "Launch Workspace" அல்லது "Sign In" பொத்தானைக் கிளிக் செய்யவும்.
+   - படி 3: கீழே கொடுக்கப்பட்டுள்ள ஏதேனும் ஒரு கணக்கைப் பயன்படுத்தி உள்நுழையவும்:
+     * Super Admin:         superadmin@intellisphere.com / superadminpassword
+     * Organization Admin:  admin@intellisphere.com      / adminpassword
+     * Analyst:             analyst@intellisphere.com    / analystpassword
+     * Operator:            operator@intellisphere.com   / operatorpassword
+   - படி 4: புதிய பணியிடத்தை உருவாக்க "Register" பொத்தானைக் கிளிக் செய்து பதிவு செய்யவும்.
+
+3. அம்சங்களை எவ்வாறு பயன்படுத்துவது?
+   - 📊 கட்டுப்பாட்டகம் (Dashboard): நிகழ்நேர வானிலை, ஸ்மார்ட் அலர்ட்டுகள், மண்டல 
+     ஆபத்து வரைபடங்கள் மற்றும் AI பரிந்துரைகளைக் காணலாம்.
+   - 🤖 AI மையம் (AI Center): ஜெமினி AI மாதிரியுடன் உரையாடி தரவு பகுப்பாய்வு 
+     கேள்விகளைக் கேட்கலாம்.
+   - 📁 பதிவேற்ற மையம் (Upload Center): புதிய டெலிமெட்ரி கோப்புகளை (CSV/JSON) 
+     இழுத்து விட்டு பதிவேற்றலாம்.
+   - 📄 அறிக்கைகள் (Reports): சிமுலேஷன் அறிக்கைகளின் விவரங்களைப் படிக்க "கண்" (Eye) 
+     குறியீட்டையும், கோப்பை பதிவிறக்க "Download" பொத்தானையும் கிளிக் செய்யவும்.
+   - ⚙️ அமைப்புகள் (Settings): உங்கள் சுயவிவரப் பெயரை மாற்றலாம், சொந்த ஜெமினி 
+     API சாவியைச் சேர்க்கலாம் மற்றும் பகல்/இரவு (Light/Dark) தீம்களை மாற்றலாம்.
+
+--------------------------------------------------------------------------------
+
+================================================================================
+🌐 PART 3: HINDI (हिंदी) - उपयोगकर्ता निर्देशिका
+================================================================================
+
+1. परिचय और उद्देश्य
+इंटेलिस्फीयर (IntelliSphere) एक आधुनिक डिसीजन इंटेलिजेंस प्लेटफॉर्म है। यह कृषि, 
+स्मार्ट शहरों, स्वास्थ्य सेवा और विनिर्माण से जुड़े डेटा और सेंसर को एक केंद्रीय 
+डैशबोर्ड में जोड़ता है। गूगल जेमिनी एआई (Gemini AI) का उपयोग करके, यह जोखिमों का 
+अनुमान लगाता है, समाधान बताता है और पीडीएफ (PDF) रिपोर्ट तैयार करता है।
+
+2. शुरुआत कैसे करें? (क्रमशः मार्गदर्शिका)
+   - चरण 1: वेबसाइट खोलें (जैसे, https://intellisphere-one.vercel.app/)।
+   - चरण 2: "Launch Workspace" या "Sign In" बटन पर क्लिक करें।
+   - चरण 3: लॉगिन करने के लिए नीचे दिए गए डेमो खातों का उपयोग करें:
+     * Super Admin:         superadmin@intellisphere.com / superadminpassword
+     * Organization Admin:  admin@intellisphere.com      / adminpassword
+     * Analyst:             analyst@intellisphere.com    / analystpassword
+     * Operator:            operator@intellisphere.com   / operatorpassword
+   - चरण 4: नया खाता बनाने के लिए "Register" पर क्लिक करके पंजीकरण करें।
+
+3. सुविधाओं का उपयोग कैसे करें?
+   - 📊 डैशबोर्ड (Dashboard): वास्तविक समय मौसम की स्थिति, स्मार्ट अलर्ट और 
+     एआई भविष्यवाणियां देखें।
+   - 🤖 एआई सेंटर (AI Center): डेटा विश्लेषण और सेंसर संबंधी प्रश्नों के उत्तर 
+     पाने के लिए जेमिनी एआई के साथ चैट करें।
+   - 📁 अपलोड सेंटर (Upload Center): डेटाबेस लोड करने के लिए CSV या JSON 
+     फ़ाइलों को ड्रैग करके अपलोड करें।
+   - 📄 रिपोर्ट (Reports): रिपोर्ट की समीक्षा करने के लिए "आंख" (Eye) आइकन पर 
+     और अपने डिवाइस पर सेव करने के लिए "Download" बटन पर क्लिक करें।
+   - ⚙️ सेटिंग्स (Settings): अपना नाम बदलें, अपनी व्यक्तिगत जेमिनी एपीआई की 
+     (API Key) जोड़ें और लाइट/डार्क थीम बदलें।
+
+================================================================================
+🌌 END OF DOCUMENT / ஆவணத்தின் முடிவு / दस्तावेज़ का अंत
+================================================================================
