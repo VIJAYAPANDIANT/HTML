@@ -112,7 +112,7 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-20">
           <button 
             onClick={() => navigate('/login')}
-            className="px-8 py-3 bg-[#2563EB] hover:bg-[#2563EB]/95 text-white font-bold rounded-lg transition-all shadow-lg shadow-[#2563EB]/20 flex items-center space-x-2 justify-center group"
+            className="px-8 py-3 bg-[#2563EB] hover:bg-[#2563EB]/95 text-white font-bold rounded-lg transition-all shadow-lg shadow-[#2563EB]/20 flex items-center space-x-2 justify-center group animate-glow-pulse"
           >
             <span>Launch Workspace</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />

@@ -199,3 +199,42 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* --- 10/10 PREMIUM UI POLISHES --- */
+
+/* Smooth Transition across theme updates */
+*, *::before, *::after {
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Glowing Pulsing Button Outline */
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 2s infinite;
+}
