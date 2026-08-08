@@ -41,6 +41,23 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
+  // Load user from localStorage
+  const [user] = useState(() => {
+    const stored = localStorage.getItem('intellisphere_user');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {}
+    }
+    return { firstName: 'Admin', lastName: 'User', email: 'admin@intellisphere.com' };
+  });
+
+  const getInitials = () => {
+    const first = user.firstName ? user.firstName.charAt(0) : 'A';
+    const last = user.lastName ? user.lastName.charAt(0) : 'U';
+    return (first + last).toUpperCase();
+  };
+
   // Mock workspace organizations
   const organizations = [
     { name: 'IntelliSphere Global', code: 'ISG' },
@@ -328,7 +345,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               >
                 <div className="relative">
                   <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-background font-bold text-xs ring-2 ring-primary/20">
-                    JD
+                    {getInitials()}
                   </div>
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-secondary border-2 border-card" />
                 </div>
