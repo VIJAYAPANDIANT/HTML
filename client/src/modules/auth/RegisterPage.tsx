@@ -124,7 +124,7 @@ export default function RegisterPage() {
               type="email" 
               {...register('email')}
               aria-invalid={errors.email ? 'true' : 'false'}
-              className={`w-full px-4 py-2bg bg-background border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary ${
+              className={`w-full px-4 py-2 bg-background border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary ${
                 errors.email ? 'border-destructive' : 'border-border'
               }`}
               placeholder="name@company.com" 
