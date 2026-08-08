@@ -1,135 +1,173 @@
 ================================================================================
-🌌 INTELLISPHERE - ENTERPRISE DECISION INTELLIGENCE PLATFORM
+🌌 INTELLISPHERE - COMPLETE USER GUIDE (ENGLISH & தமிழ்)
 ================================================================================
-User Guide & Platform Walkthrough: Start to End
+File: website_guide.txt
+Purpose: Deep architectural walkthrough & operational guide from start to end.
 ================================================================================
 
-1. INTRODUCTION TO INTELLISPHERE
 --------------------------------------------------------------------------------
-IntelliSphere is a senior-grade, cross-industry Decision Intelligence platform.
-It aggregates data from multiple operational silos—Agriculture, Healthcare, 
-Manufacturing, and Smart Cities—into a single glassmorphic dashboard interface.
-Using Google Gemini AI models, the platform forecasts risks, generates 
-remediation recommendations, and compiles detailed executive PDF reports.
-
-The project is built as a unified full-stack monorepo:
-  * Backend: Java 21 / Spring Boot 3.3.1 (Secured with JWT and CORS filters)
-  * Database: PostgreSQL (Neon Cloud / H2 In-Memory)
-  * Frontend: React 19 / Vite 8.1 / Tailwind CSS v4 / TypeScript
-
-
-2. WHERE TO START (LOGIN & REGISTRATION)
---------------------------------------------------------------------------------
-To access the platform cockpit, you can choose to either register a new workspace
-or log in using pre-seeded test accounts.
-
-A. Accessing the Platform:
-   Open the frontend application URL in your browser:
-   https://intellisphere-one.vercel.app/
-
-B. Using Seeded Demo Credentials (Recommended):
-   You can log in instantly using any of the following accounts:
-   * Super Admin (Access to all admin functions and control logs):
-     - Email: superadmin@intellisphere.com
-     - Password: superadminpassword
-   * Organization Admin (Access to organization setup and analytics):
-     - Email: admin@intellisphere.com
-     - Password: adminpassword
-   * Analyst (Access to reports, charts, and AI Center):
-     - Email: analyst@intellisphere.com
-     - Password: analystpassword
-   * Operator (Access to smart cities, metrics, and upload logs):
-     - Email: operator@intellisphere.com
-     - Password: operatorpassword
-
-C. Registering a New Workspace:
-   1. Click "Register" on the top right of the landing page.
-   2. Input your First/Last Name, Email, Workspace Name, Role, and Password.
-   3. Click "Register Workspace" to sign up. The system automatically inserts
-      your database record and redirects you to the login screen.
-
-
-3. THE MAIN COCKPIT LAYOUT
---------------------------------------------------------------------------------
-Once logged in, you will be greeted by the central dashboard. Key layout components:
-  * Sticky Glassmorphic Navbar (Top):
-    - Left: Organization Switcher dropdown and Breadcrumbs path.
-    - Right: Search input field, AI Sparkles indicator, Notification dropdown,
-             Light/Dark mode theme toggler, and User Avatar menu.
-  * Sidebar Navigation (Left):
-    - Collapsible panel containing 13 main modules.
-    - Can be collapsed/expanded via the arrow pill on the border or the 
-      hamburger (three-line) menu button next to the org switcher.
-    - Scrolls dynamically if the browser height is small.
-
-
-4. MODULE WALKTHROUGH (HOW TO USE)
+PART 1: ENGLISH GUIDE
 --------------------------------------------------------------------------------
 
-A. Dashboard (The Main Cockpit):
-   * KPI Metric Cards: Tracks active farms, soil moisture averages, outstanding 
-     AI actions, and critical warnings.
-   * Real-Time Weather Overlay: Click the "Refresh" button to pull live outlook,
-     temperature, humidity, and wind telemetry (synced via Open-Meteo REST API).
-   * Smart Alerts: Lists outstanding anomalies (e.g., Water Shortage, Disease
-     Risk). Click "X" to dismiss an alert.
-   * AI Predictions: Visualizes model confidence levels for simulated outcomes.
-   * Sector Risk Heatmap: Integrates interactive ECharts matrix displaying
-     risk grids per operational zone.
-
-B. AI Center (Generative Chat Console):
-   * Fully interactive chat interface connected to Google Gemini AI models.
-   * Ask questions regarding resource distribution, optimization logic,
-     agricultural forecasts, or municipal risks.
-   * The AI answers dynamically in real time.
-
-C. Organizations Manager:
-   * Displays all active corporate entities in the database.
-   * Click "Create Organization" to register a new tenant workspace division.
-
-D. Industry Modules:
-   * Agriculture: Shows hydration levels, active crop telemetry, and crop logs.
-     Allows downloading the Agricultural Yield PDF report.
-   * Healthcare: Tracks active emergency bed census, doctor schedules, and
-     patient timelines. Allows downloading the Medical PDF Brief.
-   * Manufacturing: Displays live machine line stress indicators, temperature
-     dials, and valve logs. Allows downloading the Production PDF Brief.
-   * Smart City: Displays traffic indexes, water main anomalies, and power grids.
-     Features an interactive Leaflet GIS map with spatial coordinate markers.
-
-E. Sustainability:
-   * Tracks carbon offset parameters, clean energy usage progress bars, and
-     environmental impact logs.
-
-F. Analytics:
-   * Displays historical multi-dimensional line charts plotting telemetry growth
-     indexes.
-
-G. Reports Archive:
-   * Displays a table of generated Excel sheets and PDF analysis files.
-   * View Button (Eye): Opens a modal overlay displaying an AI Executive Summary
-     of the document.
-   * Download Button: Instantly compiles and downloads the mock file directly
-     to your device.
-
-H. Upload Center:
-   * Drag-and-drop or select PDF/Excel telemetry logs to upload to the system.
-
-I. Notifications:
-   * View and read system notifications alerts.
-
-J. Settings:
-   * Modify your account First Name and Last Name.
-   * Save a custom Google Gemini API Key in localStorage to use your own model quota.
-   * Click "Save Settings"—the system saves the details and updates your top-right
-     avatar initials dynamically (e.g., John Doe -> JD).
-
-
-5. BACKEND DATABASE SEEDER SPECIFICS
+1. INTRODUCTION & CORE PURPOSE
 --------------------------------------------------------------------------------
-The backend is equipped with a 'DatabaseSeeder.java' script that checks the database
-state on startup. If the database is blank, it automatically populates the 42 SQL
-tables with organization rows, pre-seeded admin accounts, city records, sensors,
-weather grids, and mock reports. This ensures that the platform is ready for demoing
-and code reviews out-of-the-box.
+IntelliSphere is a state-of-the-art Enterprise Decision Intelligence Platform.
+It bridges operational silos across four major industry sectors:
+  - Agriculture (Soil moisture, hydration levels, crop anomaly alerts).
+  - Healthcare (Clinic flows, patient volumes, medical predictions).
+  - Manufacturing (Asset monitoring, machine joint stress telemetry).
+  - Smart Cities (Water main leakage alerts, energy load forecasts).
+
+The platform uses Google Gemini AI models to analyze logs, suggest risk
+mitigations, and compile cryptographic PDF reports.
+
+2. RUNNING THE PLATFORM (START TO END)
+--------------------------------------------------------------------------------
+To run the full-stack system locally, follow this progression:
+
+  STEP 1: Database Setup
+  - The platform uses a PostgreSQL database (Neon Server in production, H2 in tests).
+  - First, execute the SQL schema inside `database/schema.sql` to initialize 
+    the 42 tables (including organizations, users, telemetry, and alerts).
+
+  STEP 2: Start the Backend (Spring Boot Server)
+  - Navigate to the `server/` directory.
+  - Set your JAVA_HOME environment variable to JDK 21+.
+  - Start the Spring Boot application using:
+    Windows PowerShell: `$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1"; .\mvnw.cmd spring-boot:run`
+  - On startup, the `DatabaseSeeder.java` scans the tables. If empty, it 
+    automatically seeds organizations, simulated telemetry records, and 
+    4 demo role-based users.
+
+  STEP 3: Start the Frontend (Vite Client)
+  - Navigate to the `client/` directory.
+  - Run `npm install --legacy-peer-deps` to install dependencies.
+  - Start the local dev server using: `npm run dev`
+  - Open `http://localhost:5173` in your browser.
+
+3. HOW TO USE THE SYSTEM (USER FLOW)
+--------------------------------------------------------------------------------
+  FLOW A: Logging In
+  - In the browser, you will arrive at the Landing Page. Click "Sign In" or "Launch Workspace".
+  - Log in using one of the pre-seeded demo accounts:
+    * Super Admin: `superadmin@intellisphere.com` / `superadminpassword`
+    * Org Admin:   `admin@intellisphere.com` / `adminpassword`
+    * Analyst:     `analyst@intellisphere.com` / `analystpassword`
+    * Operator:    `operator@intellisphere.com` / `operatorpassword`
+
+  FLOW B: Exploring the Dashboard
+  - Once logged in, you will see the **Decision AI Dashboard**.
+  - Review the 4 Metric Cards at the top: Total Farms, Soil Hydration, AI Recommendations, and Critical Warnings.
+  - Check the **Real-time Weather Overlay** card (data is fetched directly from the Open-Meteo REST service).
+  - Review the **Smart Alerts** and **AI Predictions** feed showing anomalies.
+
+  FLOW C: Sector Navigation & GIS Mapping
+  - Use the Sidebar navigation to inspect specific modules:
+    * **Agriculture**: Interactive map showing farm markers. Click a farm marker to view temperature and crop health indexes.
+    * **Smart City**: Map markers showing municipal water mains and electrical grids.
+    * **Healthcare / Manufacturing**: Live charts tracking medical logs and machine telemetry.
+
+  FLOW D: AI Command Center (Chat Engine)
+  - Click on **AI Center** in the sidebar.
+  - Type queries like "Show me crop recommendation details" or "Suggest mitigation strategy for Water Leak".
+  - The model queries your database telemetry, sends a contextual prompt to Gemini AI, and streams the reasoning response back to the chat view.
+
+  FLOW E: Exporting Reports
+  - Click on **Reports** in the sidebar.
+  - You will see a list of pre-compiled system documents.
+  - Click the **Eye Icon** to open a modal preview displaying metadata and an AI Executive Summary.
+  - Click the **Blue Download Button** to generate and download the PDF/Excel sheet directly to your local device.
+
+  FLOW F: Custom Configurations
+  - Navigate to **Settings** in the sidebar.
+  - Modify your First Name, Last Name, or insert a personal Gemini API Key.
+  - Click **Save Settings** to write updates to local storage. Your avatar initials in the header (e.g. JD -> VP) will update dynamically.
+
+
+================================================================================
+பகுதி 2: தமிழ் வழிகாட்டி (TAMIL GUIDE)
+================================================================================
+
+1. அறிமுகம் மற்றும் முதன்மை நோக்கம்
+--------------------------------------------------------------------------------
+இன்டெலிஸ்பியர் (IntelliSphere) என்பது ஒரு அதிநவீன நிறுவன முடிவு நுண்ணறிவு தளமாகும் 
+(Enterprise Decision Intelligence Platform). இது நான்கு முக்கிய தொழில் துறைகளின் 
+தரவுகளை ஒருங்கிணைக்கிறது:
+  - விவசாயம் (மண் ஈரப்பதம், நீரேற்ற அளவுகள், பயிர் நோய் எச்சரிக்கைகள்).
+  - சுகாதாரம் (மருத்துவமனை நோயாளி ஓட்டம், மருத்துவ கணிப்புகள்).
+  - உற்பத்தி (இயந்திரங்களின் உதிரிபாக கண்காணிப்பு, செயல்பாட்டு அளவீடுகள்).
+  - ஸ்மார்ட் சிட்டி (குடிநீர் குழாய் கசிவு எச்சரிக்கைகள், மின்சார விநியோக கணிப்புகள்).
+
+இந்த இணையதளம் கூகுள் ஜெமினி AI (Google Gemini AI) மாதிரிகளைப் பயன்படுத்திப் பதிவுகளை 
+ஆராய்ந்து, அபாயங்களைக் குறைப்பதற்கான வழிகளைப் பரிந்துரைக்கிறது மற்றும் PDF அறிக்கைகளை 
+உருவாக்குகிறது.
+
+2. இணையதளத்தை இயக்குவது எப்படி? (தொடக்கம் முதல் முடிவு வரை)
+--------------------------------------------------------------------------------
+இந்த அமைப்பை உங்கள் கணினியில் உள்ளூர் சர்வர் மூலம் இயக்க கீழே உள்ள படிகளைப் பின்பற்றவும்:
+
+  படி 1: தரவுத்தள அமைப்பு (Database Setup)
+  - இத்தளம் PostgreSQL தரவுத்தளத்தைப் பயன்படுத்துகிறது.
+  - முதலில் `database/schema.sql` கோப்பில் உள்ள SQL கட்டளைகளை இயக்கி 42 அட்டவணைகளை 
+    (Tables) உருவாக்க வேண்டும்.
+
+  படி 2: பின்தளத்தை இயக்குதல் (Spring Boot Server)
+  - `server/` கோப்புறைக்குச் செல்லவும்.
+  - உங்கள் கணினியில் ஜாவா பதிப்பு JDK 21+ இருப்பதை உறுதி செய்யவும்.
+  - ஸ்பிரிங் பூட் சேவையை இயக்க பின்வரும் கட்டளையைப் பயன்படுத்தவும்:
+    PowerShell: `$env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1"; .\mvnw.cmd spring-boot:run`
+  - சர்வர் தொடங்கும் போது, தரவுத்தளத்தில் பதிவுகள் ஏதும் இல்லை என்றால் `DatabaseSeeder.java` 
+    கோப்பு தானாகவே மாதிரித் தரவுகளையும் 4 சோதனை கணக்குகளையும் உருவாக்கும்.
+
+  படி 3: முன்தளத்தை இயக்குதல் (Vite React Client)
+  - `client/` கோப்புறைக்குச் செல்லவும்.
+  - `npm install --legacy-peer-deps` கட்டளை மூலம் தேவையான நூலகங்களைப் பதிவிறக்கவும்.
+  - முன்தள சேவையைத் தொடங்க: `npm run dev`
+  - உங்கள் பிரவுசரில் `http://localhost:5173` பக்கத்தைத் திறக்கவும்.
+
+3. இணையதளத்தை எவ்வாறு பயன்படுத்துவது? (பயனர் வழிமுறை)
+--------------------------------------------------------------------------------
+  வழிமுறை A: உள்நுழைதல் (Login)
+  - இணையதள முகப்பு பக்கத்தில் "Sign In" அல்லது "Launch Workspace" என்பதை அழுத்தவும்.
+  - பின்வரும் சோதனை கணக்குகளில் ஒன்றை உள்ளிட்டு உள்நுழையவும்:
+    * சூப்பர் அட்மின் (Super Admin): `superadmin@intellisphere.com` / `superadminpassword`
+    * நிர்வாகி (Org Admin):        `admin@intellisphere.com` / `adminpassword`
+    * ஆய்வாளர் (Analyst):         `analyst@intellisphere.com` / `analystpassword`
+    * ஆபரேட்டர் (Operator):        `operator@intellisphere.com` / `operatorpassword`
+
+  வழிமுறை B: முகப்பு பலகை (Dashboard Navigation)
+  - உள்நுழைந்ததும் **Decision AI Dashboard** பக்கத்தைக் காண்பீர்கள்.
+  - மேல் பகுதியில் விவசாயம், நீரேற்ற அளவுகள், AI பரிந்துரைகள் மற்றும் அவசர எச்சரிக்கைகளைக் 
+    காட்டும் 4 கார்டுகளைப் பார்க்கலாம்.
+  - **Real-time Weather Overlay** கார்டில் தற்போதைய வானிலை தகவலைப் பார்க்கலாம் (இவை Open-Meteo 
+    வானிலை சேவையிலிருந்து நேரடியாகப் பெறப்படுகின்றன).
+
+  வழிமுறை C: துறைசார் கண்காணிப்பு மற்றும் வரைபடங்கள் (GIS Mapping)
+  - இடதுபுற மெனுவைப் பயன்படுத்தி குறிப்பிட்ட துறைகளைக் கண்காணிக்கலாம்:
+    * **Agriculture (விவசாயம்)**: ஊடாடும் வரைபடம் (Interactive Leaflet Map) மூலமாக விவசாய 
+      நிலங்களைக் கண்காணிக்கலாம். வரைபடக் குறியீட்டை அழுத்தினால் நிலத்தின் வெப்பநிலை மற்றும் 
+      பயிர் ஆரோக்கிய விவரங்கள் தோன்றும்.
+    * **Smart City (ஸ்மார்ட் சிட்டி)**: வரைபடத்தில் குடிநீர் குழாய்கள் மற்றும் மின் கட்டமைப்பு 
+      இடங்களைக் கண்காணிக்கலாம்.
+
+  வழிமுறை D: AI கட்டளை மையம் (AI Chat Engine)
+  - மெனுவில் உள்ள **AI Center** பக்கத்திற்குச் செல்லவும்.
+  - "Show me crop recommendation details" அல்லது "Suggest mitigation strategy for Water Leak" 
+    என்று அரட்டையில் (Chat) கேட்கவும்.
+  - இந்த தளம் உங்கள் தரவுத்தள விவரங்களை ஜெமினி AI-க்கு அனுப்பி, பொருத்தமான தீர்வைக் 
+    கணினியில் உடனுக்குடன் காண்பிக்கும்.
+
+  வழிமுறை E: அறிக்கைகளைப் பதிவிறக்குதல் (Exporting Reports)
+  - மெனுவில் உள்ள **Reports** பக்கத்திற்குச் செல்லவும்.
+  - சேமிக்கப்பட்ட அறிக்கைகளின் பட்டியலைக் காண்பீர்கள்.
+  - **கண் குறியீட்டை (Eye Icon)** அழுத்தினால், அறிக்கையின் சுருக்கத்தை ஒரு பாப்-அப் (Modal) 
+    வழியாகக் காணலாம்.
+  - **நீல நிற பதிவிறக்க பொத்தானை (Download Button)** அழுத்தினால், அறிக்கை கோப்பு (PDF/Excel) 
+    உடனடியாக உங்கள் கணினியில் பதிவிறக்கப்படும்.
+
+  வழிமுறை F: அமைப்புகள் (Settings Customization)
+  - மெனுவில் உள்ள **Settings** பக்கத்திற்குச் செல்லவும்.
+  - உங்கள் பெயர் விவரங்களை மாற்றலாம் அல்லது உங்கள் தனிப்பட்ட Gemini API Key-ஐப் பதியலாம்.
+  - **Save Settings** பொத்தானை அழுத்திச் சேமிக்கவும். நீங்கள் பெயரை மாற்றியதும், மேல் வலது 
+    மூலையில் உள்ள உங்கள் பெயரின் முதலெழுத்துக் குறியீடு (JD -> VP) உடனடியாக மாறிவிடும்.
 ================================================================================
