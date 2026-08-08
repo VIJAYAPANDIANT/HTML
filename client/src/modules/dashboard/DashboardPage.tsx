@@ -138,7 +138,7 @@ export default function DashboardPage() {
         ].map((card) => (
           <div 
             key={card.title} 
-            className={`premium-card relative overflow-hidden group cursor-pointer ${card.color}`}
+            className={`premium-card p-6 relative overflow-hidden group cursor-pointer ${card.color}`}
           >
             {/* Visual glow background inside hover group */}
             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -147,7 +147,7 @@ export default function DashboardPage() {
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{card.title}</span>
               <card.icon className="h-5 w-5" />
             </div>
-            <div className="text-3xl font-extrabold text-white tracking-tight">{card.value}</div>
+            <div className="text-3xl font-extrabold text-foreground tracking-tight">{card.value}</div>
             <span className="text-[10px] text-muted-foreground block mt-1.5">{card.desc}</span>
           </div>
         ))}
@@ -164,7 +164,7 @@ export default function DashboardPage() {
 
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+                <h3 className="text-lg font-bold text-foreground flex items-center space-x-2">
                   <CloudSun className="h-5.5 w-5.5 text-accent animate-pulse" />
                   <span>Real-time Weather Overlay</span>
                 </h3>
@@ -187,19 +187,19 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div className="bg-background border border-border rounded-lg p-3">
                   <span className="text-[9px] text-muted-foreground uppercase font-bold block">Outlook</span>
-                  <span className="text-sm font-bold text-white mt-1 block">{weather.outlook}</span>
+                  <span className="text-sm font-bold text-foreground mt-1 block">{weather.outlook}</span>
                 </div>
                 <div className="bg-background border border-border rounded-lg p-3">
                   <span className="text-[9px] text-muted-foreground uppercase font-bold block">Temperature</span>
-                  <span className="text-sm font-bold text-white mt-1 block">{weather.temperature}</span>
+                  <span className="text-sm font-bold text-foreground mt-1 block">{weather.temperature}</span>
                 </div>
                 <div className="bg-background border border-border rounded-lg p-3">
                   <span className="text-[9px] text-muted-foreground uppercase font-bold block">Humidity</span>
-                  <span className="text-sm font-bold text-white mt-1 block">{weather.humidity}</span>
+                  <span className="text-sm font-bold text-foreground mt-1 block">{weather.humidity}</span>
                 </div>
                 <div className="bg-background border border-border rounded-lg p-3">
                   <span className="text-[9px] text-muted-foreground uppercase font-bold block">Wind Speed</span>
-                  <span className="text-sm font-bold text-white mt-1 block">{weather.windSpeed}</span>
+                  <span className="text-sm font-bold text-foreground mt-1 block">{weather.windSpeed}</span>
                 </div>
               </div>
             ) : (
@@ -209,7 +209,7 @@ export default function DashboardPage() {
 
           {/* Smart Alerts Feed */}
           <div className="premium-card">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center justify-between">
               <span className="flex items-center space-x-2">
                 <AlertTriangle className="h-5.5 w-5.5 text-destructive" />
                 <span>Smart Alerts</span>
@@ -222,7 +222,7 @@ export default function DashboardPage() {
             {alerts.length === 0 ? (
               <div className="h-32 flex flex-col items-center justify-center p-6 border border-dashed border-border rounded-lg text-center bg-card/25">
                 <CheckCircle2 className="h-8 w-8 text-secondary mb-2" />
-                <h4 className="font-bold text-sm text-white">All Clear</h4>
+                <h4 className="font-bold text-sm text-foreground">All Clear</h4>
                 <p className="text-xs text-muted-foreground mt-0.5">No unresolved risk anomalies logged.</p>
               </div>
             ) : (
@@ -239,8 +239,8 @@ export default function DashboardPage() {
                         {alert.severity}
                       </span>
                       <div>
-                        <span className="font-bold text-white block">{alert.category}</span>
-                        <p className="text-slate-300 mt-1 leading-normal">{alert.message}</p>
+                        <span className="font-bold text-foreground block">{alert.category}</span>
+                        <p className="text-muted-foreground mt-1 leading-normal">{alert.message}</p>
                       </div>
                     </div>
 
@@ -262,7 +262,7 @@ export default function DashboardPage() {
 
           {/* Risk Heatmap grid */}
           <div className="premium-card">
-            <h3 className="text-lg font-bold text-white mb-2">Sector Risk Heatmap</h3>
+            <h3 className="text-lg font-bold text-foreground mb-2">Sector Risk Heatmap</h3>
             <p className="text-xs text-muted-foreground mb-4">Coordinates NPK indexes, pest risks, and moisture ratios per active zone.</p>
             <div className="h-64">
               <ReactECharts option={heatmapOption} style={{ height: '100%' }} />
@@ -276,7 +276,7 @@ export default function DashboardPage() {
           
           {/* AI Predictions */}
           <div className="premium-card space-y-4">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+            <h3 className="text-lg font-bold text-foreground flex items-center space-x-2">
               <BrainCircuit className="h-5.5 w-5.5 text-primary" />
               <span>AI Predictions</span>
             </h3>
@@ -285,10 +285,10 @@ export default function DashboardPage() {
               {recentPredictions.map((pred) => (
                 <div key={pred.id} className="bg-background border border-border rounded-lg p-3 space-y-1.5 text-xs">
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-white uppercase text-[10px] tracking-wide">{pred.model}</span>
+                    <span className="font-bold text-foreground uppercase text-[10px] tracking-wide">{pred.model}</span>
                     <span className="text-[10px] text-secondary font-bold">Confidence: {pred.confidence}</span>
                   </div>
-                  <p className="text-slate-400 leading-normal text-[11px]">{pred.outcome}</p>
+                  <p className="text-muted-foreground leading-normal text-[11px]">{pred.outcome}</p>
                 </div>
               ))}
             </div>
@@ -296,12 +296,12 @@ export default function DashboardPage() {
 
           {/* AI Recommendations */}
           <div className="premium-card space-y-4">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+            <h3 className="text-lg font-bold text-foreground flex items-center space-x-2">
               <Sparkles className="h-5.5 w-5.5 text-accent" />
               <span>AI Recommendations</span>
             </h3>
 
-            <ul className="space-y-3 text-xs text-slate-300">
+            <ul className="space-y-3 text-xs text-foreground/80">
               {aiRecommendations.map((rec, i) => (
                 <li key={i} className="flex items-start space-x-2.5 bg-background border border-border p-2.5 rounded-lg">
                   <ChevronRight className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
@@ -313,7 +313,7 @@ export default function DashboardPage() {
 
           {/* Ingestion logs / Uploads tracker */}
           <div className="premium-card space-y-4">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+            <h3 className="text-lg font-bold text-foreground flex items-center space-x-2">
               <UploadCloud className="h-5.5 w-5.5 text-muted-foreground" />
               <span>Latest Ingestion Logs</span>
             </h3>
@@ -324,7 +324,7 @@ export default function DashboardPage() {
                   <div className="flex items-center space-x-2">
                     <FileText className="h-4 w-4 text-primary" />
                     <div>
-                      <span className="font-bold text-white block max-w-[120px] truncate" title={up.name}>
+                      <span className="font-bold text-foreground block max-w-[120px] truncate" title={up.name}>
                         {up.name}
                       </span>
                       <span className="text-[9px] text-muted-foreground block mt-0.5">{up.size}</span>
