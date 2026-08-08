@@ -28,10 +28,49 @@ public class DatabaseSeeder implements CommandLineRunner {
                 System.out.println("No data found in 'roles' table. Seeding realistic enterprise demo dataset...");
                 seedData();
             } else {
-                System.out.println("Database already contains data or 'roles' table is not empty. Skipping seeder.");
+                System.out.println("Database already contains data or 'roles' table is not empty. Checking for missing demo users...");
+                checkAndSeedDemoUsers();
             }
         } catch (Exception e) {
             System.err.println("DatabaseSeeder execution failed or skipped: " + e.getMessage());
+        }
+    }
+
+    private void checkAndSeedDemoUsers() {
+        try {
+            Integer userCount = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM users WHERE email = 'superadmin@intellisphere.com'", Integer.class);
+            if (userCount == null || userCount == 0) {
+                System.out.println("Demo users are missing. Seeding multi-role demo accounts...");
+                
+                UUID superAdminUserId = UUID.randomUUID();
+                UUID adminUserId = UUID.randomUUID();
+                UUID analystUserId = UUID.randomUUID();
+                UUID operatorUserId = UUID.randomUUID();
+
+                String hashedSuperAdminPass = passwordEncoder.encode("superadminpassword");
+                String hashedAdminPass = passwordEncoder.encode("adminpassword");
+                String hashedAnalystPass = passwordEncoder.encode("analystpassword");
+                String hashedOperatorPass = passwordEncoder.encode("operatorpassword");
+
+                jdbcTemplate.update("DELETE FROM users WHERE email IN (?, ?, ?, ?)",
+                        "superadmin@intellisphere.com", "admin@intellisphere.com", "analyst@intellisphere.com", "operator@intellisphere.com");
+
+                jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                        superAdminUserId, "superadmin@intellisphere.com", hashedSuperAdminPass, "Super", "Admin", "SUPER_ADMIN");
+                jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                        adminUserId, "admin@intellisphere.com", hashedAdminPass, "Admin", "User", "ORG_ADMIN");
+                jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                        analystUserId, "analyst@intellisphere.com", hashedAnalystPass, "Analyst", "User", "ANALYST");
+                jdbcTemplate.update("INSERT INTO users (id, email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)",
+                        operatorUserId, "operator@intellisphere.com", hashedOperatorPass, "Operator", "User", "OPERATOR");
+
+                System.out.println("Demo accounts seeded successfully.");
+            } else {
+                System.out.println("Demo users already present in database.");
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to seed demo users: " + e.getMessage());
         }
     }
 
