@@ -14,6 +14,10 @@
     <br />
     Optimize resource flows, forecast municipal risks, and generate predictive analytics briefs using Gemini AI models.
   </p>
+
+  <br />
+  <img src="assets/landing_page.png" alt="IntelliSphere Hero Showcase" width="850" style="border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+  <br />
 </div>
 
 ---
