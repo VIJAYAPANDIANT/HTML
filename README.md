@@ -35,14 +35,15 @@
 5. [System Flow Architecture](#-system-flow-architecture)
 6. [Tech Stack & Dependencies](#-tech-stack--dependencies)
 7. [Database Schema (42 Tables)](#-database-schema-42-tables)
-8. [Core Features](#-core-features)
-9. [REST APIs Reference](#-rest-apis-reference)
-10. [Quick Start & Installation](#-quick-start--installation)
-11. [Running Test Suites](#-running-test-suites)
-12. [Production Deployment & Dockerization](#-production-deployment--dockerization)
-13. [Future Scope](#-future-scope)
-14. [License](#-license)
-15. [Contributors](#-contributors)
+8. [Role-Based Access Control (RBAC) Matrix](#-role-based-access-control-rbac-matrix)
+9. [Core Features](#-core-features)
+10. [REST APIs Reference](#-rest-apis-reference)
+11. [Quick Start & Installation](#-quick-start--installation)
+12. [Running Test Suites](#-running-test-suites)
+13. [Production Deployment & Dockerization](#-production-deployment--dockerization)
+14. [Future Scope](#-future-scope)
+15. [License](#-license)
+16. [Contributors](#-contributors)
 
 ---
 
@@ -129,6 +130,18 @@ The platform schema manages relational tables mapping:
 
 ---
 
+## 🔐 Role-Based Access Control (RBAC) Matrix
+IntelliSphere implements strict workspace division of concerns using Spring Security authentication. The seeded demo roles map to the following capabilities:
+
+| Role | Target Persona | Access Level | Primary Scope |
+| :--- | :--- | :--- | :--- |
+| `SUPER_ADMIN` | Platform Owner | Full Read/Write | System-wide organizations management, root audit logs, global configuration. |
+| `ORG_ADMIN` | Corporate Tenant | Read/Write | Specific tenant workspace adjustments, API keys configurations, PDF generation. |
+| `ANALYST` | Data Scientist | Read/Simulate | Running AI prediction algorithms, telemetry dashboard, charts mapping. |
+| `OPERATOR` | Municipal Controller | Read/Acknowledge | Telemetry monitoring, GIS mapping, dismissing system alarms and alerts. |
+
+---
+
 ## ⚙️ Core Features
 
 ### 1. Flagship AI Command Center (`/ai-center`)
@@ -204,6 +217,9 @@ Use any of the following pre-seeded credentials to explore the dashboard roles:
 | **Organization Admin** | `admin@intellisphere.com` | `adminpassword` |
 | **Analyst** | `analyst@intellisphere.com` | `analystpassword` |
 | **Operator** | `operator@intellisphere.com` | `operatorpassword` |
+
+> [!IMPORTANT]
+> **Dynamic Database Seeding**: On startup, the backend seeder (`DatabaseSeeder.java`) automatically verifies if these demo users exist in the `users` table. If any are missing, it seeds them instantly so that local and production (Render/Neon) environments are always ready for testing.
 
 ---
 
